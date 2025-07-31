@@ -1,0 +1,23 @@
+@import './src/styles';
+
+:host {
+  display: block;
+}
+
+.formation-icon {
+  width: 32px;
+  height: 32px;
+  background-color: var(--color-primary)-2;
+  color: #fff;
+  transition: .5s all;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: var(--border-radius);
+  border: 1px solid var(--border-color-2);
+  opacity: .8;
+
+  &:hover {
+    background-color: var(--color-primary)-2;
+  }
+}

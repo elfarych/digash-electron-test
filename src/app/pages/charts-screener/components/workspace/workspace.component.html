@@ -1,0 +1,47 @@
+
+<div  #workspaceRef class="workspace">
+  <app-mini-chart-virtual-wrapper
+    *ngFor="let coin of coins; trackBy: chartIdentity; let index=index"
+    [hasAlert]="coin.hasAlert"
+    [showAlertIcon]="showAlertIcon"
+    [index]="index"
+    [userData]="userData$ | async"
+    [coin]="coin.symbol"
+    [chartId]="coin.symbol + workspace.id"
+    [coinData]="coin.data"
+    [preferences]="preferences"
+    [timeframe]="workspace.timeframe"
+    [exchange]="workspace.market"
+    [fullChart]="false"
+    [chartSettings]="workspace"
+    [formation]="workspace.formation"
+    [alerts]="alerts"
+    [watchlistCoins]="watchlistCoins$ | async"
+    [chartIndicators]="workspace.technicalIndicators"
+    [timeframeView]="multipleWorkspaces ? 'dropdown' : 'list'"
+    (openChart)="openCoin(coin)"
+    [ngStyle]="{ 'height': chartHeight }"
+    (candlesLenUpdated)="candlesLenUpdated.emit($event)"
+    (chartIndicatorsUpdated)="chartIndicatorsUpdated.emit($event)"
+  ></app-mini-chart-virtual-wrapper>
+
+  <div *ngIf="!(userData$ | async)?.premium_enabled" class="premium-ui-block fake-block" #fakeBlockTmpl>
+    <p-blockUI [target]="fakeBlockTmpl" [blocked]="true">
+      <div>
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+        <p>{{ 'workspace.premium_block_message' | translate }}</p>
+      </div>
+      <div class="action">
+        <button class="app-button-success" (click)="redirectToPremium()">{{ 'workspace.premium_block_button' | translate }}</button>
+      </div>
+    </p-blockUI>
+  </div>
+  <div *ngIf="!coins?.length && !loading" class="info-message">
+    {{ 'workspace.no_coins_message' | translate }}
+  </div>
+  <p-scrollTop target="parent" styleClass="custom-scrolltop" [threshold]="100" icon="pi pi-arrow-up"></p-scrollTop>
+
+  <app-progress-spinner *ngIf="loading"></app-progress-spinner>
+</div>
+
+

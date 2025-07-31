@@ -1,0 +1,10 @@
+
+    <p-dropdown
+      [options]="sounds"
+      [ngModel]="selectedSound"
+      optionLabel="label"
+      optionValue="value"
+      appendTo="body"
+      placeholder="{{'alerts.soundSelection' | translate}}"
+      (onChange)="changeSound($event)"
+    ></p-dropdown>

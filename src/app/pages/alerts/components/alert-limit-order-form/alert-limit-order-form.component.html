@@ -1,0 +1,92 @@
+<form [formGroup]="form" class="app-form">
+  <section class="mt-lg">
+    <div class="text-lg text-bold">{{ 'alerts.limit_order_parameters.title' | translate }}</div>
+
+    <div class="grid-2-1 grid-gap-lg mt-md">
+
+      <div>
+        <label for="size" class="block mb-sm">{{ 'alerts.limit_order_parameters.min_density_amount' | translate
+          }}</label>
+
+        <div class="input-with-hint">
+          <input id="size" aria-describedby="size-help" formControlName="size" placeholder="400000" type="number" />
+          <div class="input-hint">{{ readableMoneyForLimitOrder }}</div>
+        </div>
+
+
+        <small *ngIf="form.get('size').errors?.['required'] && formTouched" class="error-message block">
+          {{ 'alerts.limit_order_parameters.required_field' | translate }}
+        </small>
+        <small *ngIf="form.get('size').errors?.['min'] && formTouched" class="error-message block">
+          {{ 'alerts.limit_order_parameters.min_amount' | translate }}
+        </small>
+        <small *ngIf="form.get('size').errors?.['max'] && formTouched" class="error-message block">
+          {{ 'alerts.limit_order_parameters.max_amount' | translate }}
+        </small>
+      </div>
+
+      <div>
+        <label for="distance" class="block mb-sm">{{ 'alerts.limit_order_parameters.distance' | translate }}</label>
+        <input id="distance" aria-describedby="distance-help" formControlName="distance" type="number" />
+        <small *ngIf="form.get('distance').errors?.['required'] && formTouched" class="error-message block">
+          {{ 'alerts.limit_order_parameters.required_field' | translate }}
+        </small>
+        <small *ngIf="form.get('distance').errors?.['min'] && formTouched" class="error-message block">
+          {{ 'alerts.limit_order_parameters.min_distance' | translate }}
+        </small>
+        <small *ngIf="form.get('distance').errors?.['max'] && formTouched" class="error-message block">
+          {{ 'alerts.limit_order_parameters.max_distance' | translate }}
+        </small>
+        <small id="distance-help" class="mt-sm block text-grey">{{ 'alerts.limit_order_parameters.distance_help' |
+          translate }}</small>
+      </div>
+
+      <div>
+        <label for="corrosion_time" class="block mb-sm">{{ 'alerts.limit_order_parameters.corrosion_time' | translate
+          }}</label>
+        <input id="corrosion_time" aria-describedby="corrosion_time-help" formControlName="corrosion_time"
+          type="number" />
+
+        <small *ngIf="form.get('corrosion_time').errors?.['required'] && formTouched" class="error-message block">
+          {{ 'alerts.limit_order_parameters.required_field' | translate }}
+        </small>
+        <small *ngIf="form.get('corrosion_time').errors?.['min'] && formTouched" class="error-message block">
+          {{ 'alerts.limit_order_parameters.min_time' | translate }}
+        </small>
+        <small *ngIf="form.get('corrosion_time').errors?.['max'] && formTouched" class="error-message block">
+          {{ 'alerts.limit_order_parameters.max_time' | translate }}
+        </small>
+        <small id="corrosion_time-help" class="mt-sm block text-grey">
+          {{ 'alerts.limit_order_parameters.corrosion_time_help' | translate }}
+        </small>
+      </div>
+
+      <div>
+        <label for="living_time" class="block mb-sm">{{ 'alerts.limit_order_parameters.living_time' | translate
+          }}</label>
+        <input id="living_time" aria-describedby="living_time-help" formControlName="living_time" type="number" />
+        <small *ngIf="form.get('living_time').errors?.['required'] && formTouched" class="error-message block">
+          {{ 'alerts.limit_order_parameters.required_field' | translate }}
+        </small>
+        <small *ngIf="form.get('living_time').errors?.['min'] && formTouched" class="error-message block">
+          {{ 'alerts.limit_order_parameters.min_time' | translate }}
+        </small>
+        <small *ngIf="form.get('living_time').errors?.['max'] && formTouched" class="error-message block">
+          {{ 'alerts.limit_order_parameters.max_time' | translate }}
+        </small>
+        <small id="living_time-help" class="mt-sm block text-grey">{{ 'alerts.limit_order_parameters.living_time_help' |
+          translate }}</small>
+      </div>
+
+      <div>
+        <input type="checkbox" [formControlName]="'round_density'" id="round_density">
+        <label for="round_density" class="checkbox-label">{{ 'round_density' | translate }}</label>
+      </div>
+    </div>
+
+  </section>
+
+  <app-alert-base-form [form]="form" [edit]="edit" [formTouched]="formTouched">
+  </app-alert-base-form>
+
+</form>

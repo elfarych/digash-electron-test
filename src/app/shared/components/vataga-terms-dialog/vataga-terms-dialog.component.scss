@@ -1,0 +1,51 @@
+@import './src/styles';
+
+.terms {
+    padding: calc(var(--md) * 2);
+
+    ul {
+        ul {
+            margin-left: 2.5rem;
+            margin-top: var(--sm);
+        }
+
+        li {
+            b {
+                font-weight: bold;
+            }
+
+            a {
+                color: rgb(0, 191, 255);
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+.vataga-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: var(--md) 0;
+    margin-bottom: var(--md);
+
+    background-color: var(--dark-background-hover-color);
+
+    svg-icon {
+        height: 32px;
+        display: block;
+        width: 20%;
+    }
+}
+
+.vataga-action {
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid var(--border-color);
+    margin-top: var(--md);
+    padding-top: calc(var(--md) * 2);
+}

@@ -1,0 +1,130 @@
+@import "src/mixins";
+
+
+.chart-settings {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+    grid-gap: var(--sm);
+  }
+}
+
+.settings-form-container {
+  padding: var(--md);
+  height: 400px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--md);
+  padding: var(--xs);
+  position: relative;
+  padding-right: var(--lg);
+
+  @media (max-width: 992px) {
+    overflow-x: scroll;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--color-page-bg);
+    border-right: 1px solid var(--color-main-bg-accent);
+  }
+
+  .navigation-item {
+    background: var(--color-secondary);
+    border-radius: var(--sm);
+    padding: var(--md);
+    font-size: var(--font-size-text-lg);
+    width: 100%;
+    transition: .5s all;
+    cursor: pointer;
+    @include outlined-secondary();
+
+    @media (max-width: 992px) {
+      padding: var(--sm);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+  }
+
+  .active {
+    background: var(--color-positive-dark);
+    border: 2px solid var(--color-positive);
+    box-shadow: none;
+  }
+}
+
+.chart-bg-select-3 {
+  display: grid;
+  grid-template-columns: auto 50px 50px 50px;
+  grid-gap: var(--sm);
+  align-items: center;
+  margin-bottom: var(--md);
+}
+
+.chart-bg-select-2 {
+  display: grid;
+  grid-template-columns: auto 50px 50px;
+  grid-gap: var(--sm);
+  align-items: center;
+  margin-bottom: var(--md);
+}
+
+.chart-bg-select-flex {
+  display: grid;
+  grid-template-columns: auto 150px;
+  grid-gap: var(--sm);
+  align-items: center;
+  margin-bottom: var(--md);
+}
+
+.chart-bg-select-1 {
+  display: grid;
+  grid-template-columns: auto 50px;
+  grid-gap: var(--sm);
+  align-items: center;
+  margin-bottom: var(--md);
+}
+
+.chart-bg-select-1,
+.chart-bg-select-2,
+.chart-bg-select-3 {
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.chart-bg-select-flex {
+  p-dropdown {
+    margin-top: 8px;
+  }
+}
+
+.settings-form-container {
+  label {
+    font-size: 14px;
+
+    @media (max-width: 992px) {
+      font-size: 12px;
+    }
+  }
+}

@@ -1,0 +1,17 @@
+@import "./src/styles";
+
+:host {
+  display: block;
+  position: relative;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+
+  svg-icon {
+    display: flex;
+    align-items: center;
+    margin-right: var(--md);
+  }
+}

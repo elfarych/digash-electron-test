@@ -1,0 +1,22 @@
+<div>
+  <div class="content">
+    <div class="text-content">
+      <h2>{{data.data.message}}</h2>
+    </div>
+
+    <div class="actions">
+      <button  class="app-button-success" (click)="navigate('charts-screener')">
+        {{ 'premium.screener' | translate }}
+      </button>
+      <button  class="app-button-success" (click)="navigate('coins-view')">
+        {{ 'premium.coins' | translate }}
+      </button>
+      <button  class="app-button-success" (click)="navigate('alerts')">
+        {{ 'premium.alerts' | translate }}
+      </button>
+      <button  class="app-button-success" (click)="navigate('psychology')">
+        {{ 'premium.psychology' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

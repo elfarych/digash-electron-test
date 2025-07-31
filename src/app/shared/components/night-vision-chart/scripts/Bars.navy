@@ -1,0 +1,141 @@
+// NavyJS ~ 0.1-lite
+
+// <ds>OHLC Bar Chart</ds>, format:
+// [<timestamp>, <open>, <high>, <low>, <close>, <?volume>]
+
+[OVERLAY name = BarsOHLC, ctx = Canvas, version = 1.0.0]
+
+// Define the props
+prop('colorBodyUp', {type: 'color', def: $core.colors.candleUp})
+prop('colorBodyDw', {type: 'color', def: $core.colors.candleDw})
+prop('colorWickUp', {type: 'color', def: $core.colors.wickUp})
+prop('colorWickDw', {type: 'color', def: $core.colors.wickDw})
+prop('colorVolUp', {type: 'color', def: $core.colors.volUp})
+prop('colorVolDw', {type: 'color', def: $core.colors.volDw})
+prop('showVolume', {type: 'boolean', def: true})
+prop('currencySymbol', {type: 'string', def: '$'})
+prop('showAvgVolume', {type: 'boolean', def: false})
+prop('avgVolumeSMA', {type: 'number', def: 20})
+prop('colorAvgVol', {type: 'color', def: '#1cccb777'})
+prop('scaleSymbol', {type: 'string|boolean', def: false})
+prop('priceLine', {type: 'boolean', def: true})
+prop('showValueTracker', {type: 'boolean', def: true})
+prop('clustersEnabled', {type: 'boolean', def: false})
+
+init()
+{
+}
+
+function ohlcBar(ctx, data, layout, wickWidth, candleWidth) {
+  const x = data.x
+  const o = data.o
+  const h = data.h
+  const l = data.l
+  const c = data.c
+
+  ctx.moveTo(x, Math.floor(h))
+  ctx.lineTo(x, Math.floor(l))
+
+  ctx.moveTo(x - candleWidth * 0.6, Math.floor(o))
+  ctx.lineTo(x, Math.floor(o))
+
+  ctx.moveTo(x, Math.floor(c))
+  ctx.lineTo(x + candleWidth * 0.6, Math.floor(c))
+}
+
+
+// Draw call
+draw(ctx)
+{
+
+  let cnv = $lib.layoutCnv($core, true, $props.showVolume)
+  let bodies = cnv.upBodies.length ? cnv.upBodies : cnv.dwBodies
+  if (!bodies.length) return
+  let candleWidth = bodies[0].w;
+  const wickWidth = 1;
+
+  ctx.beginPath();
+  drawCvPart(ctx, ohlcBar, cnv.dwBodies, wickWidth, candleWidth, 'colorBodyDw')
+  drawCvPart(ctx, ohlcBar, cnv.upBodies, wickWidth, candleWidth, 'colorBodyUp')
+
+  if ($props.showVolume) {
+    ctx.beginPath();
+    drawCvPart(ctx, $lib.volumeBar, cnv.dwVolbars, candleWidth, candleWidth, 'colorVolDw')
+    drawCvPart(ctx, $lib.volumeBar, cnv.upVolbars, candleWidth, candleWidth, 'colorVolUp')
+  }
+}
+
+// Draw candle part
+drawCvPart(ctx, f, arr, w, w2, color, drawCluster = false)
+{
+  let layout = $core.layout
+  ctx.lineWidth = w
+  ctx.beginPath();
+  ctx.strokeStyle = drawCluster ? $props[color] + '40' : $props[color]
+  for (var i = 0, n = arr.length; i < n; i++) {
+    f(ctx, arr[i], layout, w, w2)
+  }
+  ctx.stroke();
+}
+
+let initialLow = 0;
+let initialHigh = 0;
+static yRange(data) {
+  let len = data.length
+  var h, l, high = -Infinity, low = Infinity
+  for(var i = 0; i < len; i++) {
+    let point = data[i]
+    if (point[2] > high) high = point[2]
+    if (point[3] < low) low = point[3]
+  }
+  return [high, low]
+}
+
+
+// Use [Open, Close] for precision detection
+preSampler(x)
+=>
+[x[1], x[4]]
+
+// Map data item to OHLC (for candle magnets etc.)
+ohlc(x)
+=>
+[x[1], x[2], x[3], x[4]]
+
+// Price label + Scale symbol + price line
+function valueTracker(x) {
+  return {
+    show: $props.showValueTracker,
+    symbol: $props.scaleSymbol,
+    line: $props.priceLine,
+    color: $lib.candleColor($props, $core.data[$core.data.length - 1]),
+    value: x[4] // close
+  }
+}
+
+// Define the OHLCV legend
+legendHtml(x, prec, f)
+{
+  let color1 = $core.colors.text
+  let v = $core.cursor.getValue($core.paneId, $core.id)
+  let sym = $props.currencySymbol
+  let color2 = v[4] >= v[1] ?
+    $props.colorBodyUp : $props.colorBodyDw
+  let fc = $lib.formatCash
+  return `
+    <span style="color: ${color2}">
+        <span style="margin-left: 8px;"></span>
+        <span style="   color: ${color1}">ОТКР</span>
+        <span class="nvjs-ll-value">${f(x[1])}</span>
+        <span style="color: ${color1}">МАКС</span>
+        <span class="nvjs-ll-value">${f(x[2])}</span>
+        <span style="color: ${color1}">МИН</span>
+        <span class="nvjs-ll-value">${f(x[3])}</span>
+        <span style="color: ${color1}">ЗАКР</span>
+        <span class="nvjs-ll-value">${f(x[4])}</span>
+    `
+    + ($props.showVolume ? `
+        <span style="color: ${color1}">Объём</span>
+        <span class="nvjs-ll-value">${sym + fc(x[5])}</span>` : ``)
+    + `</span>`
+}

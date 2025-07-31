@@ -1,0 +1,25 @@
+
+:host {
+  height: 100%;
+  outline: 1px solid var(--border-color);
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+
+.depth-map-orders-block-data-col-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  text-align: center;
+  border-top: 1px solid var(--border-color);
+  padding: 4px;
+  font-size: 12px;
+  //background: var(--dark-background-color);
+  background: rgba(0,0,0,.3);
+  backdrop-filter: blur(5px);
+  color: #eeeeee;
+  z-index: 9;
+}

@@ -1,0 +1,275 @@
+// Navy ~ 0.1-lite
+// ^^^ First comment should provide a NavyJS version
+
+// Meta tag
+[OVERLAY name = CustomLevel, ctx = Canvas, author = digash, version = 1.0.0]
+
+let crossXPos = {};
+let crossYPos = {};
+let newYPos = {};
+let newXPos = {};
+
+let hoverlevelId = undefined;
+let removePriceLevelHoverId = undefined;
+let selectedSignalLevel = undefined;
+
+function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+  if (typeof stroke == "undefined") {
+    stroke = true;
+  }
+  if (typeof radius === "undefined") {
+    radius = 5;
+  }
+  ctx.beginPath();
+  ctx.setLineDash([0, 0]);
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+  if (stroke) {
+    ctx.stroke();
+  }
+  if (fill) {
+    ctx.fill();
+  }
+}
+
+function drawCross(ctx, x, y, rectWidth, rectHeight, id) {
+  const size = 5;
+  const gap = 5;
+  crossXPos[id] = x + rectWidth - size - gap;
+  crossYPos[id] = y + size + 4.5;
+
+  ctx.strokeStyle = '#fff';
+
+  ctx.lineWidth = removePriceLevelHoverId === id ? 2 : 1;
+  ctx.beginPath();
+  ctx.moveTo(crossXPos[id] - size, crossYPos[id] - size);
+  ctx.lineTo(crossXPos[id] + size, crossYPos[id] + size);
+  ctx.stroke();
+
+  ctx.lineWidth = removePriceLevelHoverId === id ? 2 : 1;
+  ctx.moveTo(crossXPos[id] + size, crossYPos[id] - size);
+  ctx.lineTo(crossXPos[id] - size, crossYPos[id] + size);
+  ctx.stroke();
+  ctx.closePath();
+}
+
+function draw(ctx) {
+  const data = $core.data;
+  const view = $core.view;
+  const layout = $core.layout;
+  const color = document.body.classList.contains('light-theme') ? '#000' : '#ccc';
+
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1;
+
+  if (!data) {
+    return void 0;
+  }
+
+  for (let i = 0; i < data.length; i++) {
+    const {value, timestamp, id} = data[i][0];
+
+    if (!timestamp) {
+      continue;
+    }
+
+    const y = getYPos(value, id);
+    const x = getXPos(timestamp, id);
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(layout.width, y);
+    ctx.stroke();
+    ctx.fill();
+
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = color;
+    ctx.fillStyle = "#131518";
+    const posX = x + 5;
+    const posY = y - 10;
+    const rectHeight = 20;
+    const rectWidth = 80;
+
+    if (hoverlevelId && hoverlevelId === id) {
+      roundRect(ctx, posX, posY, rectWidth, rectHeight, 5, '#131518', 'rgba(142, 142, 142, .4)');
+      drawCross(ctx, posX, posY, rectWidth, rectHeight, id);
+
+      ctx.strokeStyle = color;
+
+      ctx.font = "12px";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "#fff";
+
+      ctx.fillText(`${value.toFixed(layout.prec)}$`, posX + (rectWidth / 2), posY + (rectHeight / 2));
+    }
+  }
+}
+
+function handleRightClick(event) {
+  let mouse = getMouseCoords(event);
+
+  if (hoverlevelId) {
+    // price level remove
+    document.dispatchEvent(new CustomEvent("custom-level-remove", {
+      detail: {
+        id: hoverlevelId
+      }
+    }));
+    selectedSignalLevel = undefined;
+    removePriceLevelHoverId = undefined;
+    hoverlevelId = undefined;
+    return void 0;
+  }
+
+  document.dispatchEvent(new CustomEvent("custom-level-add", {
+    detail: {
+      id: Math.random(),
+      price: $core.layout.y2value(mouse.y),
+      timestamp: parseInt($core.layout.x2ti(mouse.x))
+    }
+  }));
+
+  return false;
+}
+
+function click(event) {
+  let mouse = getMouseCoords(event);
+
+  if (!selectedSignalLevel) {
+    return void 0;
+  }
+
+  // price level remove
+  $core.data.forEach(data => {
+    if (cursorInRect(mouse.x, mouse.y, crossXPos[data[0].id] - 10, crossYPos[data[0].id] - 10, 20, 20)) {
+      document.dispatchEvent(new CustomEvent("custom-level-remove", {
+        detail: {
+          id: selectedSignalLevel.levelId
+        }
+      }));
+      selectedSignalLevel = undefined;
+      removePriceLevelHoverId = undefined;
+      return void 0;
+    }
+  });
+}
+
+function mousedown(event) {
+  // event.preventDefault();
+  // event.stopPropagation();
+
+  if (event.which === 3) {
+    handleRightClick(event);
+    return void 0;
+  }
+
+  $core.meta.scrollLock = true;
+
+  let mouse = getMouseCoords(event);
+  const layout = $core.layout;
+
+  // price level click
+  $core.data.forEach(data => {
+    const y = getYPos(data[0].value, data[0].id) - 10;
+    const x = $core.layout.ti2x(data[0].timestamp) + 5;
+    if (cursorInRect(mouse.x, mouse.y, x, y, 180, 20)) {
+      selectedSignalLevel = {
+        ...selectedSignalLevel,
+        levelId: data[0].id,
+      }
+      return void 0;
+    }
+  });
+}
+
+function mouseup(event) {
+  if (selectedSignalLevel?.newYValue) {
+    document.dispatchEvent(new CustomEvent("custom-level-changed", {
+      detail: {
+        id: selectedSignalLevel.levelId,
+        price: selectedSignalLevel.newYValue,
+        timestamp: selectedSignalLevel.timestamp
+      }
+    }));
+  }
+
+  if (!removePriceLevelHoverId) {
+    selectedSignalLevel = undefined;
+  }
+
+  $core.meta.scrollLock = false;
+}
+
+function mousemove(event) {
+  let mouse = getMouseCoords(event);
+  const layout = $core.layout;
+  removePriceLevelHoverId = undefined;
+
+  if (hoverlevelId) {
+    let hoverPriceLevel = $core.data.find(data => cursorInRect(mouse.x, mouse.y, layout.width / 2, getYPos(data[0].value, data[0].id) - 10, 180, 20));
+    hoverPriceLevel ? document.body.classList.add('pointer') : document.body.classList.remove('pointer');
+  }
+
+  let showPriceLevel = $core.data.find(data => cursorInRect(mouse.x, mouse.y, 0, getYPos(data[0].value, data[0].id) - 7.5, layout.width, 15));
+  hoverlevelId = showPriceLevel ? showPriceLevel[0].id : undefined
+
+  let removePriceLevel = $core.data.find(data => cursorInRect(mouse.x, mouse.y, crossXPos[data[0].id] - 10, crossYPos[data[0].id] - 10, 20, 20));
+  removePriceLevelHoverId = removePriceLevel ? removePriceLevel[0].id : undefined;
+  removePriceLevelHoverId ? document.body.classList.add('pointer') : document.body.classList.remove('pointer');
+
+  if (selectedSignalLevel) {
+    $core.meta.scrollLock = true;
+    newYPos[selectedSignalLevel.levelId] = layout.y2value(mouse.y);
+    newXPos[selectedSignalLevel.levelId] = layout.x2ti(mouse.x);
+
+    selectedSignalLevel = {
+      ...selectedSignalLevel,
+      newYValue: parseFloat(newYPos[selectedSignalLevel.levelId].toFixed($core.layout.prec)),
+      timestamp: parseInt(newXPos[selectedSignalLevel.levelId])
+    }
+  } else {
+    // $core.meta.scrollLock = false;
+  }
+}
+
+function getYPos(yPos, id) {
+  const layout = $core.layout;
+  return newYPos[id] ? layout.value2y(newYPos[id]) : layout.value2y(yPos);
+}
+
+function getXPos(timestamp, id) {
+  const layout = $core.layout;
+  return newYPos[id] ? layout.ti2x(newXPos[id]) : layout.ti2x(timestamp);
+}
+
+let cursorInRect = (mouseX, mouseY, rectX, rectY, rectW, rectH) => {
+  let xLine = mouseX > rectX && mouseX < rectX + rectW
+  let yLine = mouseY > rectY && mouseY < rectY + rectH
+
+  return xLine && yLine
+}
+
+let getOffsetCoords = (mouse, rect) => {
+  return {
+    x: mouse.x - rect.x,
+    y: mouse.y - rect.y
+  }
+}
+
+let getMouseCoords = (event) => {
+  // let canvasCoords = canvas.getBoundingClientRect();
+
+  return {
+    x: event.layerX,
+    y: event.layerY
+  }
+}

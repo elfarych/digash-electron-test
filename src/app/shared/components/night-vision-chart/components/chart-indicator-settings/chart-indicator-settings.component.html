@@ -1,0 +1,19 @@
+<div class="divider my-lg"></div>
+
+<div class="content question-form-grid">
+  <app-chart-settings-question *ngFor="let question of questions" [question]="question"
+                                [form]="form"></app-chart-settings-question>
+</div>
+
+<div class="divider my-lg"></div>
+
+<div class="flex justify-end gap-md">
+  <button class="app-button" (click)="resetToDefault()">
+    <span>{{'app.reset' | translate}}</span>
+  </button>
+  <button class="app-button-primary" (click)="save()">
+    <span>{{'app.save' | translate}}</span>
+  </button>
+</div>
+
+

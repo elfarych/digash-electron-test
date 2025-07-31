@@ -1,0 +1,22 @@
+<div>
+  <div class="mb-sm">{{ "excludeExchanges" | translate }}:</div>
+  <div class="exchanges gap-sm" [ngClass]="gridClass">
+    <ng-container *ngFor="let exchange of exchangesData">
+      <button class="exclude-exchange-button" [class.active]="excludedExchanges.includes(exchange.exchange)"
+              (click)="excludeExchange(exchange.exchange)">
+        <div class="app-form" (click)="excludeExchange(exchange.exchange)">
+          <input
+            type="checkbox"
+            [checked]="excludedExchanges.includes(exchange.exchange)"
+            (click)="excludeExchange(exchange.exchange)"
+          >
+          <label class="checkbox-label text-ellipsis" (click)="excludeExchange(exchange.exchange)"></label>
+        </div>
+        <span class="logo">
+          <svg-icon [src]="exchange.icon" [svgStyle]="{ 'width.px': 18, 'height.px': 18 }"></svg-icon></span>
+        <span class="no-wrap-text">{{ exchange.name }}</span>
+      </button>
+    </ng-container>
+  </div>
+
+</div>

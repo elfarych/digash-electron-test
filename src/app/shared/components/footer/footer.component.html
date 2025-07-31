@@ -1,0 +1,48 @@
+<footer class="app-footer">
+  <div class="container">
+
+    <div class="logo mt-md">
+      <img src="assets/svg/logo.svg" alt="logo">
+    </div>
+
+    <div class="divider my-lg"></div>
+
+    <div class="footer-content">
+
+      <div class="products">
+        <h4 class="text-lg text-bold">{{ 'footer.products' | translate }}</h4>
+        <ul>
+          <li><a routerLink="/app/charts-screener">{{ 'footer.screener' | translate }}</a></li>
+          <li><a routerLink="/app/coins-view">{{ 'footer.coins' | translate }}</a></li>
+          <li><a routerLink="/app/alerts">{{ 'footer.notifications' | translate }}</a></li>
+        </ul>
+      </div>
+
+      <div class="company">
+        <h4 class="text-lg text-bold">{{ 'footer.company' | translate }}</h4>
+        <ul>
+          <li><a routerLink="/app/user-agreement">{{ 'footer.userAgreement' | translate }}</a></li>
+          <li><a routerLink="/app/privacy-policy">{{ 'footer.privacyPolicy' | translate }}</a></li>
+          <li><a routerLink="/app/personal-data-processing">{{ 'footer.processingOfPersonalData' | translate }}</a></li>
+          <li><a routerLink="/app/contacts">{{ 'footer.contacts' | translate }}</a></li>
+        </ul>
+      </div>
+
+      <div class="follow">
+        <h4 class="text-lg text-bold">{{ 'footer.socialNetworks' | translate }}</h4>
+        <div class="social-links mt-md">
+          <a href="https://youtube.com/@Digash-Screener" target="_blank">
+            <svg-icon src="assets/svg/youtube.svg"
+                      [svgStyle]="{ 'width.px':20, 'height.px': 20 }"></svg-icon>
+          </a>
+          <a href="https://t.me/digashlive" target="_blank">
+            <svg-icon src="assets/svg/telegram.svg"
+                      [svgStyle]="{ 'width.px':20, 'height.px': 20 }"></svg-icon>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</footer>

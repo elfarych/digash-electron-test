@@ -1,0 +1,126 @@
+// Navy ~ 0.1-lite
+
+[OVERLAY name = SessionZones, ctx = Canvas, author = digash, version = 1.0.0]
+
+const msInDay = 24 * 60 * 60 * 1000;
+
+const sessionHours = {
+  London: [7, 16],
+  NY: [13, 21],
+  Tokyo: [0, 6],
+  Sydney: [21, 5],
+};
+
+const labels = {
+  'London': 'Europe',
+  'NY': 'America',
+  'Tokyo': 'Asia',
+  'Sydney': 'Australia and Oceania',
+}
+
+function generateSessionRanges(fromTime, toTime) {
+  const sessions = {};
+
+  for (const [name, [startHour, endHour]] of Object.entries(sessionHours)) {
+    if (name === 'London' && !$props.showLondon) {
+      continue;
+    }
+    if (name === 'NY' && !$props.showNewYork) {
+      continue;
+    }
+    if (name === 'Tokyo' && !$props.showTokyo) {
+      continue;
+    }
+    if (name === 'Sydney' && !$props.showSydney) {
+      continue;
+    }
+
+    sessions[name] = [];
+
+    const dayStart = new Date(fromTime);
+    dayStart.setUTCHours(0, 0, 0, 0);
+    let t = dayStart.getTime();
+
+    while (t <= toTime) {
+      let start = new Date(t);
+      start.setUTCHours(startHour, 0, 0, 0);
+      let end = new Date(t);
+
+      if (endHour <= startHour) {
+        end.setUTCDate(end.getUTCDate() + 1);
+      }
+      end.setUTCHours(endHour, 0, 0, 0);
+
+      const startMs = start.getTime();
+      const endMs = end.getTime();
+
+      if (endMs >= fromTime && startMs <= toTime) {
+        sessions[name].push([startMs, endMs]);
+      }
+
+      t += msInDay;
+    }
+  }
+
+  return sessions;
+}
+
+function draw(ctx) {
+  const bars = $core.hub.mainOv.data;
+  const layout = $core.layout;
+  const visibleFrom = bars[0][0];
+  const visibleTo = bars[bars.length - 1][0];
+
+  const sessionRects = generateSessionRanges(visibleFrom, visibleTo);
+
+  for (const [name, ranges] of Object.entries(sessionRects)) {
+    for (const [start, end] of ranges) {
+      const x1 = layout.ti2x(start);
+      const x2 = layout.ti2x(end);
+
+      const candlesInRange = bars.filter(b => b[0] >= start && b[0] <= end);
+      if (candlesInRange.length === 0) continue;
+
+      let high = -Infinity, low = Infinity;
+      for (const candle of candlesInRange) {
+        if (candle[2] > high) high = candle[2]; // High
+        if (candle[3] < low) low = candle[3];   // Low
+      }
+
+      const y1 = layout.value2y(high);
+      const y2 = layout.value2y(low);
+      const height = y2 - y1;
+
+      ctx.fillStyle = getColor(name);
+      ctx.globalAlpha = 0.05;
+      ctx.fillRect(x1, y1, x2 - x1, height);
+      ctx.globalAlpha = 1;
+
+      ctx.strokeStyle = getColor(name);
+      ctx.setLineDash([2, 1]);
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x1, y1, x2 - x1, height);
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = getColor(name);
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const textX = (x1 + x2) / 2;
+      ctx.fillText(labels[name], textX, y1 - 10);
+    }
+  }
+}
+
+function getColor(sessionName) {
+  switch (sessionName) {
+    case 'London':
+      return $props.LondonColor
+    case 'NY':
+      return $props.NewYorkColor
+    case 'Tokyo':
+      return $props.TokyoColor
+    case 'Sydney':
+      return $props.SydneyColor
+  }
+}
+

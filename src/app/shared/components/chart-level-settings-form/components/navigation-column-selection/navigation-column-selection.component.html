@@ -1,0 +1,34 @@
+<div
+  class="columns-selector"
+>
+
+  <div
+    *ngIf="unSelectedColumns.length"
+    class="columns-selector-arrow"
+    (click)="onSelectorClick()"
+  >
+    <span class="pi" [ngClass]="selectorIsActive ? 'pi-angle-up' : 'pi-angle-down'"></span>
+  </div>
+
+  <ng-container *ngFor="let item of selectedColumns">
+    <button class="app-button-xs" (click)="selectColumn.emit(item.id)">
+      <span>{{ item.label }}</span>
+      <span class="pi pi-times"></span>
+    </button>
+  </ng-container>
+</div>
+
+<div *ngIf="unSelectedColumns.length" class="columns-selector-options-wrapper" [class.active]="selectorIsActive">
+  <div class="columns-selector-options" >
+    <ng-container *ngFor="let item of unSelectedColumns">
+      <div
+        class="columns-selector-option"
+        [class.disabled]="item.isDisabled"
+        (click)="onColumnSelect($event, item)"
+      >
+        {{ item.label }}
+      </div>
+    </ng-container>
+
+  </div>
+</div>

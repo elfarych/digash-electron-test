@@ -1,0 +1,7 @@
+<div *ngIf="tooltip" (click)="formationTooltipPanel.toggle($event)" class="cursor-pointer">
+  <span class="pi pi-question-circle"></span>
+</div>
+
+<p-overlayPanel #formationTooltipPanel>
+  <div class="formation-tooltip-text" [innerHTML]="tooltip"></div>
+</p-overlayPanel>

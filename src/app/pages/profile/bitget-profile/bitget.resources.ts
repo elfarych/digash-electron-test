@@ -1,0 +1,20 @@
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { environment } from "src/environments/environment";
+import {ApiGatewayService} from "../../../core/http/api-gateway.service";
+
+@Injectable({
+    providedIn: 'root'
+})
+export class BitgetRersources {
+    constructor(private http: HttpClient, private apiGatewayService: ApiGatewayService) {}
+
+    public connect(uuid: string): Observable<void> {
+        return this.http.put<void>(`${this.apiGatewayService.getBaseUrl()}/user/bitget/connect/`, {uuid});
+    }
+
+    public balance(): Observable<{balance: number}> {
+        return this.http.get<{balance: number}>(`${this.apiGatewayService.getBaseUrl()}/user/bitget/balance/`);
+    }
+}

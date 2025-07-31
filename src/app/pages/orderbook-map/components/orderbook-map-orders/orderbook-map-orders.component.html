@@ -1,0 +1,16 @@
+<ng-container *ngFor="let order of orders; let index = index; trackBy: orderIdentify">
+  <app-orderbook-map-order
+    [orderType]="ordersType"
+    [ordersCount]="orders.length"
+    [order]="order"
+    [orderIndex]="index"
+    [size]="size"
+    [settings]="settings"
+    [chartSettings]="chartSettings"
+    [preferences]="preferences"
+    [coinData]="coinsData[order.symbol][order.exchange]"
+    [alerts]="alerts"
+    (openChart)="openChart.emit($event)"
+  ></app-orderbook-map-order>
+</ng-container>
+

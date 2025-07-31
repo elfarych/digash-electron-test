@@ -1,0 +1,25 @@
+.listing-table {
+  p-table {
+    display: block;
+    background: transparent !important;
+  }
+
+  td, th, tr {
+    background: transparent;
+    text-align: left;
+  }
+
+  td {
+    padding: var(--md) 0;
+    font-size: 14px;
+  }
+
+  th {
+    padding: var(--md) 0;
+    font-weight: 500;
+    text-align: left;
+  }
+}
+
+
+

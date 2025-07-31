@@ -1,0 +1,9 @@
+<button class="app-button-md" (click)="timeframeOptions.toggle($event)">
+  <span>{{ selectedTimeframe }}</span>
+</button>
+
+<p-overlayPanel #timeframeOptions>
+  <ng-container *ngFor="let tf of timeframes">
+    <div class="timeframe-option" (click)="selectTimeframe(tf.name, timeframeOptions)">{{ tf.label }}</div>
+  </ng-container>
+</p-overlayPanel>

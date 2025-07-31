@@ -1,0 +1,12 @@
+<div class="preset" (click)="onSelect()">
+  <div class="name">{{ preset.name }}</div>
+  <div class="flex gap-xs">
+    <button class="app-button-xs" (click)="onEdit($event)">
+      <span class="pi pi-pencil"></span>
+    </button>
+    <button class="app-button-xs" (click)="onDelete($event)">
+      <span class="pi pi-trash"></span>
+    </button>
+  </div>
+
+</div>

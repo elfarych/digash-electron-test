@@ -1,0 +1,13 @@
+<div class="formations">
+  <button
+    *ngFor="let formation of formations"
+    [disabled]="disabled"
+    [class.selected]="formation.value === selected"
+    class="formation"
+    (click)="formationChange.emit(formation.value)"
+  >
+    <div class="label">
+      {{formation.label}}
+    </div>
+  </button>
+</div>

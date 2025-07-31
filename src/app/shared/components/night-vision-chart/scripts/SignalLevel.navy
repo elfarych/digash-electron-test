@@ -1,0 +1,235 @@
+// Navy ~ 0.1-lite
+// ^^^ First comment should provide a NavyJS version
+
+// Meta tag
+[OVERLAY name = SignalLevel, ctx = Canvas, author = digash, version = 1.0.0]
+
+let crossXPos = {};
+let crossYPos = {};
+let newYPos = {};
+
+let hoverAlertId = undefined;
+let removePriceLevelHoverId = undefined;
+let selectedSignalLevel = undefined;
+let rectWidth = 180;
+
+const priceCrossingTranslations = {
+  ru: 'пересечение',
+  en: 'crossing',
+  uk: 'перетин',
+  hi: 'क्रॉसिंग',
+  bn: 'ক্রসিং',
+  es: 'cruce',
+  pt: 'cruzamento'
+};
+
+
+function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+  if (typeof stroke == "undefined") {
+    stroke = true;
+  }
+  if (typeof radius === "undefined") {
+    radius = 5;
+  }
+  ctx.beginPath();
+  ctx.setLineDash([0, 0]);
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  if (stroke) {
+    ctx.stroke();
+  }
+  if (fill) {
+    ctx.fill();
+  }
+  ctx.closePath();
+}
+
+function drawCross(ctx, x, y, rectWidth, rectHeight, id) {
+  const size = 5;
+  const gap = 5;
+  crossXPos[id] = x + rectWidth - size - gap;
+  crossYPos[id] = y + size + 4.5;
+
+  ctx.lineWidth = removePriceLevelHoverId === id ? 2 : 1;
+  ctx.beginPath();
+  ctx.setLineDash([0, 0]);
+  ctx.moveTo(crossXPos[id] - size, crossYPos[id] - size);
+  ctx.lineTo(crossXPos[id] + size, crossYPos[id] + size);
+  ctx.stroke();
+
+  ctx.lineWidth = removePriceLevelHoverId === id ? 2 : 1;
+  ctx.moveTo(crossXPos[id] + size, crossYPos[id] - size);
+  ctx.lineTo(crossXPos[id] - size, crossYPos[id] + size);
+  ctx.stroke();
+  ctx.closePath();
+}
+
+function draw(ctx) {
+  const data = $core.data;
+  const view = $core.view;
+  const layout = $core.layout;
+
+  ctx.strokeStyle = 'rgb(129, 199, 132)';
+  ctx.lineWidth = 1;
+
+  if (!data) {
+    return void 0;
+  }
+
+  for (let i = 0; i < data.length; i++) {
+    const {value, symbol, id} = data[i][0];
+    const y = getYPos(value, id);
+
+    ctx.beginPath();
+    ctx.setLineDash([4, 4]);
+    ctx.moveTo(0, y);
+    ctx.lineTo(layout.width, y);
+    ctx.stroke();
+    ctx.fill();
+
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "#5f885f";
+    ctx.fillStyle = "#131518";
+    const posX = layout.width / 3;
+    const posY = y - 10;
+    const rectHeight = 20;
+
+
+    if (hoverAlertId && hoverAlertId === id) {
+      const text = `${symbol} ${priceCrossingTranslations[window.locale] ?? ''} ${data[i][0].value}`;
+      const textWidth = ctx.measureText(text).width;
+      rectWidth = textWidth + 40;
+
+      roundRect(ctx, posX, posY, rectWidth, rectHeight, 5, '#131518', '#5f885f');
+      drawCross(ctx, posX, posY, rectWidth, rectHeight, id);
+
+      ctx.font = "12px";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "#fff";
+
+      ctx.fillText(text, posX + (rectWidth / 2), posY + (rectHeight / 2));
+    }
+    ctx.closePath();
+  }
+}
+
+function click(event) {
+  let mouse = getMouseCoords(event);
+
+  if (!selectedSignalLevel) {
+    return void 0;
+  }
+
+  // price level remove
+  $core.data.forEach(data => {
+    if (cursorInRect(mouse.x, mouse.y, crossXPos[data[0].id] - 10, crossYPos[data[0].id] - 10, 20, 20)) {
+
+      document.dispatchEvent(new CustomEvent("signal-level-remove", {
+        detail: {
+          alertId: selectedSignalLevel.alertId
+        }
+      }));
+      selectedSignalLevel = undefined;
+      removePriceLevelHoverId = undefined;
+      return void 0;
+    }
+  });
+}
+
+function mousedown(event) {
+  // $core.meta.scrollLock = true;
+
+  let mouse = getMouseCoords(event);
+  const layout = $core.layout;
+
+  // price level click
+  $core.data.forEach(data => {
+    const y = getYPos(data[0].value, data[0].id) - 10;
+    const x = layout.width / 3;
+    if (cursorInRect(mouse.x, mouse.y, x, y, rectWidth, 20)) {
+      selectedSignalLevel = {
+        ...selectedSignalLevel,
+        alertId: data[0].id
+      }
+      return void 0;
+    }
+  });
+}
+
+function mouseup(event) {
+  if (selectedSignalLevel?.newYValue) {
+    document.dispatchEvent(new CustomEvent("signal-level-changed", {
+      detail: selectedSignalLevel
+    }));
+  }
+
+  if (!removePriceLevelHoverId) {
+    selectedSignalLevel = undefined;
+  }
+
+  $core.meta.scrollLock = false;
+}
+
+function mousemove(event) {
+  let mouse = getMouseCoords(event);
+  const layout = $core.layout;
+  removePriceLevelHoverId = undefined;
+
+  if (hoverAlertId) {
+    let hoverPriceLevel = $core.data.find(data => cursorInRect(mouse.x, mouse.y, layout.width / 3, getYPos(data[0].value, data[0].id) - 10, rectWidth, 20));
+    hoverPriceLevel ? document.body.classList.add('pointer') : document.body.classList.remove('pointer');
+  }
+
+  let showPriceLevel = $core.data.find(data => cursorInRect(mouse.x, mouse.y, 0, getYPos(data[0].value, data[0].id) - 7.5, layout.width, 15));
+  hoverAlertId = showPriceLevel ? showPriceLevel[0].id : undefined
+
+  let removePriceLevel = $core.data.find(data => cursorInRect(mouse.x, mouse.y, crossXPos[data[0].id] - 10, crossYPos[data[0].id] - 10, 20, 20));
+  removePriceLevelHoverId = removePriceLevel ? removePriceLevel[0].id : undefined;
+  removePriceLevelHoverId ? document.body.classList.add('pointer') : document.body.classList.remove('pointer');
+
+  if (selectedSignalLevel) {
+    $core.meta.scrollLock = true;
+    newYPos[selectedSignalLevel.alertId] = layout.y2value(mouse.y);
+
+    selectedSignalLevel = {
+      ...selectedSignalLevel,
+      newYValue: parseFloat(newYPos[selectedSignalLevel.alertId].toFixed($core.layout.prec))
+    }
+  } else {
+    // $core.meta.scrollLock = false;
+  }
+}
+
+function getYPos(yPos, id) {
+  const layout = $core.layout;
+  return newYPos[id] ? layout.value2y(newYPos[id]) : layout.value2y(yPos);
+}
+
+let cursorInRect = (mouseX, mouseY, rectX, rectY, rectW, rectH) => {
+  let xLine = mouseX > rectX && mouseX < rectX + rectW
+  let yLine = mouseY > rectY && mouseY < rectY + rectH
+
+  return xLine && yLine
+}
+
+let getOffsetCoords = (mouse, rect) => {
+  return {
+    x: mouse.x - rect.x,
+    y: mouse.y - rect.y
+  }
+}
+
+let getMouseCoords = (event) => {
+  return {
+    x: event.layerX,
+    y: event.layerY
+  }
+}

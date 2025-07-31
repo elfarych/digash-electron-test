@@ -1,0 +1,26 @@
+<div class="show-tooltip-on-hover">
+
+  <!-- <div *ngIf="showLabel" class="flex items-center gap-sm mb-sm">
+    <div>{{ 'alerts.tooltip.select_alert_type' | translate }}</div>
+    <app-tooltips [identifier]="alertTooltipIdentifier" [size]="14"></app-tooltips>
+  </div> -->
+
+  <!-- <p-dropdown
+    [options]="alertTypes"
+    [ngModel]="selectedAlertTypes"
+    optionLabel="label"
+    optionValue="value"
+    placeholder="{{ 'alerts.tooltip.select_alert_type' | translate }}"
+    (onChange)="toggleAlertTypesChange($event)"
+  >
+  </p-dropdown> -->
+
+  <div class="alert-types-list">
+    <button *ngIf="multipleSelect" (click)="toggleAlertTypesChange('all')" class="app-button" [class.active]="isSelected('all')">
+      <span class="pa-sm">{{'app.all' | translate}}</span>
+    </button>
+    <button *ngFor="let type of alertTypes" (click)="toggleAlertTypesChange(type.value)" class="app-button" [class.active]="isSelected(type.value)">
+      <span class="pa-sm">{{type.label}}</span>
+    </button>
+  </div>
+</div>

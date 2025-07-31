@@ -1,0 +1,80 @@
+[OVERLAY name = Bubbles, ctx = Canvas, author = Digash, version = 1.0.0]
+
+prop('drawLines', {type: 'boolean', def: false});
+prop('hideSmallLiquidations', {type: 'boolean', def: true});
+prop('color', {type: 'string', def: '#0c83ff'});
+
+function draw(ctx) {
+  const data = $core.data;
+  const view = $core.view;
+  const layout = $core.layout;
+
+  const hideSmallLiquidations = $props.hideSmallLiquidations;
+  const drawLines = $props.drawLines;
+
+  ctx.fillStyle = $props.color + '80';
+  ctx.strokeStyle = $props.color + '80';
+
+  if (!data) {
+    return void 0;
+  }
+
+  let radius = 3;
+
+  const minRadius = 1.5;
+  const maxRadius = 10;
+
+  ctx.beginPath()
+  for (let i = view.i1, n = view.i2; i <= n; i++) {
+    const timestamp = data[i][0];
+    const {price, quantity, averagePrice, eventTime, side, avgVolume} = data[i][1];
+
+    let x = layout.ti2x(timestamp, i);
+    let y = layout.value2y(averagePrice);
+
+    const total = price * quantity;
+    const percent = total / (avgVolume / 100);
+    radius = percent / 10;
+
+    if (radius < minRadius) {
+      if (hideSmallLiquidations) {
+        continue;
+      }
+
+      radius = minRadius;
+    }
+
+    if (radius > maxRadius) {
+      radius = maxRadius;
+    }
+
+    radius = parseInt(radius)
+
+    ctx.moveTo(x + radius, y);
+    ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+
+    const textYPos = side === 'BUY' ? y - 20 : y + 20;
+    ctx.fillText((convertPrice(total)), x - 10, textYPos);
+
+    if (drawLines) {
+      ctx.setLineDash([1, 1]);
+      ctx.moveTo(x, y);
+      ctx.lineTo(layout.width, y);
+      ctx.stroke();
+    }
+  }
+  ctx.fill();
+}
+
+function legend(x) {
+  return [[x[1].price, $props.color]];
+}
+
+function convertPrice(price) {
+  if (!price) {
+    return void 0;
+  }
+
+  const formatter = Intl.NumberFormat('en', {notation: 'compact'});
+  return `${formatter.format(price)}$`;
+}

@@ -1,0 +1,34 @@
+<form [formGroup]="form" class="app-form">
+
+  <section class="mt-lg">
+    <div class="text-lg text-bold">{{ 'alerts.volatility.title' | translate }}</div>
+
+      <div class="grid-2-1 grid-gap-lg mt-md">
+
+        <div>
+          <div class="block mb-sm">{{ 'alerts.volatility.interval' | translate }}</div>
+          <app-interval-selector
+            [selectedInterval]="form.get('interval').value"
+            (intervalChange)="intervalChange($event)"
+          ></app-interval-selector>
+        </div>
+
+        <div>
+          <label for="value" class="block mb-sm">{{ 'alerts.volatility.volatility_percentage' | translate }}</label>
+          <input id="value" aria-describedby="value-help" formControlName="value" type="number"/>
+          <small *ngIf="form.get('value').errors?.['required'] && formTouched" class="error-message block">{{ 'alerts.validation.required' | translate }}</small>
+          <small *ngIf="form.get('value').errors?.['min'] && formTouched" class="error-message block">{{ 'alerts.validation.min' | translate }}</small>
+          <small *ngIf="formTouched" class="error-message block">{{ form.errors?.['validationErrorMessage'] }}</small>
+        </div>
+
+      </div>
+
+  </section>
+
+  <app-alert-base-form
+    [form]="form"
+    [edit]="edit"
+    [formTouched]="formTouched"
+  ></app-alert-base-form>
+
+</form>

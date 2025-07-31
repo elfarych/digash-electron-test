@@ -1,0 +1,27 @@
+<p-dropdown
+  [options]="appColorThemesOptions"
+  [(ngModel)]="selectedAppColorThemeSrc"
+  optionLabel="label"
+  optionValue="value"
+  appendTo="body"
+  (onChange)="handleAppColorThemeChange($event)"
+>
+  <ng-template pTemplate="selectedItem">
+    <div class="item theme-color-select-item">
+      <div
+        class="theme-color-preview-box"
+        [ngStyle]="{ '--color-start' : selectedAppColorTheme.color, '--color-end': selectedAppColorTheme.bgColor }"
+      ></div>
+      <div>{{ selectedAppColorTheme.name }}</div>
+    </div>
+  </ng-template>
+  <ng-template let-theme pTemplate="item">
+    <div class="theme-color-select-item">
+      <div
+        class="theme-color-preview-box"
+        [ngStyle]="{ '--color-start' : theme.color, '--color-end': theme.bgColor }"
+      ></div>
+      <div>{{ theme.label }}</div>
+    </div>
+  </ng-template>
+</p-dropdown>

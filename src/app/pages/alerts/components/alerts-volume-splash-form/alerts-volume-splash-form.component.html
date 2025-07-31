@@ -1,0 +1,67 @@
+<form [formGroup]="form" class="app-form">
+
+  <section class="mt-lg">
+    <div class="text-lg text-bold">{{ 'alerts.volumeSplashParams' | translate }}</div>
+
+      <div class="grid-2-1 grid-gap-lg mt-md">
+        <div>
+          <div class="mb-sm">{{ 'alerts.timeRange' | translate }}</div>
+          <app-interval-selector
+            [selectedInterval]="form.get('interval').value"
+            (intervalChange)="intervalChange($event)"
+            [options]="volumeSplashAlertIntervalOptions"
+          ></app-interval-selector>
+        </div>
+
+        <div>
+          <label for="price_direction" class="block mb-sm">{{ 'alerts.priceDirection' | translate }}</label>
+          <p-dropdown
+            id="price_direction"
+            [options]="alertPriceChangeTypeOptions"
+            optionLabel="label"
+            optionValue="value"
+            appendTo="body"
+            [placeholder]="'alerts.direction' | translate"
+            formControlName="price_direction"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="mt-sm">
+          <label for="value" class="block mb-sm" >{{ 'alerts.splash' | translate }}</label>
+          <input id="value" aria-describedby="value-help" formControlName="value" type="number"/>
+          <small *ngIf="form.get('value').errors?.['required'] && formTouched" class="error-message block">{{ 'alerts.requiredField' | translate }}</small>
+          <small *ngIf="form.get('value').errors?.['min'] && formTouched" class="error-message block">{{ 'alerts.minValue' | translate }}</small>
+          <small *ngIf="formTouched" class="error-message block">{{ form.errors?.['validationErrorMessage'] }}</small>
+        </div>
+
+        <div>
+          <div>
+            <input type="checkbox" formControlName="price_change" id="price_change">
+            <label for="price_change" class="checkbox-label">{{ 'alerts.priceChangeFilter' | translate }}</label>
+
+            <div class="mt-sm">
+              <input id="price_change_from" aria-describedby="value-help" formControlName="price_change_from" type="number"/>
+              <small *ngIf="form.get('price_change_from').errors?.['required'] && formTouched" class="error-message block">{{ 'alerts.requiredField' | translate }}</small>
+              <small *ngIf="form.get('price_change_from').errors?.['min'] && formTouched" class="error-message block">{{ 'alerts.minValue' | translate }}</small>
+              <small *ngIf="form.get('price_change_from').errors?.['max'] && formTouched" class="error-message block">{{ 'alerts.maxValue' | translate }}</small>
+              <small *ngIf="formTouched" class="error-message block">{{ form.errors?.['validationErrorMessage'] }}</small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <small class="block mt-md">
+        {{ getVolumeSplashTooltip(form.get('interval').value, translateService) }}
+      </small>
+
+  </section>
+
+  <app-alert-base-form
+    [form]="form"
+    [edit]="edit"
+    [formTouched]="formTouched"
+  ></app-alert-base-form>
+
+</form>

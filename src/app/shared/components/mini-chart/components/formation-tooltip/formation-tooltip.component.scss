@@ -1,0 +1,10 @@
+@import './src/styles';
+
+:host {
+  display: block;
+}
+
+.formation-tooltip-text {
+  font-size: 13px;
+  line-height: 1.5;
+}

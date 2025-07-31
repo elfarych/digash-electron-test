@@ -1,0 +1,73 @@
+.bitget-block {
+  overflow: visible;
+  padding: var(--lg) var(--lg) var(--xl);
+  position: relative;
+  border-radius: var(--md);
+  border: 1px solid transparent;
+  background: linear-gradient(#14141D, #14141D) padding-box,
+  linear-gradient(to bottom, #97f0fb, #292a32) border-box,
+  var(--color-primary-ligthen) padding-box;
+  background-clip: padding-box, border-box;
+  color: #F3F3F3;
+  min-height: calc(100% - 22px);
+
+  .ellipse {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+  }
+
+  .logo {
+    img {
+      width: 300px;
+      max-width: 80%;
+      height: 45px;
+    }
+  }
+
+  button {
+    position: relative;
+    border: 2px solid transparent;
+    background: linear-gradient(#02e0ff, #02e0ff) padding-box,
+    linear-gradient(to bottom, #78f4ff, #02e0ff) border-box,
+    #97f0fb padding-box;
+    background-clip: padding-box, border-box;
+    color: #040810;
+    padding: 12px 24px;
+    border-radius: var(--sm);
+    letter-spacing: .3px;
+    box-shadow: 0 0 50px 0 rgba(33, 224, 242, .7);
+    cursor: pointer;
+    z-index: 10;
+  }
+}
+
+.app-form {
+  width: 450px;
+  max-width: 100%;
+  margin: auto;
+
+  .bitget-uid-input {
+    width: 100%;
+  }
+
+  @media (max-width: 720px) {
+    width: 100%;
+  }
+}
+
+.bitget-text {
+  color: #02e0ff;
+}
+
+.connect-form-grid {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-gap: var(--md);
+
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+  }
+}

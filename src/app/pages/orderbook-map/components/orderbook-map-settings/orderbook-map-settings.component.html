@@ -1,0 +1,204 @@
+<button class="app-button" (click)="openSettings()">
+	<span class="pi pi-sliders-h"></span>
+	<span>{{ 'depth_map.settings' | translate }}</span>
+</button>
+
+<p-dialog [(visible)]="dialogVisible" [modal]="true" [closable]="true"
+	[style]="{ width: '1024px', height: '85%', maxWidth: '100%' }" [header]="'depth_map.settings' | translate">
+	<div class="settings-form-container">
+
+		<form [formGroup]="settingsForm" class="app-form">
+			<div class="py-md grid-2-1 grid-gap-md">
+
+				<div>
+					<label class="block mb-sm">{{ 'depth_map.dataUpdate' | translate }}</label>
+					<p-dropdown formControlName="loaderMode" [options]="dataLoaderOptions" optionLabel="label"
+						optionValue="value" appendTo="body"></p-dropdown>
+				</div>
+
+				<div>
+					<label class="block mb-sm" for="loaderIntervalSec">{{ 'depth_map.updateInterval' | translate
+						}}</label>
+					<p-inputNumber inputId="loaderIntervalSec" formControlName="loaderIntervalSec" class="w-full"
+						[min]="15" [max]="60" [step]="1" [showButtons]="true" spinnerMode="horizontal"
+						buttonLayout="horizontal" decrementButtonClass="p-button-danger"
+						incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
+						decrementButtonIcon="pi pi-minus" />
+					<small class="block mt-xs text-hint">{{ 'depth_map.minValue' | translate }} 15</small>
+				</div>
+
+				<div>
+					<label class="block mb-sm">{{ 'depth_map.ordersType' | translate }}</label>
+					<p-dropdown formControlName="ordersDirection" [options]="ordersDirectionOptions" optionLabel="label"
+						optionValue="value" appendTo="body"></p-dropdown>
+				</div>
+
+				<div>
+					<label class="block mb-sm" for="chartCandlesLength">{{ 'depth_map.chartCandlesLength' | translate
+						}}</label>
+					<p-inputNumber inputId="chartCandlesLength" formControlName="chartCandlesLength" class="w-full"
+						[min]="50" [max]="1000" [step]="50" [showButtons]="true" spinnerMode="horizontal"
+						buttonLayout="horizontal" decrementButtonClass="p-button-danger"
+						incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
+						decrementButtonIcon="pi pi-minus" />
+					<small class="block mt-xs text-hint">{{ 'depth_map.minValue' | translate }} 50. {{
+						'depth_map.maxValue' | translate }} 1000</small>
+				</div>
+
+				<div>
+					<label class="block mb-sm" for="maxOrdersToShow">{{ 'depth_map.maxOrders' | translate }}</label>
+					<p-inputNumber inputId="maxOrdersToShow" formControlName="maxOrdersToShow" class="w-full" [min]="10"
+						[max]="100" [step]="10" [showButtons]="true" spinnerMode="horizontal" buttonLayout="horizontal"
+						decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success"
+						incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+					<small class="block mt-xs text-hint">{{ 'depth_map.maxValue' | translate }} 100</small>
+				</div>
+
+				<div>
+					<label class="block mb-sm" for="maxOrdersDistance">{{ 'depth_map.maxDistancePercent' | translate
+						}}</label>
+					<p-inputNumber inputId="maxOrdersDistance" formControlName="maxOrdersDistance" class="w-full"
+						[min]="1" [max]="10" [step]="1" [showButtons]="true" spinnerMode="horizontal"
+						buttonLayout="horizontal" decrementButtonClass="p-button-danger"
+						incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
+						decrementButtonIcon="pi pi-minus" />
+					<small class="block mt-xs text-hint">{{ 'depth_map.minValue' | translate }} 1. {{
+						'depth_map.maxValue' | translate }} 10</small>
+				</div>
+
+				<div>
+					<label class="block mb-md">{{ 'depth_map.mapScale' | translate }}</label>
+
+					<div class="grid-2-1 grid-gap-md">
+						<div class="flex items-center">
+							<input type="checkbox" formControlName="displaySmallCircle" id="displaySmallCircle">
+							<label class="checkbox-label" for="displaySmallCircle">{{ 'depth_map.showSmallCircle' | translate }}</label>
+						</div>
+						<div class="block">
+							<label class="block mb-sm" for="smallCircleDistance">{{ 'depth_map.circleRange' | translate }} (%)</label>
+							<p-inputNumber inputId="smallCircleDistance" formControlName="smallCircleDistance"
+								class="w-full" [min]="0.2" [max]="2" [step]="0.1" [showButtons]="true" mode="decimal" minFractionDigits="0" maxFractionDigits="2"
+								spinnerMode="horizontal" buttonLayout="horizontal"
+								decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success"
+								incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
+								[readonly]="!settingsForm.get('displaySmallCircle').value" />
+						</div>
+
+						<div class="flex items-center">
+							<input type="checkbox" formControlName="displayLargeCirce" id="displayLargeCirce">
+							<label class="checkbox-label" for="displayLargeCirce">{{ 'depth_map.showBigCircle' | translate }}</label>
+						</div>
+						<div class="block">
+							<label class="block mb-sm" for="largeCircleDistance">{{ 'depth_map.circleRange' | translate }} (%)</label>
+							<p-inputNumber inputId="largeCircleDistance" formControlName="largeCircleDistance"
+								class="w-full" [min]="2" [max]="5" [step]="0.2" [showButtons]="true" mode="decimal" minFractionDigits="0" maxFractionDigits="2"
+								spinnerMode="horizontal" buttonLayout="horizontal"
+								decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success"
+								incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
+								[readonly]="!settingsForm.get('displayLargeCirce').value" />
+						</div>
+					</div>
+				</div>
+
+				<div class="orderbook-map-settings-timeframe">
+					<label class="block mb-sm">{{ 'depth_map.chartTimeframe' | translate }}</label>
+					<p-selectButton [options]="timeframes" optionValue="name" formControlName="chartTimeframe"
+						[allowEmpty]="false"></p-selectButton>
+				</div>
+
+			</div>
+
+			<div class="divider my-lg"></div>
+
+			<div>
+				<label class="block mb-sm">{{ 'depth_map.blacklist' | translate }}</label>
+				<app-blacklist-builder [blacklist]="settings.blacklist" [coins]="coins"
+					(selectSymbol)="selectBlacklistCoin($event)"></app-blacklist-builder>
+			</div>
+
+			<div class="divider my-lg"></div>
+
+			<div class="grid-2-1 app-form grid-gap-md">
+
+				<div>
+					<input type="checkbox" formControlName="showExchange" id="showExchange">
+					<label class="checkbox-label" for="showExchange">{{ 'depth_map.showExchange' | translate }}</label>
+				</div>
+
+				<div>
+					<input type="checkbox" formControlName="showDistance" id="showDistance">
+					<label class="checkbox-label" for="showDistance">{{ 'depth_map.showDistance' | translate }}</label>
+				</div>
+
+				<div>
+					<input type="checkbox" formControlName="showCorrosionTime" id="showCorrosionTime">
+					<label class="checkbox-label" for="showCorrosionTime">{{ 'depth_map.showCorrosionTime' | translate
+						}}</label>
+				</div>
+
+				<div>
+					<input type="checkbox" formControlName="showOrderSum" id="showOrderSum">
+					<label class="checkbox-label" for="showOrderSum">{{ 'depth_map.showOrderSum' | translate }}</label>
+				</div>
+
+				<div>
+					<input type="checkbox" formControlName="openChartOnHover" id="openChartOnHover">
+					<label class="checkbox-label" for="openChartOnHover">{{ 'depth_map.openChartOnHover' | translate
+						}}</label>
+				</div>
+			</div>
+		</form>
+
+		<div class="divider my-lg"></div>
+
+		<div class="orderbook-map-exchanges-settings">
+			<div class="text-lg text-bold">{{ 'depth_map.exchangeSettings' | translate }}</div>
+
+			<div class="flex gap-md mt-md mobile-scroll-x wrap">
+				<ng-container *ngFor="let exchange of exchanges; let index = index">
+					<button class="exchange-button" [class.active]="activeTabIndex === index"
+						(click)="changeActiveTab($event, index)">
+						<div class="app-form" (click)="activateExchange($event, exchange)">
+							<input type="checkbox"
+								[checked]="localSettings.exchangesSettings[exchange.exchange]?.active"
+								(click)="activateExchange($event, exchange.exchange)">
+							<label class="checkbox-label"></label>
+						</div>
+						<span class="exchange-button-logo"><svg-icon [src]="exchange.icon"
+								[svgStyle]="{ 'width.px': 22, 'height.px': 22 }"></svg-icon></span>
+						<span class="no-wrap-text">{{ exchange.name }}</span>
+					</button>
+				</ng-container>
+			</div>
+
+			<ng-container *ngFor="let exchange of exchanges; let index = index">
+				<ng-container *ngIf="activeTabIndex === index">
+					<div class="mt-xl">
+						<app-orderbook-map-exchange-settings
+							[settings]="localSettings.exchangesSettings[exchange.exchange]"
+							(changeSettings)="updateExchangeSettings(exchange.exchange, $event)" />
+					</div>
+				</ng-container>
+			</ng-container>
+		</div>
+
+	</div>
+
+	<div class="flex justify-between mt-md">
+		<div>
+			<button class="app-button" (click)="resetSettings()">
+				<span>{{ isMobileDevice() ? ('depth_map.reset' | translate) : ('depth_map.resetSettings' | translate)
+					}}</span>
+			</button>
+		</div>
+		<div class="flex gap-md">
+			<button class="app-button" (click)="close()">
+				<span>{{ 'depth_map.cancel' | translate }}</span>
+			</button>
+
+			<button class="app-button-primary" (click)="save()">
+				<span>{{ 'depth_map.save' | translate }}</span>
+			</button>
+		</div>
+	</div>
+</p-dialog>

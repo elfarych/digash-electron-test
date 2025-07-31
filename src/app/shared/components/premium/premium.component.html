@@ -1,0 +1,252 @@
+<section>
+  <div class="premium-blocks">
+    <div class="premium-card premium-card-starter">
+
+      <div class="premium-card-content">
+        <div class="text-sub-title text-capitalize text-center">{{ 'premium.beginner' | translate }}</div>
+
+        <div class="mt-lg">
+
+          <ng-container *ngFor="let item of starterPackageItems">
+            <div class="package-item">
+              <div class="package-item-main-text">
+                <span [class]="item.iconClass"></span>
+                <span class="ml-sm">{{ item.label }}</span>
+              </div>
+              <div *ngIf="item.description" class="text-grey premium-card-sub-text">{{ item.description }}</div>
+            </div>
+          </ng-container>
+
+        </div>
+      </div>
+
+    </div>
+    <div class="premium-card premium-card-main">
+
+      <div class="premium-card-content">
+        <div class="text-sub-title text-capitalize text-center">{{ 'premium.premium' | translate }}</div>
+
+        <div class="grid-2-1 grid-gap-md mt-lg package-items">
+          <ng-container *ngFor="let item of premiumPackageItems">
+            <div class="package-item">
+              <span class="pi pi-check icon"></span>
+              <span class="ml-sm">{{ item }}</span>
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="my-lg">{{ 'premium.unlimited_functionality' | translate }}</div>
+
+
+        <!--        Packages-->
+
+        <div class="premium-packages">
+          <ng-container *ngFor="let item of priceList">
+            <div class="premium-packages-item" [class.selected]="selectedPeriod === item.period"
+                 (click)="changePeriod(item.period)">
+              <!-- <div *ngIf="item.value === '12month' " class="main-card-top-decoration" [style]="{ 'background-image':'url(' + gerlandImg + ')' }"></div> -->
+              <div class="premium-packages-item-label">{{ item.info.label | translate }}</div>
+
+              <div class="premium-packages-item-prices">
+                <div *ngIf="item.price_per_month" class="premium-packages-item-price-block mt-sm">
+                  <span class="premium-packages-item-price">{{ item.price_per_month }}$</span>
+                  <span class="text-sm text-grey">{{ 'premium.monthly_short' | translate }}</span>
+                </div>
+
+                <div class="premium-packages-item-total-price-block mt-sm" [ngClass]="item.period !== 'month' ? 'text-right' : ''">
+                  <span class="premium-packages-item-total-price">{{ item.user_price }}$</span>
+                  <span *ngIf="item.info.period" class="text-sm text-grey">/{{ item.info.period | translate }}</span>
+                </div>
+              </div>
+
+              <div *ngIf="item.discount_percent || item.default_discount" class="premium-packages-item-discount">
+                <ng-container *ngIf="item.period !== '12month'">
+                  <ng-container *ngIf="item.discount_percent && item.default_discount &&  item.discount_percent - item.default_discount !== 0">
+                    {{item.default_discount}}% + {{item.discount_percent - item.default_discount}}%
+                  </ng-container>
+                </ng-container>
+
+                <ng-container *ngIf="item.period === '12month'">
+                  <ng-container *ngIf="item.discount_percent && item.default_discount &&  item.discount_percent - item.default_discount !== 0">
+                    {{item.discount_percent}}%
+                  </ng-container>
+                </ng-container>
+
+
+                <ng-container *ngIf="item.discount_percent && item.discount_percent - item.default_discount === 0">
+                  {{item.default_discount}}%
+                </ng-container>
+
+                <ng-container *ngIf="item.discount_percent && !item.default_discount">
+                  {{item.discount_percent}}%
+                </ng-container>
+              </div>
+
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="loyalty-block" *ngIf="userData?.loyalty_discount">
+          <app-premium-loyalty-block
+            [discount]="userData.loyalty_discount"
+          ></app-premium-loyalty-block>
+        </div>
+
+        <div class="divider my-lg"></div>
+
+        <div *ngIf="errorMessage" class="error-message mb-sm">{{ errorMessage }}</div>
+
+
+        <!--        Promo code input-->
+        <div class="app-form promocode-block">
+          <div>
+            <input [(ngModel)]="promoCodeInput" (ngModelChange)="onPromoCodeChange($event)"
+                   placeholder="{{ 'premium.promo_code' | translate }}">
+          </div>
+
+          <button class="app-button-secondary" (click)="applyPromoCode()">
+            <span>{{ 'premium.apply' | translate }}</span>
+          </button>
+        </div>
+
+        <!--        Terms checkbox-->
+        <div class="mt-md terms app-form">
+          <div class="flex gap-xs items-center">
+            <div>
+              <input type="checkbox" [(ngModel)]="termsAgreed" id="termsAgree">
+              <label for="termsAgree" class="checkbox-label">
+              </label>
+            </div>
+            <span [innerHTML]="translatedTerms"></span>
+          </div>
+        </div>
+
+        <div *ngIf="errorMessageTerms && !termsAgreed" class="error-message mb-sm mt-sm">{{ errorMessageTerms }}</div>
+
+
+        <!--        Payment-->
+        <div class="total-block items-center mt-lg">
+          <div class="flex justify-between items-center">
+            <div>{{ 'premium.total' | translate }}</div>
+            <div class="text-lg text-bold">{{ totalPrice.toFixed(2) }}$</div>
+          </div>
+
+          <div>
+            <button class="app-button-primary-md w-full" (click)="payment()" [class.disabled]="!termsAgreed">
+              <span>{{ 'premium.pay' | translate }}</span>
+            </button>
+          </div>
+        </div>
+
+
+        <!--        Partner card-->
+        <ng-container *ngIf="userData$ | async as userData">
+          <div class="mt-lg border-positive pa-sm rounded-borders-sm" *ngIf="userData.special_discount">
+            <div class="text-positive">{{ 'premium.partner_discount' | translate }} {{ userData.special_discount }}%
+              <div class="mt-xs">{{ 'premium.promo_code' | translate }}: {{ userData.partner_promocode }}</div>
+              <div class="flex items-center justify-between">
+                <span>{{ 'profile.partner' | translate }}: {{ userData.partner_username }}</span>
+                <button class="app-button-sm" (click)="deactivatePartner()">
+                  <span>{{ 'profile.partnerDeactivate' | translate }}</span>
+                  <span class="pi pi-times"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-md text-positive border-positive rounded-borders-sm pa-sm"
+               *ngIf="promoCode && !promoCode.constant">
+            <div><b>{{ promoCode.coupon_code }}&nbsp;</b> {{ 'premium.applied' | translate }}.
+              {{ promoCode.discount?.value }}% {{ 'premium.discount' | translate }}
+            </div>
+            <div class="flex justify-end">
+              <button class="app-button-sm app-button-flat" (click)="removePromocode()">
+                <span>{{ 'premium.remove' | translate }}</span>
+              </button>
+            </div>
+          </div>
+
+          <!--          <div class="mt-md text-positive text-bold" *ngIf="selectedPriceList?.period === '12month' && selectedPriceList.special_discount_title">-->
+          <!--            <div>{{ selectedPriceList.special_discount_title }}</div>-->
+          <!--          </div>-->
+
+
+        </ng-container>
+
+        <app-progress-spinner *ngIf="processed"></app-progress-spinner>
+      </div>
+
+
+    </div>
+
+    <div class="premium-card premium-card-partners">
+
+      <div class="bitget-ellipse">
+        <img src="assets/img/ellipse-bitget.png">
+      </div>
+
+      <div class="premium-card-content">
+        <div class="text-sub-title text-capitalize text-center">{{ 'premium.bitget_promo' | translate }}</div>
+      </div>
+
+      <div class="partner-logo">
+        <img src="assets/svg/vataga.svg">
+        <img src="assets/svg/bitget-logo.svg">
+      </div>
+
+      <div class="action position-relative z-index-10">
+        <div class="text-italic text-grey mb-xl text-center">{{ 'premium.tradeOnBitgetInstruction' | translate }}</div>
+        <button class="app-button-primary w-full mt-sm" (click)="openBitget()">
+          <span>{{ 'premium.get_free_premium' | translate }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- <div class="premium-card premium-card-bitget">
+
+      <div class="bitget-ellipse">
+        <img src="assets/img/ellipse-bitget.png">
+      </div>
+
+      <div class="premium-card-content">
+        <div class="text-sub-title text-capitalize text-center">{{ 'premium.tradeOnBitget' | translate }}</div>
+      </div>
+
+      <div class="logo">
+        <img src="assets/svg/bitget-logo.svg">
+      </div>
+
+      <div class="action position-relative z-index-10">
+        <div class="text-italic text-grey mb-xl text-center">{{ 'premium.tradeOnBitgetInstruction' | translate }}</div>
+        <button class="cursor-pointer" (click)="openBitget()">
+          <span>{{ 'premium.get_free_premium' | translate }}</span>
+        </button>
+      </div>
+    </div> -->
+  </div>
+</section>
+
+<div class="my-xl py-lg text-center">
+  <h2 class="text-title">{{ 'premium.comparePlans' | translate }}</h2>
+</div>
+
+<section class="bg-main rounded-borders-md mb-xl">
+  <app-premium-table [comparisonTableData]="comparisonTableData0"
+                     title="{{ 'premium.basic' | translate }}"></app-premium-table>
+  <app-premium-table [comparisonTableData]="comparisonTableData"
+                     title="{{ 'premium.screener' | translate }}"></app-premium-table>
+  <app-premium-table [comparisonTableData]="comparisonTableData2"
+                     title="{{ 'premium.alerts' | translate }}"></app-premium-table>
+  <app-premium-table [comparisonTableData]="comparisonTableData5"
+                     title="{{ 'premium.depth_map' | translate }}"></app-premium-table>
+  <app-premium-table [comparisonTableData]="comparisonTableData3"
+                     title="{{ 'premium.coins' | translate }}"></app-premium-table>
+  <app-premium-table [comparisonTableData]="comparisonTableData6"
+                     title="{{ 'premium.listings' | translate }}"></app-premium-table>
+  <app-premium-table [comparisonTableData]="comparisonTableData7"
+                     title="{{ 'premium.psychology' | translate }}"></app-premium-table>
+  <app-premium-table [comparisonTableData]="comparisonTableData4"
+                     title="{{ 'premium.exchanges' | translate }}"></app-premium-table>
+</section>
+
+<p-scrollTop target="parent" styleClass="custom-scrolltop" [threshold]="100" icon="pi pi-arrow-up"></p-scrollTop>

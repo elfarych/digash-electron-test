@@ -1,0 +1,43 @@
+<div>
+  <app-depth-map-orders-block
+    [styles]="{ top: 0, right: 0 }"
+    [depthDataOrdersGroup]="depthData.asks.distantBlock"
+    [settings]="settings"
+    [showColsTitle]="!isMobileDevice()"
+    titlePosition="top"
+    blockType="distant"
+    ordersType="ask"
+    (openChart)="openChart.emit($event)"
+  ></app-depth-map-orders-block>
+
+  <app-depth-map-orders-block
+    [styles]="{ top: '25%', right: isMobileDevice() ? 0 : '33.333%' }"
+    [showColsTitle]="false"
+    [depthDataOrdersGroup]="depthData.asks.nearBlock"
+    [settings]="settings"
+    blockType="near"
+    ordersType="ask"
+    (openChart)="openChart.emit($event)"
+  ></app-depth-map-orders-block>
+
+  <app-depth-map-orders-block
+    [styles]="{ bottom: '25%', left: isMobileDevice() ? 0 : '33.333%' }"
+    [depthDataOrdersGroup]="depthData.bids.nearBlock"
+    [settings]="settings"
+    [showColsTitle]="!isMobileDevice()"
+    blockType="near"
+    ordersType="bid"
+    (openChart)="openChart.emit($event)"
+  ></app-depth-map-orders-block>
+
+  <app-depth-map-orders-block
+    [styles]="{ bottom: 0, left: 0 }"
+    [depthDataOrdersGroup]="depthData.bids.distantBlock"
+    [settings]="settings"
+    blockType="distant"
+    ordersType="bid"
+    (openChart)="openChart.emit($event)"
+  ></app-depth-map-orders-block>
+
+  <div class="spread-line">{{ 'depth_map.spread' | translate }}</div>
+</div>

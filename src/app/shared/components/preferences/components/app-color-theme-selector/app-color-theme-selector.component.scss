@@ -1,0 +1,16 @@
+@import './src/styles';
+
+
+.theme-color-select-item {
+  display: flex;
+  align-items: center;
+  gap: var(--md);
+}
+
+.theme-color-preview-box {
+  width: 25px;
+  height: 25px;
+  border-radius: var(--border-radius);
+  background: linear-gradient(to bottom, var(--color-start), var(--color-end));
+  box-shadow: 1px 1px 10px 10px rgba(0,0,0,.03);
+}

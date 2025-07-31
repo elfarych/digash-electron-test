@@ -1,0 +1,29 @@
+<app-chart-with-navigation
+  *ngIf="isAuth$ | async"
+  [preferences]="preferences$ | async"
+  [selectedCoin]="symbol$ | async"
+  [exchange]="exchange$ | async"
+  [standaloneChart]="true"
+  [setPriceTitle]="true"
+  [chartIndicators]="chartIndicators$ | async"
+  [timeframe]="'5m'"
+  (coinChange)="redirect($event)"
+  (exchangeChange)="redirect($event)"
+>
+</app-chart-with-navigation>
+
+<app-guard></app-guard>
+
+<!--<div #chartsViewTmpl></div>-->
+
+<!--<div class="premium-ui-block" *ngIf="!(isPremium$ | async)">-->
+<!--  <p-blockUI [target]="chartsViewTmpl" [blocked]="true">-->
+<!--    <div>-->
+<!--      <i class="pi pi-lock" style="font-size: 3rem"></i>-->
+<!--      <p>Просмотр всех монет открывается в премиум доступе</p>-->
+<!--    </div>-->
+<!--    <div class="action">-->
+<!--      <p-button (click)="redirectToPremium()">Приобрести</p-button>-->
+<!--    </div>-->
+<!--  </p-blockUI>-->
+<!--</div>-->

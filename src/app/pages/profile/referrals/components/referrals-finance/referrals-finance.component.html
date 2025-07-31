@@ -1,0 +1,125 @@
+<div class="bg-main pa-lg rounded-borders-md">
+  <div class="flex justify-between items-center">
+    <div class="text-lg text-bold">{{ 'profile.incomeHeader' | translate }}</div>
+    <div>
+      <p-dropdown
+        [ngModel]="selectedDataPeriod"
+        [options]="financeDataPeriodOptions"
+        optionLabel="label"
+        appendTo="body"
+        optionValue="value"
+        placeholder="{{ 'profile.dropdownPlaceholder' | translate }}"
+        (onChange)="handleDatePeriodChange($event)"
+      >
+      </p-dropdown>
+    </div>
+  </div>
+
+  <div class="divider my-lg"></div>
+
+  <div>
+
+    <p>
+      <span>{{ 'profile.balance' | translate }}:</span>
+      <span class="f-weight-500">{{ user.balance }} USDT</span>
+    </p>
+
+    <p>
+      <span>{{ 'profile.periodIncome' | translate }}:</span>
+      <span class="f-weight-500">{{ periodRevenue }} USDT</span>
+    </p>
+
+    <p>
+      <span>{{ 'profile.availableToWithdraw' | translate }}:</span>
+      <span class="flex items-center gap-sm">
+        <span class="f-weight-500">{{ user.balance }} USDT</span>
+        <span>
+          <button class="app-button-primary-sm" (click)="withdraw()">
+            <span class="pi pi-wallet"></span>
+            <span>{{ 'profile.withdraw' | translate }}</span>
+          </button>
+        </span>
+      </span>
+    </p>
+
+    <p>
+      <span>{{ 'profile.withdrawnThisPeriod' | translate }}:</span>
+      <span class="f-weight-500">{{ periodCompletedWithdraw }} USDT</span>
+    </p>
+
+    <p>
+      <span>{{ 'profile.withdrawalsInProcess' | translate }}:</span>
+      <span class="f-weight-500">{{ periodInWorkWithdraw }} USDT</span>
+    </p>
+
+  </div>
+</div>
+
+
+<!--<p-panel>-->
+<!--  -->
+<!--  <app-referrals-table [referralsData]="referrals"/>-->
+
+<!--  <div class="margin-top-4">-->
+<!--    <app-withdraws-table [withdraws]="withdraws"/>-->
+<!--  </div>-->
+
+<!--</p-panel>-->
+
+
+<p-dialog
+  header="{{ 'profile.withdrawDialogHeader' | translate }}"
+  [modal]="true"
+  [(visible)]="dialogVisible"
+  [style]="{ width: '25rem' }"
+>
+  <div class="divider my-lg"></div>
+
+  <ng-template [ngIf]="!!periodInWorkWithdraw">
+    <p-messages [closable]="false" severity="info">
+      <ng-template pTemplate>
+        <div class="text-center">
+          {{ 'profile.withdrawDialogInProcess' | translate }}
+          <br><br>{{ 'profile.withdrawDialogWait' | translate }}
+        </div>
+      </ng-template>
+
+    </p-messages>
+
+  </ng-template>
+
+  <ng-template [ngIf]="!periodInWorkWithdraw">
+    <form class="app-form" [formGroup]="form" (ngSubmit)="submit()">
+
+      <div>
+        <label for="address" class="block mb-sm">{{ 'profile.tronAddress' | translate }}</label>
+        <input id="address" formControlName="address"/>
+        <small *ngIf="form.get('address').errors?.['required'] && formTouched" class="text-negative block mt-sm">{{ 'profile.requiredField' | translate }}</small>
+      </div>
+
+      <div class="mt-md">
+        <label for="sum" class="block mb-sm">{{ 'profile.withdrawAmount' | translate }}</label>
+        <input id="sum" formControlName="sum" type="number"/>
+        <small *ngIf="form.get('sum').errors?.['min'] && formTouched" class="text-negative mt-sm">{{ 'profile.minimumValue' | translate }}</small>
+      </div>
+
+      <div *ngIf="form.errors?.['validationErrorMessage']" class="mt-md text-negative">
+        {{ form.errors?.['validationErrorMessage'] }}
+      </div>
+
+      <div class="mt-md">
+        {{ 'profile.withdrawProcessingTime' | translate }}
+      </div>
+
+      <div class="divider my-lg"></div>
+
+      <div class="flex justify-end">
+        <button class="app-button-primary" (click)="submit()">
+          <span>{{ 'profile.create' | translate }}</span>
+        </button>
+      </div>
+
+    </form>
+  </ng-template>
+
+</p-dialog>

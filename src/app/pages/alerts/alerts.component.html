@@ -1,0 +1,113 @@
+<div class="container">
+
+  <p-confirmPopup></p-confirmPopup>
+
+  <div class="text-center my-xl">
+    <h1 class="text-title">{{ 'alerts.title' | translate }}</h1>
+  </div>
+
+  <div class="bg-main pa-lg rounded-borders-md">
+    <app-alerts-settings-form *ngIf="alertSettings$ | async as alertSettings" [userData]="userData$ | async" [settings]="alertSettings"
+      (settingsChanged)="settingsChanged($event)"></app-alerts-settings-form>
+  </div>
+
+  <!--  Listings-->
+
+  <!-- <div class="bg-main pa-lg rounded-borders-md mt-lg">
+    <div class="flex justify-between items-center mobile-flex-wrap">
+      <div class="text-lg text-bold">{{ 'alerts.listings' | translate }}</div>
+      <div>
+        <button class="app-button-primary" (click)="create('listing')">
+          <span>{{ 'alerts.create' | translate }}</span>
+          <span class="pi pi-plus ml-sm"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="divider my-lg"></div>
+
+    <app-alerts-list
+      *ngIf="listingAlerts$ | async as listingAlerts"
+      [alerts]="listingAlerts"
+      (removeAlert)="remove($event)"
+      (activateAlert)="activate($event)"
+      (stopAlert)="stop($event)"
+      (editAlert)="edit($event)"
+    >
+    </app-alerts-list>
+  </div> -->
+
+  <!--  Notifications-->
+
+  <div class="bg-main pa-lg rounded-borders-md mt-lg show-tooltip-on-hover">
+    <div class="flex justify-between items-center gap-sm mobile-flex-wrap">
+      <div class="text-lg text-bold flex gap-sm">
+        <div>{{ 'alerts.all_alerts' | translate }}</div>
+        <app-tooltips identifier="ALERTS_PAGE_ALL_ALERTS" [size]="14"></app-tooltips>
+      </div>
+      <div class="flex gap-sm mobile-flex-wrap">
+
+        <!-- <button *ngIf="!selectedAlertTypes?.length" class="app-button" (click)="alertsTypeChanged([])">
+          <span class="pi pi-filter-slash"></span>
+        </button> -->
+
+        <!-- <app-alert-type-selection
+          [selectedAlertType]="alertsType"
+          [showLabel]="false"
+          (alertTypeChanged)="alertsTypeChanged($event)"
+        ></app-alert-type-selection> -->
+
+        <button class="app-button-primary flex no-wrap" (click)="create()">
+          <span>{{ 'alerts.create' | translate }}</span>
+          <span class="pi pi-plus ml-sm"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="divider my-lg"></div>
+
+    <app-alert-type-selection [selectedAlertTypes]="selectedAlertTypes" [multipleSelect]="true" [showLabel]="false"
+      (alertTypeChanged)="alertsTypeChanged($event)"></app-alert-type-selection>
+
+    <app-alerts-list *ngIf="alerts$ | async as alerts" [alerts]="alerts" (removeAlert)="remove($event)"
+      (activateAlert)="activate($event)" (stopAlert)="stop($event)" (editAlert)="edit($event)">
+    </app-alerts-list>
+  </div>
+
+  <!--  Price notifications-->
+
+  <div class="bg-main pa-lg rounded-borders-md mt-lg show-tooltip-on-hover">
+    <div class="flex justify-between items-center">
+      <div class="text-lg text-bold flex gap-sm mobile-flex-wrap">
+        <div>{{ 'alerts.price_crossing' | translate }}</div>
+        <app-tooltips identifier="ALERTS_PAGE_PRICE_ALERTS" [size]="14"></app-tooltips>
+      </div>
+      <div class="flex gap-sm mobile-flex-wrap mobile-justify-end">
+
+        <button class="app-button" (click)="removeInactivePriceAlerts()">
+          <span>{{ 'alerts.delete_inactive' | translate }}</span>
+          <span class="pi pi-trash"></span>
+        </button>
+
+        <button class="app-button-primary flex no-wrap" (click)="create('price')">
+          <span>{{ 'alerts.create' | translate }}</span>
+          <span class="pi pi-plus ml-sm"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="divider my-lg"></div>
+
+    <app-alerts-list *ngIf="priceGrossingAlerts$ | async as alerts" [alerts]="alerts" (removeAlert)="remove($event)"
+      (activateAlert)="activate($event)" (stopAlert)="stop($event)" (editAlert)="edit($event)">
+    </app-alerts-list>
+  </div>
+
+</div>
+
+
+<app-guard></app-guard>
+
+<div class="mt-xl">
+  <app-footer></app-footer>
+</div>

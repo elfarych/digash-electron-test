@@ -1,0 +1,112 @@
+<div class="divider my-lg"></div>
+
+<div class="content">
+  <div *ngIf="errorMessage$ | async as message" class="error-message">
+    {{message}}
+  </div>
+
+  <form [formGroup]="form" class="app-form">
+
+    <div class="main-settings-grid">
+
+      <div>
+        <label class="block mb-sm">{{ 'psychology.alertTitle' | translate }}</label>
+        <input type="text" pInputText formControlName="title" placeholder="{{ 'psychology.titlePlaceholder' | translate }}"/>
+
+        <ng-container *ngIf="form">
+          <div *ngIf="form.get('title').errors?.['required'] && formTouched" class="error">
+            {{ 'psychology.requiredField' | translate }}
+          </div>
+        </ng-container>
+      </div>
+
+      <div>
+        <label class="block mb-sm">{{ 'psychology.triggerFrequency' | translate }}<b>&nbsp;{{form.get('occurrenceHours').value}} {{ 'psychology.hours' | translate }}</b></label>
+
+        <p-inputNumber
+          formControlName="occurrenceHours"
+          [showButtons]="true"
+          buttonLayout="horizontal"
+          inputId="horizontal"
+          spinnerMode="horizontal"
+          [step]="0.2"
+          [min]="0.2"
+          [max]="72"
+          decrementButtonClass="p-button-danger"
+          incrementButtonClass="p-button-success"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+        ></p-inputNumber>
+
+        <ng-container *ngIf="form">
+          <div *ngIf="form.get('occurrenceHours').errors?.['required'] && formTouched" class="error">
+            {{ 'psychology.requiredField' | translate }}
+          </div>
+        </ng-container>
+      </div>
+
+      <div></div>
+
+
+      <div>
+        <input type="checkbox" formControlName="telegram" id="telegram">
+        <label for="telegram" class="checkbox-label">{{ 'psychology.sendToTelegram' | translate }}</label>
+      </div>
+
+    </div>
+
+
+    <div class="mt-md">
+      <div class="mb-sm">{{ 'psychology.textForPsychology' | translate }}</div>
+      <!--      <textarea formControlName="content" type="text" placeholder="Текст напоминания" required></textarea>-->
+
+      <p-editor #editor formControlName="content" [style]="{ height: '320px' }" placeholder="{{ 'psychology.reminderTextPlaceholder' | translate }}">
+        <ng-template pTemplate="header">
+
+          <select class="ql-size">
+            <option value="small">{{ 'psychology.small' | translate }}</option>
+            <option selected>{{ 'psychology.normal' | translate }}</option>
+            <option value="large">{{ 'psychology.large' | translate }}</option>
+            <option value="huge">{{ 'psychology.huge' | translate }}</option>
+          </select>
+          <span class="ql-formats">
+            <button type="button" class="ql-bold" aria-label="Bold"></button>
+            <button type="button" class="ql-italic" aria-label="Italic"></button>
+            <button type="button" class="ql-underline" aria-label="Underline"></button>
+            <button class="ql-script" value="sub"></button>
+            <button class="ql-script" value="super"></button>
+          </span>
+          <button class="ql-list" value="ordered"></button>
+          <button class="ql-list" value="bullet"></button>
+          <button class="ql-list" value="check"></button>
+          <select class="ql-color">
+            <option value="white" selected></option>
+            <option value="red"></option>
+            <option value="green"></option>
+            <option value="blue"></option>
+            <option value="yellow"></option>
+            <option value="pink"></option>
+          </select>
+        </ng-template>
+      </p-editor>
+
+      <ng-container *ngIf="form">
+        <div *ngIf="form.get('content').errors?.['required'] && formTouched" class="error">
+          {{ 'psychology.requiredField' | translate }}
+        </div>
+      </ng-container>
+    </div>
+  </form>
+</div>
+
+<div class="divider my-lg"></div>
+
+<div class="flex justify-end gap-md pa-xs">
+  <button class="app-button app-button-flat" (click)="close()">
+    <span class="text-lg">{{ 'psychology.cancel' | translate }}</span>
+  </button>
+
+  <button class="app-button-primary" (click)="submit()">
+    <span class="text-lg">{{data?.data?.edit ? ( 'psychology.edit' | translate ) : ( 'psychology.create' | translate )}}</span>
+  </button>
+</div>

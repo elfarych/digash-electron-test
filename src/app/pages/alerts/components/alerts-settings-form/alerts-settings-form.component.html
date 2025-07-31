@@ -1,0 +1,38 @@
+<form [formGroup]="alertsForm" class="app-form">
+
+  <div class="grid-2-1 grid-gap-md">
+
+    <div class="flex column gap-md">
+      <div>
+        <input type="checkbox" formControlName="alert_sound_enabled" id="alert_sound_enabled">
+        <label for="alert_sound_enabled" class="checkbox-label">{{ 'alerts.enableSoundNotifications' | translate }}</label>
+      </div>
+      <app-sound-selector
+        [selectedSound]="alertsForm.get('alert_sound_name').value"
+        (soundChanged)="changeSound($event)"
+      ></app-sound-selector>
+    </div>
+
+
+    <div class="flex column gap-md">
+      <div>
+        <input type="checkbox" formControlName="telegram_alerts_enabled" id="telegram_alerts_enabled">
+        <label for="telegram_alerts_enabled" class="checkbox-label">{{ 'alerts.enableTelegramNotifications' | translate }}</label>
+      </div>
+
+      <div class="input-with-hint">
+        <input [class.blur]="shouldHide()" formControlName="telegram_user_id" placeholder="{{'telegram.chatIdLabel' | translate}}" [disabled]="true">
+        <div class="input-hint">
+          <i class="pi pi-telegram text-sub-title"></i>
+        </div>
+      </div>
+
+      <div class="text-grey flex column gap-xs">
+        <div>{{ 'alerts.activateDigashBot' | translate }} (напишите /start - <a href='https://t.me/digash_bot' target='_blank' class="text-primary">{{ 'alerts.link' | translate }}</a>)</div>
+        <div>{{ 'alerts.enterTelegramChatId' | translate }} (Вы можете найти его здесь - <a href='https://t.me/raw_info_bot' target='_blank' class="text-primary">{{ 'alerts.link' | translate }}</a>)</div>
+      </div>
+    </div>
+
+  </div>
+
+</form>

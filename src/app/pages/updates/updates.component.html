@@ -1,0 +1,20 @@
+<ng-container *ngIf="posts.length">
+  <div class="container">
+    <h1 class="text-title text-center my-xl">{{ 'updates.updates' | translate }}</h1>
+
+    <div>
+      <app-updates-post-card [post]="firstPost"></app-updates-post-card>
+    </div>
+
+    <div class="grid-2-1 gap-md mt-md">
+      <ng-container *ngFor="let post of otherPosts">
+        <app-updates-post-card [post]="post"></app-updates-post-card>
+      </ng-container>
+    </div>
+
+  </div>
+</ng-container>
+
+<div class="mt-xl">
+  <app-footer></app-footer>
+</div>

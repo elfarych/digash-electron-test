@@ -1,0 +1,442 @@
+.premium-new-year {
+  position: relative;
+  z-index: 10;
+  height: calc(100vh - 60px);
+  overflow: hidden;
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+  z-index: 100;
+
+  & ::ng-deep {
+    .p-button.p-button-icon-only.p-button-rounded {
+    cursor: pointer;
+      position: relative;
+      color: #fff;
+      background: transparent;
+      box-shadow: none;
+      outline: none;
+      border: none;
+    }
+  }
+}
+
+.premium-new-year-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transform: scale(1);
+  animation: scale 50s linear infinite;
+}
+
+.premium-new-year-light {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  animation: light 10s linear infinite;
+}
+
+.premium-new-year-snow {
+  position: absolute;
+  width: 100%;
+  height: 200%;
+  top: -100%;
+  left: 0;
+  opacity: 1;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  animation: snow 20s linear infinite;
+}
+
+.main-title {
+  margin-top: var(--lg);
+  position: relative;
+  z-index: 1;
+  font-size: 64px;
+  font-weight: 800;
+  background: linear-gradient(180deg, #F3F3F3, #8D8D8D);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  @media (max-width: 1660px) {
+    font-size: 32px;
+  }
+
+  @media (max-width: 992px) {
+    margin-top: var(--xl);
+    font-size: 24px;
+  }
+}
+
+.main-card-wrapper {
+  margin-top: 74px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  animation: opacityScale 1s linear forwards;
+  animation-delay: .25s;
+  opacity: 0;
+  z-index: 10;
+  position: relative;
+
+
+  .main-card-block {
+    position: relative;
+    z-index: 1;
+  }
+
+  .main-card {
+    position: relative;
+    width: 320px;
+    border-radius: 30px;
+    background: #1a182d;
+    color: #F3F3F3;
+    z-index: 10;
+
+    @media (max-width: 1660px) {
+      width: 280px;
+    }
+
+    .main-card-price-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: var(--md);
+    }
+
+    .content {
+      position: relative;
+      z-index: 3;
+      padding: var(--md);
+    }
+
+    .title {
+      margin-top: var(--xs);
+      font-size: 28px;
+      font-weight: 600;
+      text-shadow: 1px 1px 10px rgba(0, 0, 0, .5);
+      text-align: center;
+
+      @media (max-width: 1660px) {
+        font-size: 22px;
+      }
+    }
+
+    .price {
+      margin: 24px 0;
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+
+      @media (max-width: 1660px) {
+        font-size: 18px;
+        margin: 12px 0;
+      }
+
+      @media (max-width: 992px) {
+        font-size: 18px;
+      }
+
+      .value {
+        color: #18E992
+      }
+
+      .old-value {
+        font-size: 18px;
+        font-weight: 400;
+        opacity: 0.5;
+        text-decoration: line-through;
+
+        @media (max-width: 1660px) {
+          font-size: 16px;
+        }
+
+        @media (max-width: 992px) {
+          font-size: 14px;
+        }
+      }
+    }
+
+    .action {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      justify-content: center;
+
+      .action-button {
+        font-weight: 600;
+        background: linear-gradient(180deg, #f3f3f3 0%, #18E99266 50%, #B5F7DC66 100%);
+        border: 1px solid #18E99266;
+        border-radius: 10px;
+        padding: 12px 24px;
+        width: 100%;
+        color: white;
+        cursor: pointer;
+      }
+    }
+
+
+    .discount-img {
+      width: 130%;
+      margin-left: -15%;
+    }
+
+    .discount-lighting-wrapper {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 30%;
+
+      div {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+
+        .discount-lighting-img {
+          width: 120%;
+          height: 100%;
+        }
+      }
+    }
+
+    .main-card-top-decoration {
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      width: 100%;
+      height: 20%;
+      opacity: 0.9;
+      background-position: center center;
+      background-size: 100%;
+      background-repeat: no-repeat;
+      border-top-left-radius: 30px;
+      border-top-right-radius: 30px;
+    }
+
+    .main-card-bottom-decoration {
+      position: absolute;
+      z-index: 1;
+      height: 150px;
+      bottom: 0;
+      width: 100%;
+      background-position: center center;
+      background-size: 200%;
+      background-repeat: no-repeat;
+      opacity: 0.5;
+      backdrop-filter: blur(10px);
+      border-bottom-left-radius: 30px;
+      border-bottom-right-radius: 30px;
+    }
+  }
+
+  .free-price-block {
+    width: 320px;
+    position: absolute;
+    z-index: 0;
+    top: 10%;
+    filter: blur(2.2px);
+  }
+
+  .free-price-block-1 {
+    left: -240px;
+  }
+
+  .free-price-block-2 {
+    right: -240px;
+  }
+}
+
+.timer {
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  margin-top: var(--lg);
+  animation: opacityScale 1s linear forwards;
+  animation-delay: 1.5s;
+
+  @media (max-width: 1660px) {
+    margin: 32px 0;
+  }
+
+  @media (max-width: 992px) {
+    margin: 50px 0;
+  }
+
+  .clock {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+
+    .clock-value {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      font-weight: bold;
+      font-size: 18px;
+
+      span {
+        background: #181820;
+        padding: 8px;
+        border-radius: 8px;
+        width: 30px;
+      }
+    }
+
+    .clock-label {
+      opacity: 0.5;
+      margin-top: 4px;
+    }
+  }
+}
+
+.screener {
+  margin-top: var(--lg);
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  animation: opacityScale 1s linear forwards;
+  animation-delay: .75s;
+  opacity: 0;
+
+  img {
+    width: 40%;
+
+    @media (max-width: 992px) {
+      width: 80%;
+    }
+  }
+}
+
+.all-plans {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: var(--lg);
+  position: relative;
+  z-index: 10;
+
+  animation: opacityScale 1s linear forwards;
+  animation-delay: 1.5s;
+  opacity: 0;
+
+  a {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@keyframes opacityScale {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes scale {
+  0% {
+    scale: 1
+  }
+
+  50% {
+    scale: 1.1;
+  }
+
+  100% {
+    scale: 1;
+  }
+}
+
+@keyframes light {
+  0% {
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.5;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  30% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 0.5;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes snow {
+  0% {
+    opacity: 0;
+    top: -100%;
+    left: 0;
+  }
+
+  3% {
+    opacity: 0.5;
+  }
+
+  20% {
+    opacity: 0.8;
+    left: 1%;
+  }
+
+  30% {
+    opacity: 0.2;
+    left: 0;
+  }
+
+  50% {
+    opacity: 0.8;
+    left: -1%
+  }
+
+  70% {
+    opacity: 0.2;
+    left: 0
+  }
+
+  80% {
+    opacity: 0.8;
+    left: 1%
+  }
+
+  100% {
+    top: 0;
+    opacity: 0;
+    left: 0;
+  }
+}

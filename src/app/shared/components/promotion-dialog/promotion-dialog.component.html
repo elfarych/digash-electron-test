@@ -1,0 +1,33 @@
+<p-dialog
+  header="Header"
+  [(visible)]="visible"
+  [modal]="true"
+  [showHeader]="false"
+  class="promotion-dialog"
+  [dismissableMask]="true"
+  [style]="{ width: '540px', height: 'auto' }"
+  (onHide)="close()"
+>
+  <app-premium-loyalty-block
+    *ngIf="(user$ | async)?.loyalty_discount as discount"
+    [showClose]="true"
+    (closeDialog)="close()"
+    [discount]="discount"
+  ></app-premium-loyalty-block>
+<!--<app-premium-new-year [showClose]="true" (closeDialog)="close()"></app-premium-new-year>-->
+<!-- <div class="content">-->
+<!--    <div class="text-content">-->
+<!--      <h2>{{ 'promotion.discountMessage' | translate }}</h2>-->
+<!--      <h3>{{ 'promotion.preorderCountdown' | translate }}</h3>-->
+<!--      <h3>{{countdown}}</h3>-->
+<!--    </div>-->
+<!--    <div class="actions">-->
+<!--      <p-button class="action-button payment" label="{{ 'promotion.orderButton' | translate }}" [rounded]="true"-->
+<!--                (click)="redirectToPayment()"></p-button>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <div class="close">-->
+<!--    <p-button icon="pi pi-times" [rounded]="true" [text]="true" severity="secondary" (click)="close()"></p-button>-->
+<!--  </div>-->
+</p-dialog>

@@ -1,0 +1,323 @@
+@import 'src/mixins';
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.chart-toolbar-wrapper {
+  transition: .2s all;
+  position: relative;
+  text-align: center;
+
+  @media (max-width: 992px) {
+    position: absolute;
+    padding-top: 40px;
+    top: 0;
+    left: -50px;
+    bottom: 0;
+    z-index: 3;
+    background: var(--color-page-bg)
+  }
+
+  .chart-toolbar {
+    width: 50px;
+    height: 100%;
+    border-right: 1px dashed #3a3a3a;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--color-page-bg);
+
+    .toolbar-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: var(--transtion);
+      padding: 4px;
+
+      width: 40px;
+      height: 40px;
+      margin: 4px 2.5px 0px 2.5px;
+      border-radius: 3px 2px 2px 3px;
+
+      &.active span {
+        color: var(--color-primary-ligthen);
+      }
+
+      span {
+        display: block;
+        pointer-events: none;
+        width: 24px;
+      }
+
+      &:hover {
+        background-color: #000;
+      }
+    }
+
+    @media (max-width: 992px) {
+      width: 50px;
+      display: block;
+
+      .toolbar-item {
+        border-radius: 3px 2px 2px 3px;
+
+        span {
+          display: block;
+          pointer-events: none;
+        }
+
+        &:hover {
+          background-color: #000;
+        }
+      }
+    }
+  }
+
+  .toolbar-toggle-btn {
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    background: var(--color-page-bg);
+    //background: red;
+    padding: 8px 4px;
+    border: none;
+    color: var(--color-main-text);
+    box-shadow: 0 0 10px 0 rgba(0,0,0,.5);
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+
+    span {
+      font-size: 16px;
+    }
+  }
+}
+
+.mobile-hint {
+  position: absolute;
+  bottom: 60px;
+  left: 10px;
+  width: calc(100% - 20px);
+  z-index: 1000;
+  padding: 12px;
+  opacity: .9;
+  font-size: 16px;
+  border-radius: 4px;
+  @include outlined-main();
+
+  .close-button {
+    top: -10px;
+    right: -6px;
+    border-radius: 8px;
+    position: absolute;
+    border: 1px solid var(--color-primary);
+    background-color: var(--color-primary-ligthen);
+    cursor: pointer;
+    padding: 1px 6px;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.open {
+  @media (max-width: 992px) {
+    left: 0;
+  }
+}
+
+.header-content {
+  width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: var(--sm);
+  align-items: center;
+  padding: var(--sm);
+  background: var(--color-main-bg);
+  border-top: 3px solid var(--color-main-bg-accent-lighten);
+  border-bottom: 3px solid var(--color-main-bg-accent-lighten);
+  height: 50px;
+
+  @media (max-width: 992px) {
+    border-top: none;
+    border-bottom: none;
+  }
+
+  .left-side, .right-side {
+    display: flex;
+    gap: var(--sm);
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  .coin-exchange {
+    display: flex;
+    align-items: center;
+
+    img {
+      width: var(--lg);
+      height: var(--lg);
+      border-radius: 50%;
+    }
+  }
+
+  .swap-exchange-button {
+    cursor: pointer;
+    @include outlined-main(1px);
+    padding: var(--sm);
+    border-radius: var(--sm);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.full-chart {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+
+  .right-side {
+    display: flex;
+    align-items: center;
+    gap: var(--sm);
+
+    .right-side-button {
+      @include outlined-main(1px);
+      padding: var(--sm);
+      border-radius: var(--sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+  }
+}
+
+.mini-chart {
+  width: 100%;
+  height: 100%;
+
+  .header-content {
+    position: relative;
+    z-index: 10;
+    @include outlined(
+        var(--color-secondary),
+        var(--color-secondary-lighten),
+        transparent,
+        1px,
+        0
+    );
+    height: 40px;
+    border-radius: var(--sm);
+    padding: var(--xs);
+    overflow-x: scroll;
+
+    @media (max-width: 992px) {
+      .symbol-title {
+        font-size: var(--font-size-text-small);
+      }
+    }
+  }
+
+  .night-vision-chart {
+    margin-top: -1px;
+    border-bottom-right-radius: var(--sm);
+    border-bottom-left-radius: var(--sm);
+
+    &::ng-deep .nvjs-toolbar {
+      display: none;
+    }
+  }
+
+  .clipboard-preview {
+    display: none;
+  }
+
+  .right-side {
+    display: flex;
+    align-items: center;
+    gap: var(--sm);
+
+    .right-side-button {
+      @include outlined-main(1px);
+      padding: 4px;
+      border-radius: var(--sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #fff;
+
+      @media (max-width: 992px) {
+        padding: 6px;
+        border-radius: 6px;
+
+        @include outlined(
+            var(--color-main-bg-accent),
+            var(--color-main-bg-accent-lighten),
+            var(--color-main-outline-shadow),
+            1px, 1px
+        )
+      }
+    }
+  }
+}
+
+.clipboard-preview {
+  display: none;
+  border-radius: var(--sm);
+  position: absolute;
+  bottom: var(--sm);
+  left: var(--sm);
+  background-color: var(--color-main-bg-accent);
+  transition: .3s all;
+  z-index: -1;
+  width: 400px;
+  max-width: 100%;
+  height: 0;
+
+  &.show {
+    height: 300px;
+    z-index: 25;
+
+    padding: var(--sm);
+    padding-bottom: var(--xl);
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+  }
+
+  .title {
+    background-color: var(--color-secondary);
+    text-align: center;
+    padding: var(--sm);
+    margin-bottom: var(--sm);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+}
+
+night-vision-chart {
+  @media (max-width: 992px) {
+    margin-top: -8px;
+    max-height: calc(100vh - 90px);
+  }
+}
+

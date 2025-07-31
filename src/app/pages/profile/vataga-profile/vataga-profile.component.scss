@@ -1,0 +1,81 @@
+$vataga-gradient: linear-gradient(104.44deg, rgb(146, 36, 255) 12%, rgb(184, 65, 240) 107.91%);
+
+.vataga-block {
+  overflow: visible;
+  padding: var(--lg) var(--lg) var(--xl);
+  position: relative;
+  border-radius: var(--md);
+  border: 1px solid transparent;
+  background: linear-gradient(hsl(240, 18%, 10%), #14141D) padding-box,
+    linear-gradient(to bottom, rgb(146, 36, 255), #292a32) border-box,
+    var(--color-primary-ligthen) padding-box;
+  background-clip: padding-box, border-box;
+  color: #F3F3F3;
+  overflow: hidden;
+
+  .ellipse {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    opacity: .25;
+  }
+
+  .logo {
+    img {
+      width: 300px;
+      max-width: 80%;
+      height: 45px;
+    }
+  }
+
+  button {
+    position: relative;
+    border: 2px solid transparent;
+    background: linear-gradient(rgb(146, 36, 255), rgb(146, 36, 255)) padding-box,
+      linear-gradient(to bottom, rgb(184, 65, 240), rgb(146, 36, 255)) border-box,
+      #97f0fb padding-box;
+    background-clip: padding-box, border-box;
+    color: #040810;
+    padding: 12px 24px;
+    border-radius: var(--sm);
+    letter-spacing: .3px;
+    box-shadow: 0 0 50px 0 rgb(184, 65, 240, .3);
+    cursor: pointer;
+    z-index: 10;
+  }
+}
+
+.app-form {
+  width: 450px;
+  max-width: 100%;
+  margin: auto;
+
+  .vataga-uid-input {
+    width: 100%;
+  }
+
+  @media (max-width: 720px) {
+    width: 100%;
+  }
+}
+
+.vataga-text {
+  color: rgb(184, 65, 240);
+}
+
+.help-content-link {
+  color: rgb(184, 65, 240);
+  text-decoration: underline;
+}
+
+.connect-form-grid {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-gap: var(--md);
+
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+  }
+}

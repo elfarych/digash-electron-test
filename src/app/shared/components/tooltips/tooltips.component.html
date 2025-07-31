@@ -1,0 +1,78 @@
+<span
+  class="pi pi-question-circle cursor-pointer app-function-tooltip-icon"
+  [ngStyle]="{ fontSize: size + 'px' }"
+  (click)="openTooltipDialog($event)"
+></span>
+
+<p-dialog
+  position="center"
+  [(visible)]="dialogVisible"
+  [closable]="true"
+  [showHeader]="false"
+  [modal]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '800px', maxWidth: '95%', height: 'auto', maxHeight: '90vh' }"
+  (onHide)="closeTooltipDialog()"
+  appendTo="body"
+  styleClass="tooltip-dialog"
+>
+
+  <ng-template [ngIf]="!loading && tooltip">
+
+    <div>
+      <h3 class="text-bold text-lg">
+        {{ title }}
+      </h3>
+
+      <div *ngIf="tooltip.image" class="mt-lg">
+        <img
+          [src]="tooltip.image"
+          [alt]="title"
+          class="tooltip-image"
+        />
+      </div>
+
+      <div [innerHTML]="content" class="mt-lg"></div>
+
+      <div class="divider my-lg"></div>
+      <div class="actions">
+        <button class="app-button-primary" (click)="closeTooltipDialog()">
+          <span class="pi pi-check-circle px-xl"></span>
+        </button>
+      </div>
+    </div>
+
+  </ng-template>
+
+  <ng-template [ngIf]="loading">
+    <div>
+      <p-panel>
+        <ng-template pTemplate="header">
+          <h3>
+            <p-skeleton height="30px" width="300px"></p-skeleton>
+          </h3>
+        </ng-template>
+
+        <div>
+          <p-skeleton height="400px" width="100%"></p-skeleton>
+        </div>
+        <div class="margin-top-4">
+          <p-skeleton height="20px" width="100%"></p-skeleton>
+        </div>
+        <div class="margin-top-2">
+          <p-skeleton height="20px" width="90%"></p-skeleton>
+        </div>
+        <div class="margin-top-2">
+          <p-skeleton height="20px" width="80%"></p-skeleton>
+        </div>
+        <div class="margin-top-2">
+          <p-skeleton height="20px" width="70%"></p-skeleton>
+        </div>
+
+      </p-panel>
+    </div>
+
+
+  </ng-template>
+
+</p-dialog>

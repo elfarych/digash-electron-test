@@ -1,0 +1,19 @@
+@import "src/mixins";
+
+.psyhology-item {
+  @include outlined-main(1px);
+  border-radius: var(--md);
+  padding: var(--md);
+  transition: .5s all;
+
+
+  &:hover {
+    border: 2px solid var(--color-primary);
+  }
+}
+
+.badge {
+  background: var(--color-main-bg-accent-lighten);
+  border-radius: var(--sm);
+  padding: var(--sm);
+}

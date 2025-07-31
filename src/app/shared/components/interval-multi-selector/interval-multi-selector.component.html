@@ -1,0 +1,13 @@
+<div *ngIf="options?.length">{{ 'chart.selectMultipleTimeframeLevels' | translate }}: </div>
+<div class="mt-sm timeframe-selection">
+  <p-selectButton
+    [disabled]="!isPremium"
+    [options]="options"
+    optionValue="name"
+    [allowEmpty]="true"
+    [multiple]="true"
+    [ngModel]="selectedIntervals"
+    (onChange)="onIntervalsChange($event)"
+  ></p-selectButton>
+</div>
+

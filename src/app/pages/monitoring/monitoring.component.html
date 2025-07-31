@@ -1,0 +1,79 @@
+<main>
+  <div *ngIf="permissions$ | async as permissions" class="pa-md">
+    <div class="flex justify-between items-center">
+      <div><h1>{{ 'monitoring.Apps' | translate }} {{ processedApps.length }}</h1></div>
+
+      <div *ngIf="permissions.is_admin" class="flex items-center items-center gap-md">
+
+        <div class="app-form" style="min-width: 250px">
+          <input type="checkbox" [(ngModel)]="groupAppsByExchange" id="groupAppsByExchange">
+          <label for="groupAppsByExchange" class="checkbox-label">Группировать по биржам</label>
+        </div>
+
+        <p-dropdown
+          [(ngModel)]="appsFilter"
+          [options]="filterDropdownOptions"
+          optionLabel="label"
+          optionValue="value"
+          appendTo="body"
+          (onChange)="onFilterChange()"
+        >
+        </p-dropdown>
+
+        <p-dropdown
+          [(ngModel)]="sortDirection"
+          [options]="sortingDropdownOptions"
+          optionLabel="label"
+          optionValue="value"
+          appendTo="body"
+          (onChange)="onSortingChange()"
+        >
+        </p-dropdown>
+
+        <div>
+          <button *ngIf="!updateInProcess" class="app-button-primary" (click)="reloadApps()">
+            <span class="pi pi-refresh"></span>
+            <span>Update</span>
+          </button>
+
+          <span *ngIf="updateInProcess">Processing...</span>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div *ngIf="groupAppsByExchange" class="mt-lg">
+      <ng-container *ngFor="let exchange of exchanges">
+        <div class="flex items-center gap-sm">
+          <svg-icon [src]="exchange.icon" [svgStyle]="{ 'width.px': 24 }"></svg-icon>
+          <div class="text-sub-title text-bold">{{ exchange.name }}</div>
+        </div>
+
+        <div class="apps mt-md mb-xl">
+          <ng-container *ngFor="let app of getAppsByExchange(exchange.exchange)">
+            <app-digital-ocean-app-card
+              [permissions]="permissions"
+              [app]="app"
+              (restartApp)="restartApp($event)"
+            >
+            </app-digital-ocean-app-card>
+          </ng-container>
+        </div>
+
+      </ng-container>
+
+    </div>
+
+    <div *ngIf="!groupAppsByExchange && permissions.is_admin" class="mt-lg apps">
+      <ng-container *ngFor="let app of processedApps">
+        <app-digital-ocean-app-card
+          [permissions]="permissions"
+          [app]="app"
+          (restartApp)="restartApp($event)"
+        >
+        </app-digital-ocean-app-card>
+      </ng-container>
+    </div>
+  </div>
+</main>

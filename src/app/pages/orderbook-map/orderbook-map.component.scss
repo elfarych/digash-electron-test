@@ -1,0 +1,123 @@
+@import "src/variables";
+@import "src/mixins";
+
+.premium-container {
+  height: calc(100vh - 50px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--dark-background-second-color);
+  background: url("/../assets/img/density_map.png");
+  background-size: 100% 100%;
+  border-radius: 10px;
+
+  & ::ng-deep .p-component-overlay {
+    flex-wrap: wrap;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+
+    > div {
+      width: 100%;
+
+      p {
+        margin-top: 16px;
+      }
+    }
+
+    .action {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
+
+main {
+  height: 100%;
+  position: relative;
+
+  .toolbar {
+    position: absolute;
+    top: var(--md);
+    left: var(--md);
+
+    display: flex;
+    gap: var(--sm);
+    align-items: center;
+    z-index: 25;
+  }
+
+  .legend {
+    position: absolute;
+    top: calc(var(--md) + 50px);
+    left: var(--md);
+    z-index: 25;
+    background-color: var(--color-main-bg);
+    padding: var(--sm);
+    opacity: .75;
+    pointer-events: none;
+
+    @media (max-width: 992px) {
+      z-index: 10;
+    }
+
+    .legend-item {
+      display: flex;
+      align-self: center;
+      gap: var(--sm);
+      margin-bottom: var(--md);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &__marker {
+        font-size: 9px;
+        width: 18px;
+        border-radius: 100%;
+        padding: 0;
+
+        &.distance {
+          @include outlined(var(--color-danger),
+            var(--color-danger-lighten),
+            transparent, 2px, 0)
+        }
+
+        &.limit-order {
+          border-radius: 100%;
+
+          &.ask {
+            @include outlined(var(--color-danger),
+              var(--color-danger-lighten),
+              transparent, 2px, 0)
+          }
+
+          &.bid {
+            @include outlined(
+              var(--color-positive),
+              var(--color-positive-ligthen),
+              transparent, 2px, 0
+            )
+          }
+        }
+      }
+
+      &__description {
+        color: var(--color-sub-text);
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  .orderbook-area-container {
+    width: 100%;
+    height: calc(100vh - 60px);
+    position: relative;
+    overflow: hidden;
+  }
+}

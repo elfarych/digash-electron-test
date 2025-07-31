@@ -1,0 +1,16 @@
+@import './src/styles';
+
+:host {
+  position: fixed;
+  bottom: 42px;
+  right: 42px;
+
+  width: 32px;
+  height: 32px;
+
+  z-index: 100;
+}
+
+button {
+  background-color: var(--color-main-bg-accent);
+}

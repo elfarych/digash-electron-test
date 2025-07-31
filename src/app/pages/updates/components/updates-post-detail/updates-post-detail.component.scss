@@ -1,0 +1,143 @@
+@import "./src/styles";
+
+:host {
+  &::ng-deep .changelog-post {
+    background-color: #1e1e2a;
+    padding: 1.5rem;
+    margin: 2rem auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+
+    h2, h3 {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+      color: #ffffff;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      margin-top: 1.5rem;
+    }
+
+    p {
+      margin-bottom: 0.8rem;
+      line-height: 1.6;
+    }
+
+    ul {
+      margin: 0 0 1.5rem 1.5rem;
+      padding: 0;
+      list-style: disc;
+
+      li {
+        margin-bottom: 0.5rem;
+        line-height: 1.5;
+      }
+    }
+
+    strong {
+      font-weight: 600;
+      color: #ffffff;
+    }
+  }
+}
+
+.bg-effect {
+  position: absolute;
+  bottom: -40px;
+  right: -40px;
+  pointer-events: none;
+}
+
+.image {
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.post-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .open-premium {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    text-align: center;
+
+    i {
+      width: 100%;
+    }
+  }
+
+  button {
+    width: auto;
+    margin-top: 12px;
+    font-weight: 600;
+    background: linear-gradient(180deg, #EACB6530 0%, #EACB65 50%, #EACB6566 100%);
+    border: 1px solid #EACB65;
+    color: #252533;
+    border-radius: 10px;
+    padding: 12px 24px;
+    //color: white;
+    cursor: pointer;
+  }
+}
+
+.post-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .social-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--md);
+  }
+}
+
+.post-detail {
+  padding: var(--lg);
+  position: relative;
+  overflow: hidden;
+  border-radius: 0;
+
+  .title-container {
+    padding-bottom: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+
+    h2 {
+      font-size: 18px;
+    }
+
+    .title-img {
+      background-color: #633ECA40;
+      border-radius: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 4px;
+      min-width: 48px;
+      height: 48px;
+    }
+  }
+
+  @media (max-width: 992px) {
+    padding: var(--md);
+  }
+}
+
+.dialog {
+  padding: 0;
+}

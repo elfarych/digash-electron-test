@@ -1,0 +1,75 @@
+<!--<ng-container [ngSwitch]="premiumLoyaltyDiscount.discount_type">-->
+<!--  <div *ngSwitchCase="'loyalty'" class="">-->
+<!--    -->
+<!--  </div>-->
+<!--  <div *ngSwitchCase="'repeat'">-->
+
+<!--  </div>-->
+<!--</ng-container>-->
+
+<div
+  #premiumLoyaltyBlock
+  class="premium-loyalty-block"
+  [class.popup]="showClose"
+>
+  <header *ngIf="showClose">
+    <div class="title">
+      {{"premium.loyalty_discount" | translate}}
+    </div>
+    <div class="close">
+      <p-button icon="pi pi-times" [rounded]="true" [text]="true" severity="secondary" (click)="closeDialog.emit()"></p-button>
+    </div>
+  </header>
+  <div class="discount-prices">
+    <div class="discount-prices-value">
+      -{{discount.percent}}%
+    </div>
+    <div class="discount-prices-all">
+      <div class="discount-prices-year">
+        <span class="price-now">{{priceNowYear}}$/{{"premium.period_one_year" | translate}}</span>
+        <span class="price-before">{{priceBeforeYear}}$/{{"premium.period_one_year" | translate}}</span>
+      </div>
+      <div class="discount-prices-month">
+        <span class="price-now">{{priceNowMonth}}$/{{"premium.per_month" | translate}}</span>
+        <span class="price-before">{{priceBeforeMonth}}$/{{"premium.per_month" | translate}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="discount-description">
+    <span>{{"premium." + discount.discount_type + "_1" | translate}}</span><br>
+    <span>{{"premium." + discount.discount_type + "_2" | translate}}</span>
+  </div>
+
+  <div class="action" *ngIf="showClose">
+    <button class="action-button" (click)="payment()">
+      {{ 'pricing.subscribe' | translate }}
+    </button>
+  </div>
+
+  <div class="countdown-timer">
+    <div class="countdown-left-label">{{ 'pricing.until' | translate }}</div>
+    <div class="time-blocks-wrapper">
+      <div class="time-block">
+        <div class="time-block-value-wrapper">
+          <div class="time-block-value">{{countdownHours[0]}}</div>
+          <div class="time-block-value">{{countdownHours[1]}}</div>
+          <div class="time-block-divider">:</div>
+        </div>
+        <div class="clock-label">{{ 'pricing.hours' | translate }}</div>
+
+      </div>
+      <div class="time-block">
+        <div class="time-block-value-wrapper">
+          <div class="time-block-value">{{countdownMinutes[0]}}</div>
+          <div class="time-block-value">{{countdownMinutes[1]}}</div>
+        </div>
+        <div class="clock-label">{{ 'pricing.minutes' | translate }}</div>
+        <!--      <div class="time-block-divider">:</div>-->
+      </div>
+    </div>
+<!--    <div class="time-block">-->
+<!--      <div class="time-block-value">{{countdownSeconds[0]}}</div>-->
+<!--      <div class="time-block-value">{{countdownSeconds[1]}}</div>-->
+<!--    </div>-->
+  </div>
+</div>

@@ -1,0 +1,31 @@
+
+
+.profile-data {
+  position: relative;
+  padding-right: var(--lg);
+
+  .h-divider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 2px;
+    background: var(--color-page-bg);
+    border-right: 1px solid var(--color-main-bg-accent);
+    transition: .5s all;
+  }
+
+  @media (max-width: 992px) {
+    padding-right: 0;
+
+    .h-divider {
+      display: none;
+    }
+  }
+}
+
+.partners-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--md);
+}

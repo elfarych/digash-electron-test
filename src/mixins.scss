@@ -1,0 +1,102 @@
+@mixin outlined($bg-color, $bg-color-lighten, $outline-shadow-color, $border-size, $shadow-size) {
+  border: $border-size solid transparent;
+  background: linear-gradient($bg-color, $bg-color) padding-box,
+    linear-gradient(to bottom, $bg-color-lighten, $bg-color) border-box,
+    $bg-color padding-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 0 0 $shadow-size $outline-shadow-color;
+}
+
+@mixin outlined-main($shadow-size: 2px) {
+  @include outlined(
+      var(--color-main-bg-accent),
+      var(--color-main-bg-accent-lighten),
+      var(--color-main-outline-shadow),
+      2px, $shadow-size
+  )
+}
+
+@mixin outlined-promo($shadow-size: 2px) {
+  @include outlined(
+      rgba(31, 31, 40, 0.6),
+      rgba(41, 42, 50, 0.6),
+      #0e0f15,
+      2px, 2px
+  )
+}
+
+@mixin outlined-primary($shadow-size: 2px) {
+  @include outlined(
+      var(--color-primary),
+      var(--color-primary-ligthen),
+      var(--color-main-outline-shadow),
+      2px, $shadow-size
+  )
+}
+
+@mixin outlined-secondary($shadow-size: 2px) {
+  @include outlined(
+      var(--color-secondary),
+      var(--color-secondary-lighten),
+      var(--color-main-outline-shadow),
+      2px, $shadow-size
+  )
+}
+
+@mixin base-shadow {
+  box-shadow: 2px 2px 10px 0 rgba(0,0,0,.1);
+}
+
+@mixin default-button-style($border-size: 2px, $padding: 4px) {
+  @include button-style(
+    var(--color-main-bg-accent),
+    var(--color-main-bg-accent-lighten),
+    var(--color-main-outline-shadow),
+      $padding, $border-size
+  )
+}
+
+@mixin default-button-primary-style($border-size: 2px, $padding: 4px) {
+  @include button-style(
+      var(--color-primary),
+      var(--color-primary-ligthen),
+      var(--color-main-outline-shadow),
+      $padding, $border-size
+  )
+}
+
+@mixin button-style($bg-color, $bg-color-lighten, $outline-shadow-color, $padding, $border-size: 2px) {
+  cursor: pointer;
+  position: relative;
+  padding: $padding;
+  color: var(--color-main-text);
+  border-radius: var(--sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sm);
+  font-size: var(--font-size-text);
+  letter-spacing: .5px;
+  @include outlined($bg-color, $bg-color-lighten, $outline-shadow-color, $border-size, $border-size);
+
+  .pi {
+    font-size: 16px;
+  }
+
+  @media (max-width: 992px) {
+    font-size: 12px;
+    padding: 6px;
+    @include outlined($bg-color, $bg-color-lighten, $outline-shadow-color, 1px, 1px);
+    border-radius: 6px;
+    .pi {
+      font-size: 14px;
+    }
+
+    span {
+      font-size: 12px;
+    }
+  }
+}
+
+
+

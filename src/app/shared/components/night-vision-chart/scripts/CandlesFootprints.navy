@@ -1,0 +1,446 @@
+// NavyJS ~ 0.1-lite
+
+// <ds>Standart japanese candles</ds>, format:
+// [<timestamp>, <open>, <high>, <low>, <close>, <?volume>]
+
+[OVERLAY name = CandlesFootprints, ctx = Canvas, version = 1.0.0]
+
+prop('colorClusterUp', {type: 'color', def: '#00ff51'});
+prop('colorClusterDw', {type: 'color', def: '#ff0000'});
+prop('clusterDeltaMode', {type: 'boolean', def: true});
+prop('exchange', {type: 'string', def: 'BINANCE_SPOT'})
+
+let max_cluster_value = 0;
+let hoveredCandle = {x: 0, y: 0};
+let step = 0;
+
+// Draw call
+draw(ctx)
+{
+
+  let cnv = $lib.layoutCnv($core, true, $props.showVolume)
+  let bodies = [...cnv.upBodies ?? [], ...cnv.dwBodies ?? []];
+  if (!bodies.length) return;
+  let layout = $core.layout;
+  let width = Math.max(bodies[0].w, 1);
+  const timeframe = $core.props.timeFrame / 60_000;
+
+  if (timeframe >= 240) {
+    return void 0;
+  }
+
+  for (let i = 0; i < $core.data.length - 1; i++) {
+    max_cluster_value += $core.data[i][5];
+  }
+
+  max_cluster_value = (max_cluster_value / $core.data.length) / 2;
+
+  if ($core.view.length <= 150) {
+    for (let i = 0; i < bodies.length; i++) {
+      drawClusterData(ctx, bodies[i], width);
+    }
+
+    drawTooltip(ctx, width);
+  }
+}
+
+function mousemove($event) {
+  if ($core.view.length <= 150) {
+    const x = $core.cursor.time;
+    const precision = Math.pow(10, $core.layout.prec);
+    const roundedY = (Math.ceil($core.layout.y2value(event.offsetY) * precision) / precision);
+    const y = roundedY.toFixed($core.layout.prec);
+
+    hoveredCandle = {x, y};
+  }
+}
+
+function mouseout() {
+  hoveredCandle = {x: 0, y: 0};
+}
+
+function drawTooltip(ctx, initialCandleWidth) {
+  if (!hoveredCandle?.x || !hoveredCandle?.y) {
+    return void 0;
+  }
+
+  const layout = $core.layout;
+  let cnv = $lib.layoutCnv($core, true, $props.showVolume);
+  let bodies = [...cnv.upBodies ?? [], ...cnv.dwBodies ?? []];
+  const candle = bodies.find((value) => value.src[0] === hoveredCandle.x);
+
+  if (!candle) {
+    return void 0;
+  }
+
+  const clusterData = clusterDataCompression(candle).src[8];
+
+  if (!clusterData) {
+    return void 0;
+  }
+
+  const coeff = $core.view.length > 50 ? 4 : 2;
+  const low = layout.value2y(candle.src[3]);
+  const high = layout.value2y(candle.src[2]);
+  const candleHeight = (high < low ? low - high : high - low) * coeff;
+
+  const y1 = layout.value2y(0, false);
+  const y2 = layout.value2y(step, false);
+  let height = y1 - y2;
+  height *= coeff;
+
+  const clusterWidth = Math.max(initialCandleWidth, 40)
+
+  const tooltipHeight = 120;
+  const tooltipWidth = 80;
+
+  const tooltipX = layout.ti2xWithoutRound(candle.src[0]) - tooltipWidth / 2;
+  const tooltipY = high - tooltipHeight;
+  // let tooltipY = high;
+
+  // ctx.beginPath();
+  // ctx.strokeWidth = 2;
+  // ctx.strokeStyle = 'rgba(255,255,255,.2)';
+  // ctx.fillStyle = 'rgba(19,21,24,0.9)';
+  // ctx.rect(tooltipX, tooltipY, tooltipWidth, tooltipHeight);
+  // ctx.stroke();
+  // ctx.fill();
+
+
+
+  if (clusterData?.sell) {
+    const x = layout.ti2xWithoutRound(candle.src[0]) - clusterWidth - 1;
+
+    const orderedSell = Object.keys(clusterData.sell).sort().reduce(
+      (obj, key) => {
+        obj[key] = clusterData.sell[key];
+        return obj;
+      },
+      {}
+    );
+
+    let offsetY = 80;
+    let prevY = 0;
+    for (const [price, value] of Object.entries(orderedSell)) {
+      if (!prevY) {
+        prevY = layout.value2y(parseFloat(price));
+      }
+      let y = prevY - height;
+
+      ctx.beginPath();
+      ctx.fillStyle = gradient(value * price, 'sell')(value * price);
+      ctx.rect(x, y - offsetY, clusterWidth, height);
+      ctx.fill();
+
+      drawLabel(ctx, price, value, x + clusterWidth / 2, y - offsetY + height / 2);
+      prevY = y;
+    }
+  }
+
+  if (clusterData?.buy) {
+    const x = layout.ti2xWithoutRound(candle.src[0]) - clusterWidth - 1;
+
+    const orderedBuy = Object.keys(clusterData.buy).sort().reduce(
+      (obj, key) => {
+        obj[key] = clusterData.buy[key];
+        return obj;
+      },
+      {}
+    );
+
+    let offsetY = 80;
+    let prevY = 0;
+    for (const [price, value] of Object.entries(orderedBuy)) {
+      if (!prevY) {
+        prevY = layout.value2y(parseFloat(price));
+      }
+      let y = prevY - height;
+
+      ctx.beginPath();
+
+      ctx.fillStyle = gradient(value * price, 'buy')(value * price);
+      ctx.rect(x + clusterWidth, y - offsetY, clusterWidth, height);
+      ctx.fill();
+
+      drawLabel(ctx, price, value, x + clusterWidth + clusterWidth / 2, y - offsetY + height / 2);
+      prevY = y;
+    }
+  }
+}
+
+function clusterDataCompression(clusterData) {
+  const data = JSON.parse(JSON.stringify(clusterData));
+
+  const compressedData = {'sell': {}, 'buy': {}};
+
+  if (!data.src[8]) {
+    return data;
+  }
+
+  const price = data.src[1];
+  let min = 2;
+  let offset = 1;
+
+  if (price > 100 && price < 1000) {
+    offset = 0.5;
+  }
+
+  if (price > 10000) {
+    offset = 10;
+  }
+
+  const timeframe = $core.props.timeFrame / 60_000;
+  switch (timeframe) {
+    case 1:
+      min = 2;
+      break;
+    case 5:
+      min = 4;
+      break;
+    case 15:
+      min = 6;
+      break;
+    case 60:
+      min = 7;
+      break;
+    default:
+      min = 8;
+      break;
+  }
+  min *= offset;
+
+  const multiplier = d3.scaleLinear().range([min, min + 10]).domain([1, 150]);
+  step = Math.round(multiplier($core.view.length));
+  if (price < 1000) {
+    step = $core.layout.$step / Math.round(multiplier($core.view.length));
+  }
+
+  function roundPrice(price) {
+    return Math.round(price / step) * step;
+  }
+
+  ['sell', 'buy'].forEach((type) => {
+    if (type in data.src[8]) {
+      Object.entries(data.src[8][type]).forEach(([price, value]) => {
+        const roundedPrice = roundPrice(parseFloat(price));
+        compressedData[type][roundedPrice] = (compressedData[type][roundedPrice] || 0) + value;
+      });
+    }
+  });
+
+  data.src[8] = compressedData;
+  return data;
+}
+
+drawClusterData(ctx, data, candleWidth)
+{
+  const compressedClusterData = clusterDataCompression(data);
+  if ($props.clusterDeltaMode) {
+    drawClusterDeltaModeOn(ctx, compressedClusterData, candleWidth);
+  } else {
+    drawClusterDeltaModeOff(ctx, compressedClusterData, candleWidth);
+  }
+}
+
+function drawClusterDeltaModeOn(ctx, data, candleWidth) {
+  const layout = $core.layout;
+  const clusterData = data.src[8];
+  const {sell: sellClusterData = {}, buy: buyClusterData = {}} = clusterData ?? {};
+
+  const low = layout.value2y(data.src[3]);
+  const high = layout.value2y(data.src[2]);
+  const candleHeight = high - low;
+  const clusters = Math.max(Object.keys(sellClusterData).length, Object.keys(buyClusterData).length);
+  let height = clusters === 0 ? candleHeight : candleHeight / clusters;
+
+  const y1 = layout.value2y(0, false);
+  const y2 = layout.value2y(step, false);
+  height = y1 - y2;
+
+  if (clusterData?.sell) {
+    ctx.beginPath();
+
+    const width = candleWidth;
+    const x = layout.ti2xWithoutRound(data.src[0]) - width / 2 - 1;
+
+    for (const [price, value] of Object.entries(clusterData.sell)) {
+      const buyValue = clusterData.buy[price] ?? 0;
+      let deltaValue = value - buyValue;
+      const type = deltaValue > 0 ? 'sell' : 'buy';
+      deltaValue = Math.abs(deltaValue);
+      const y = layout.value2y(parseFloat(price));
+      ctx.beginPath();
+      // ctx.strokeStyle = 'rgba(255,255,255,.2)';
+      // ctx.strokeWidth = 0.1;
+      ctx.fillStyle = gradient(value * price, type)(deltaValue * price);
+      ctx.rect(x, y, width, height);
+      ctx.fill();
+      // ctx.stroke();
+
+      if ($core.view.length <= 20) {
+        drawLabel(ctx, price, deltaValue, x + width / 2, y + height / 2);
+      }
+    }
+  }
+}
+
+function drawClusterDeltaModeOff(ctx, data, candleWidth) {
+  const layout = $core.layout;
+  const clusterData = data.src[8];
+  const {sell: sellClusterData = {}, buy: buyClusterData = {}} = clusterData ?? {};
+
+  const low = layout.value2y(data.src[3]);
+  const high = layout.value2y(data.src[2]);
+  const candleHeight = high - low;
+  const clusters = Math.max(Object.keys(sellClusterData).length, Object.keys(buyClusterData).length);
+  let height = clusters === 0 ? candleHeight : candleHeight / clusters;
+
+  const y1 = layout.value2y(0, false);
+  const y2 = layout.value2y(step, false);
+  height = y1 - y2;
+
+  if (clusterData?.sell) {
+    const width = candleWidth / 2;
+    const x = layout.ti2xWithoutRound(data.src[0]) - width - 1;
+
+    for (const [price, value] of Object.entries(clusterData.sell)) {
+      const y = layout.value2y(parseFloat(price));
+      ctx.beginPath();
+      // ctx.strokeStyle = 'rgba(255,255,255,.2)';
+      // ctx.strokeWidth = 0.1;
+      ctx.fillStyle = gradient(value * price, 'sell')(value * price);
+      ctx.rect(x, y, width, height);
+      ctx.fill();
+      // ctx.stroke();
+
+      if ($core.view.length <= 20) {
+        drawLabel(ctx, price, value, x + width / 2, y + height / 2);
+      }
+    }
+  }
+
+  if (clusterData?.buy) {
+    const width = candleWidth / 2;
+    const x = layout.ti2xWithoutRound(data.src[0]);
+
+    for (const [price, value] of Object.entries(clusterData.buy)) {
+      const y = layout.value2y(parseFloat(price));
+      ctx.beginPath();
+      // ctx.strokeStyle = 'rgba(255,255,255,.2)';
+      // ctx.strokeWidth = 0.1;
+      ctx.fillStyle = gradient(value * price, 'buy')(value * price);
+      ctx.rect(x, y, width, height);
+      ctx.fill();
+      // ctx.stroke();
+
+      if ($core.view.length <= 20) {
+        drawLabel(ctx, price, value, x + width / 2, y + height / 2);
+      }
+    }
+  }
+}
+
+function drawLabel(ctx, price, value, x, y) {
+  ctx.font = '9px Quantico';
+  ctx.fillStyle = window.theme === 'dark' ? 'rgba(255, 255, 255, .75)' : 'rgba(0, 0, 0, .75)';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  const data = $core.data;
+  const view = $core.view;
+  const layout = $core.layout;
+  const hi = layout.$hi;
+
+  ctx.beginPath();
+
+  const text = convertPrice(price * value);
+  ctx.fillText(text, x, y);
+
+  ctx.closePath();
+}
+
+function convertPrice(price) {
+  if (!price) {
+    return void 0;
+  }
+
+  const formatter = Intl.NumberFormat('en', {notation: 'compact'});
+  return `${formatter.format(price)}$`;
+}
+
+function gradient(val, type) {
+  const max_value = max_cluster_value;
+
+  if (type === 'buy') {
+    return d3.scaleLinear()
+      .range([$props.colorClusterDw + '20', $props.colorClusterDw])
+      // .range([`rgba(255,0,0, ${opacityMin})`, `rgba(255,242,0, ${(opacityMin + opacityMax) / 2})`, `rgba(30,150,0,${opacityMax})`])
+      .domain([1000, max_value]);
+  }
+
+  if (type === 'sell') {
+    return d3.scaleLinear()
+      .range([$props.colorClusterUp + '20', $props.colorClusterUp])
+      // .range([`rgba(30,150,0,${opacityMin})`, `rgba(255,242,0,${(opacityMin + opacityMax) / 2})`, `rgba(255,0,0, ${opacityMax})`])
+      .domain([1000, max_value]);
+  }
+}
+
+let initialLow = 0;
+let initialHigh = 0;
+yRange(data, a, low)
+{
+  const updData = $core.data.slice(-500);
+  let len = updData.length;
+
+  var h, l, high = -Infinity, low = Infinity
+  if (initialLow && initialHigh) {
+    low = initialLow;
+    high = initialHigh;
+  } else {
+    for (var i = 0; i < len; i++) {
+      let point = updData[i];
+      if (!point) {
+        break;
+      }
+      if (point[2] > high) high = point[2];
+      if (point[3] < low) low = point[3];
+    }
+    initialLow = low;
+    initialHigh = high;
+  }
+  return [high, low]
+}
+
+function legend(x) {
+  return '';
+}
+
+// Use [Open, Close] for precision detection
+preSampler(x)
+=>
+[x[1], x[4]]
+
+// Map data item to OHLC (for candle magnets etc.)
+ohlc(x)
+=>
+[x[1], x[2], x[3], x[4]]
+
+// Price label + Scale symbol + price line
+valueTracker(x)
+=>
+{
+  show: $props.showValueTracker,
+    symbol
+:
+  $props.scaleSymbol,
+    line
+:
+  $props.priceLine,
+    color
+:
+  $lib.candleColor($props, $core.data[$core.data.length - 1]),
+    value
+:
+  x[4] // close
+}

@@ -1,0 +1,26 @@
+<button (click)="showDialog()" class="app-button">
+  <span class="pi pi-sliders-h"></span>
+</button>
+<p-dialog
+  [(visible)]="visible"
+  [dismissableMask]="true"
+  [showHeader]="false"
+  [modal]="true"
+  [style]="{width: '640px', maxWidth: '95%'}"
+  [position]="'topright'"
+  appendTo="body"
+>
+  <app-chart-level-settings-form
+    [coins]="coins"
+    [activeSortingId]="activeSortingId"
+    [coinNavigationAutoSize]="coinNavigationAutoSize"
+    [selectedColumns]="selectedColumns"
+    [chartSettings]="chartSettings"
+    [isPremium]="isPremium"
+    (chartSettingsChange)="chartSettingsChange.emit($event)"
+    (columnSelectionChange)="columnSelectionChange.emit($event)"
+    (resetNavigationColumns)="resetNavigationColumns.emit()"
+    (toggleNavigationAutoSize)="toggleNavigationAutoSize.emit()"
+    (excludeExchanges)="excludeExchanges.emit($event)"
+  ></app-chart-level-settings-form>
+</p-dialog>

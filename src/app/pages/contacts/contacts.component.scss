@@ -1,0 +1,29 @@
+@import './src/styles';
+
+:host {
+  display: block;
+  position: relative;
+}
+
+.contacts-content {
+  min-height: calc(100vh - 440px);
+
+  .container {
+    width: 680px;
+  }
+}
+
+.contact-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  
+  span {
+    margin-right: 6px;
+    display: block;
+
+    &:first-child {
+      font-weight: bold;
+    }
+  }
+}

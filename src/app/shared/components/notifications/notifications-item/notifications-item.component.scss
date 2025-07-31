@@ -1,0 +1,41 @@
+:host {
+  display: block;
+}
+
+
+.menu-item {
+  position: relative;
+  border-radius: var(--sm);
+  padding: var(--sm);
+  margin-top: var(--xs);
+  cursor: pointer;
+
+  .title {
+    transition: .5s all;
+  }
+
+  &.watched {
+    opacity: .5;
+  }
+
+  &:hover {
+    .divider {
+      background: var(--color-primary);
+    }
+
+    .title {
+      color: var(--color-primary);
+    }
+  }
+}
+
+.notification-type-badge {
+  background-color: var(--alert-color);
+  color: #F3F3F3;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 4px;
+  font-size: 12px;
+  border-radius: var(--xs);
+}

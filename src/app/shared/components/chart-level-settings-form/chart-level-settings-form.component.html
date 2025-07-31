@@ -1,0 +1,788 @@
+<div class="chart-settings-form">
+  <form [formGroup]="chartForm" class="app-form">
+    <p-tabView [scrollable]="true">
+
+      <!--      COLUMNS-->
+
+      <p-tabPanel>
+
+        <ng-template pTemplate="header">
+          <div>{{ 'navigation_settings.columns' | translate }}</div>
+        </ng-template>
+
+        <div class="mt-lg flex justify-between show-tooltip-on-hover items-center">
+          <div class="flex gap-sm">
+            <div class="text-lg text-bold">{{ 'navigation_settings.columns' | translate }}</div>
+            <app-tooltips identifier="NAVIGATION_SETTING_COLUMNS" [size]="14"></app-tooltips>
+          </div>
+
+          <app-default-settings-button
+            [label]="'navigation_settings.reset_columns' | translate"
+            chartSettingsType="filters"
+            (setDefaultSettings)="resetNavigationColumns.emit()"
+          />
+        </div>
+
+        <div class="divider my-lg"></div>
+
+        <!-- <div>
+          <input type="checkbox" [formControlName]="isPremium ? 'showLimitOrdersMarker' : ''"
+            id="showLimitOrdersMarker">
+          <label for="showLimitOrdersMarker" class="checkbox-label">{{ 'navigation_settings.show_limit_orders_marker' | translate }}</label>
+        </div> -->
+        <div class="mb-md">
+          <input type="checkbox" [checked]="coinNavigationAutoSize" id="coinNavigationAutoSize"
+                 (input)="toggleNavigationAutoSize.emit()">
+          <label for="coinNavigationAutoSize"
+                 class="checkbox-label">{{ 'navigation_settings.coinNavigationAutoSize' | translate }}</label>
+        </div>
+
+        <app-navigation-columns-settings
+          (columnSelectionChange)="columnSelectionChange.emit($event)"
+          [selectedColumns]="selectedColumns"
+          [isPremium]="isPremium"
+        ></app-navigation-columns-settings>
+
+      </p-tabPanel>
+
+      <!--      FILTERS-->
+
+      <p-tabPanel>
+
+        <ng-template pTemplate="header">
+          <div>{{ 'navigation_settings.filters' | translate }}</div>
+        </ng-template>
+
+        <ng-template [ngIf]="true">
+
+          <div class="mt-lg flex justify-between show-tooltip-on-hover items-center">
+            <div class="flex gap-sm">
+              <div class="text-lg text-bold">{{ 'navigation_settings.filters' | translate }}</div>
+              <app-tooltips identifier="NAVIGATION_SETTING_FILTERS" [size]="14"></app-tooltips>
+            </div>
+
+            <app-default-settings-button
+              [label]="'navigation_settings.reset_filters' | translate"
+              chartSettingsType="filters"
+              (setDefaultSettings)="setDefaultSettings($event)"
+            />
+          </div>
+
+          <div class="divider my-lg"></div>
+
+          <!--          Blacklist-->
+
+          <app-premium-message-banner class="mt-md"
+                                      *ngIf="!isPremium"
+                                      [message]="'navigation_settings.premium_filter_message' | translate"
+          ></app-premium-message-banner>
+
+          <div class="mt-lg show-tooltip-on-hover">
+            <div class="flex gap-sm">
+              <div>{{ 'navigation_settings.blacklist' | translate }}</div>
+              <app-tooltips identifier="BLACKLIST" [size]="14"></app-tooltips>
+            </div>
+
+            <div class="mt-sm">
+              <app-blacklist-builder
+                [disabled]="!isPremium"
+                [blacklist]="chartSettings.blacklist"
+                [coins]="coins"
+                (selectSymbol)="selectBlacklistCoin($event)"
+              />
+            </div>
+          </div>
+
+          <div class="mb-md mt-md">
+            <div class="flex gap-sm">
+              <div>{{ 'navigation_settings.activity' | translate }}</div>
+              <app-tooltips identifier="ACTIVE_COINS" [size]="14"></app-tooltips>
+            </div>
+
+            <div class="flex column gap-sm mt-md">
+              <div>
+                <input type="checkbox" formControlName="showOnlyActiveCoins" id="showOnlyActiveCoins">
+                <label [for]="isPremium ? 'showOnlyActiveCoins' : ''" [class.disabled]="!isPremium"
+                       class="checkbox-label">{{ 'navigation_settings.show_only_active_coins' | translate }}</label>
+              </div>
+
+              <div>
+                <input type="checkbox" [formControlName]="isPremium ? 'showActiveCoinTooltips' : ''"
+                       id="showActiveCoinTooltips">
+                <label [for]="isPremium ? 'showActiveCoinTooltips' : ''" [class.disabled]="!isPremium"
+                       class="checkbox-label">{{ 'chart.showActiveCoinTooltips' | translate }}</label>
+              </div>
+            </div>
+
+          </div>
+
+<!--          Exclude Exchanges-->
+          <div class="divider my-lg"></div>
+
+          <div>
+            <app-exclude-exchanges
+              [selectedExchange]="chartSettings.market"
+              [excludedExchanges]="chartSettings.excludedExchanges ?? []"
+              [grid]="2"
+              (exclude)="excludeExchanges.emit($event)"
+            ></app-exclude-exchanges>
+          </div>
+
+          <!--          Volume-->
+
+          <div class="divider my-lg"></div>
+
+          <div class="mt-md show-tooltip-on-hover">
+            <div class="flex gap-sm">
+              <div class="text-bold">{{ 'navigation_settings.volume' | translate }}</div>
+              <app-tooltips identifier="VOLUME_FILTER" [size]="14"></app-tooltips>
+            </div>
+
+            <div class="mb-sm mt-md">{{ 'navigation_settings.interval' | translate }}</div>
+            <app-interval-selector
+              class="margin-top-1"
+              [selectedInterval]="chartForm.get('volumeInterval').value"
+              [disabled]="!isPremium"
+              (intervalChange)="volumeIntervalChange($event)"
+            ></app-interval-selector>
+
+            <div class="mt-md grid-2-1 grid-gap-md">
+
+              <div>
+                <div class="input-with-hint">
+                  <p-inputNumber
+                    inputId="volumeFrom"
+                    formControlName="volumeFrom"
+                    [readonly]="!isPremium"
+                    [formControlName]="isPremium ? 'volumeFrom' : ''"
+                    disabled="true"
+                    class="w-full"
+                    [min]="0"
+                    [max]="100000000000"
+                  />
+                  <div class="input-hint">
+                    {{ 'navigation_settings.from' | translate }} {{ (chartForm.controls['volumeFrom'].value ?? 0) | convertPrice }}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="input-with-hint">
+                  <p-inputNumber
+                    inputId="volumeTo"
+                    [formControlName]="isPremium ? 'volumeTo' : ''"
+                    [readonly]="!isPremium"
+                    disabled="true"
+                    class="w-full"
+                    [min]="1000000"
+                    [max]="100000000000"
+                  />
+                  <div class="input-hint">
+                    {{ 'navigation_settings.to' | translate }} {{ chartForm.controls['volumeTo'].value | convertPrice }}
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="divider my-lg"></div>
+
+          <!--    Price change      -->
+
+          <div class="mt-md show-tooltip-on-hover">
+            <div class="flex gap-sm">
+              <div>{{ 'workspace.form.priceChangeFilter' | translate }}</div>
+              <app-tooltips identifier="PRICE_CHANGE_FILTER" [size]="14"></app-tooltips>
+            </div>
+
+            <div class="mb-sm mt-md">{{ 'navigation_settings.interval' | translate }}</div>
+            <app-interval-selector
+              class="margin-top-1"
+              [selectedInterval]="chartForm.get('priceChangeInterval').value"
+              [disabled]="!isPremium"
+              (intervalChange)="priceChangeIntervalChange($event)"
+            ></app-interval-selector>
+
+            <div class="mt-md grid-2-1 grid-gap-md">
+
+              <div>
+                <div class="input-with-hint">
+                  <p-inputNumber
+                    inputId="priceChangeFrom"
+                    formControlName="priceChangeFrom"
+                    [readonly]="!isPremium"
+                    [formControlName]="isPremium ? 'priceChangeFrom' : ''"
+                    disabled="true"
+                    class="w-full"
+                    [min]="-100"
+                    [max]="1000"
+                  />
+                  <div class="input-hint">
+                    {{ 'navigation_settings.from' | translate }} {{ (chartForm.controls['priceChangeFrom'].value ?? 0) }}%
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="input-with-hint">
+                  <p-inputNumber
+                    inputId="priceChangeTo"
+                    [formControlName]="isPremium ? 'priceChangeTo' : ''"
+                    [readonly]="!isPremium"
+                    disabled="true"
+                    class="w-full"
+                    [min]="-100"
+                    [max]="1000"
+                  />
+                  <div class="input-hint">
+                    {{ 'navigation_settings.to' | translate }} {{ (chartForm.controls['priceChangeTo'].value ?? 0) }}%
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!--          Trades-->
+
+          <ng-template [ngIf]="chartSettings.market?.includes('BINANCE')">
+            <div class="divider my-lg"></div>
+
+            <div class="mt-md show-tooltip-on-hover">
+              <div class="flex gap-sm">
+                <div class="text-bold">{{ 'navigation_settings.trades' | translate }}</div>
+                <app-tooltips identifier="TRADES_FILTER" [size]="14"></app-tooltips>
+              </div>
+
+              <div class="mb-sm mt-md">{{ 'navigation_settings.interval' | translate }}</div>
+              <app-interval-selector
+                class="margin-top-1"
+                [selectedInterval]="chartForm.get('tradesInterval').value"
+                [disabled]="!isPremium"
+                (intervalChange)="tradesIntervalChange($event)"
+              ></app-interval-selector>
+
+              <div class="mt-md grid-2-1 grid-gap-md">
+
+                <div>
+                  <div class="input-with-hint">
+                    <p-inputNumber
+                      inputId="tradesFrom"
+                      formControlName="tradesFrom"
+                      [readonly]="!isPremium"
+                      [formControlName]="isPremium ? 'tradesFrom' : ''"
+                      disabled="true"
+                      class="w-full"
+                      [min]="0"
+                      [max]="100000000000"
+                    />
+                    <div class="input-hint">
+                      {{ 'navigation_settings.from' | translate }} {{ (chartForm.controls['tradesFrom'].value ?? 0) | convertBigNumber }}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="input-with-hint">
+                    <p-inputNumber
+                      inputId="tradesTo"
+                      [formControlName]="isPremium ? 'tradesTo' : ''"
+                      [readonly]="!isPremium"
+                      disabled="true"
+                      class="w-full"
+                      [min]="0"
+                      [max]="100000000000"
+                    />
+                    <div class="input-hint">
+                      {{ 'navigation_settings.to' | translate }} {{ chartForm.controls['tradesTo'].value | convertBigNumber }}
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </ng-template>
+
+          <!--          Correlation-->
+
+          <div class="divider my-lg"></div>
+
+          <div class="mt-md show-tooltip-on-hover">
+            <div class="flex gap-sm">
+              <div class="text-bold">{{ 'navigation_settings.correlation_with_btc' | translate }}</div>
+              <app-tooltips identifier="CORRELATION_FILTER" [size]="14"></app-tooltips>
+            </div>
+
+            <div class="mb-sm mt-md">{{ 'navigation_settings.interval' | translate }}</div>
+            <app-interval-selector
+              class="margin-top-1"
+              [selectedInterval]="chartForm.get('correlationInterval').value"
+              [disabled]="!isPremium"
+              (intervalChange)="correlationIntervalChange($event)"
+            ></app-interval-selector>
+
+            <div class="mt-md grid-2-1 grid-gap-md">
+
+              <div class="input-start-with-hint">
+                <p-inputNumber
+                  inputId="correlationFrom"
+                  [formControlName]="isPremium ? 'correlationFrom' : ''"
+                  [readonly]="!isPremium"
+                  [disabled]="!isPremium"
+                  class="w-full"
+                  [min]="-100"
+                  [max]="100"
+                  [step]="10"
+                  [showButtons]="true"
+                  spinnerMode="horizontal"
+                  buttonLayout="horizontal"
+                  decrementButtonClass="p-button-danger"
+                  incrementButtonClass="p-button-success"
+                  incrementButtonIcon="pi pi-plus"
+                  decrementButtonIcon="pi pi-minus"
+                />
+                <div class="input-hint">{{ 'navigation_settings.from' | translate }}</div>
+              </div>
+
+              <div class="input-start-with-hint">
+                <p-inputNumber
+                  inputId="correlationFrom"
+                  [formControlName]="isPremium ? 'correlationTo' : ''"
+                  [readonly]="!isPremium"
+                  [disabled]="!isPremium"
+                  class="w-full"
+                  [min]="-100"
+                  [max]="100"
+                  [step]="10"
+                  [showButtons]="true"
+                  spinnerMode="horizontal"
+                  buttonLayout="horizontal"
+                  decrementButtonClass="p-button-danger"
+                  incrementButtonClass="p-button-success"
+                  incrementButtonIcon="pi pi-plus"
+                  decrementButtonIcon="pi pi-minus"
+                />
+                <div class="input-hint">{{ 'navigation_settings.to' | translate }}</div>
+              </div>
+            </div>
+          </div>
+
+        </ng-template>
+      </p-tabPanel>
+
+      <!--      LEVELS-->
+
+      <p-tabPanel>
+
+        <ng-template pTemplate="header">
+          <div>{{ 'levels' | translate }}</div>
+        </ng-template>
+
+        <div class="mt-lg flex justify-between items-center show-tooltip-on-hover">
+          <div class="flex gap-sm">
+            <div class="text-lg text-bold">{{ 'levels' | translate }}</div>
+            <app-tooltips identifier="HORIZONTAL_LEVELS" [size]="14"></app-tooltips>
+          </div>
+
+          <app-default-settings-button
+            label="{{ 'resetSettings' | translate }}"
+            chartSettingsType="horizontalLevels"
+            (setDefaultSettings)="setDefaultSettings($event)"
+          />
+        </div>
+
+        <div class="divider my-lg"></div>
+
+        <div class="grid-2-1 grid-gap-md">
+          <div>
+            <label class="block mb-sm" for="candlesLength">{{ 'candlesLength' | translate }}</label>
+            <p-inputNumber
+              inputId="candlesLength"
+              formControlName="candlesLength"
+              disabled="true"
+              [min]="50"
+              [max]="1000"
+              [step]="50"
+              [showButtons]="true"
+              spinnerMode="horizontal"
+              buttonLayout="horizontal"
+              decrementButtonClass="p-button-danger"
+              incrementButtonClass="p-button-success"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+              pTooltip="{{ 'candlesLengthTooltip' | translate }}"
+              tooltipPosition="top"
+            />
+          </div>
+          <div>
+            <label class="block mb-sm" for="chartOffset">{{ 'chartOffset' | translate }}</label>
+            <p-inputNumber
+              inputId="chartOffset"
+              formControlName="chartOffset"
+              disabled="true"
+              [min]="0"
+              [max]="500"
+              [step]="10"
+              [showButtons]="true"
+              spinnerMode="horizontal"
+              buttonLayout="horizontal"
+              decrementButtonClass="p-button-danger"
+              incrementButtonClass="p-button-success"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+              tooltipPosition="top"
+            />
+          </div>
+        </div>
+
+        <div class="divider my-lg"></div>
+
+        <app-premium-message-banner
+          *ngIf="!isPremium"
+          message="{{ 'premiumAccessMessage' | translate }}"
+        ></app-premium-message-banner>
+
+        <div class="grid-2-1 grid-gap-md">
+          <div>
+            <input type="checkbox" [formControlName]="isPremium ? 'showHorizontalLevels' : ''"
+                   id="showHorizontalLevels">
+            <label [for]="isPremium ? 'showHorizontalLevels' : ''" [class.disabled]="!isPremium"
+                   class="checkbox-label">{{ 'showHorizontalLevels' | translate }}</label>
+
+            <!--            <div class="mt-sm">-->
+            <!--              <input type="checkbox" [formControlName]="isPremium ? 'roundHorizontalLevels' : ''"-->
+            <!--                     id="roundHorizontalLevels">-->
+            <!--              <label for="roundHorizontalLevels" class="checkbox-label">{{ 'workspace.form.roundHorizontalLevels' |-->
+            <!--                translate }}</label>-->
+            <!--            </div>-->
+          </div>
+          <div>
+            <input type="checkbox" [formControlName]="isPremium ? 'showDailyHighAndLow' : ''" id="showDailyHighAndLow">
+            <label [for]="isPremium ? 'showDailyHighAndLow' : ''" [class.disabled]="!isPremium"
+                   class="checkbox-label">{{ 'showDailyHighAndLow' | translate }}</label>
+          </div>
+        </div>
+
+
+        <div *ngIf="true" class="grid-2-1 grid-gap-md mt-md">
+          <div>
+            <label class="block mb-sm" for="horizontalLevelsPeriod">{{ 'horizontalLevelsPeriod' | translate }}</label>
+            <p-inputNumber
+              inputId="horizontalLevelsPeriod"
+              [formControlName]="isPremium ? 'horizontalLevelsPeriod' : ''"
+              [disabled]="!chartForm.controls['showHorizontalLevels'].value || !isPremium || activeSortingId?.includes('HL')"
+              [readonly]="!chartForm.controls['showHorizontalLevels'].value || !isPremium || activeSortingId?.includes('HL')"
+              [min]="10"
+              [max]="80"
+              [step]="5"
+              [showButtons]="true"
+              spinnerMode="horizontal"
+              buttonLayout="horizontal"
+              decrementButtonClass="p-button-danger"
+              incrementButtonClass="p-button-success"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+              pTooltip="{{ 'horizontalLevelsPeriodTooltip' | translate }}"
+              tooltipPosition="top"
+            />
+          </div>
+
+
+          <div>
+            <label class="block mb-sm" for="horizontalLevelsTouches">{{ 'horizontalLevelsTouches' | translate }}</label>
+            <p-inputNumber
+              inputId="horizontalLevelsTouches"
+              [formControlName]="isPremium ? 'horizontalLevelsTouches' : ''"
+              [disabled]="!chartForm.controls['showHorizontalLevels'].value || !isPremium || activeSortingId?.includes('HL')"
+              [readonly]="!chartForm.controls['showHorizontalLevels'].value || !isPremium || activeSortingId?.includes('HL')"
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              [showButtons]="true"
+              spinnerMode="horizontal"
+              buttonLayout="horizontal"
+              decrementButtonClass="p-button-danger"
+              incrementButtonClass="p-button-success"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+              pTooltip="{{ 'horizontalLevelsTouchesTooltip' | translate }}"
+              tooltipPosition="top"
+            />
+          </div>
+
+          <div>
+            <label class="block mb-sm"
+                   for="horizontalLevelsTouchesThreshold">{{ 'horizontalLevelsTouchesThreshold' | translate }}
+            </label>
+            <p-inputNumber
+              inputId="horizontalLevelsTouchesThreshold"
+              [formControlName]="isPremium ? 'horizontalLevelsTouchesThreshold' : ''"
+              [disabled]="!chartForm.controls['showHorizontalLevels'].value || !isPremium || activeSortingId?.includes('HL')"
+              [readonly]="!chartForm.controls['showHorizontalLevels'].value || !isPremium || activeSortingId?.includes('HL')"
+              [min]="0"
+              [max]="5"
+              [step]="0.1"
+              [showButtons]="true"
+              spinnerMode="horizontal"
+              buttonLayout="horizontal"
+              decrementButtonClass="p-button-danger"
+              incrementButtonClass="p-button-success"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+              pTooltip="{{ 'horizontalLevelsTouchesThresholdTooltip' | translate }}"
+              tooltipPosition="top"
+            />
+          </div>
+
+          <div>
+            <label class="block mb-sm"
+                   for="horizontalLevelsLivingTime">{{ 'horizontalLevelsLivingTime' | translate }}</label>
+            <p-inputNumber
+              inputId="horizontalLevelsLivingTime"
+              [formControlName]="isPremium ? 'horizontalLevelsLivingTime' : ''"
+              [disabled]="!chartForm.controls['showHorizontalLevels'].value || !isPremium || activeSortingId?.includes('HL')"
+              [readonly]="!chartForm.controls['showHorizontalLevels'].value || !isPremium || activeSortingId?.includes('HL')"
+              [min]="0"
+              [max]="1000"
+              [step]="1"
+              [showButtons]="true"
+              spinnerMode="horizontal"
+              buttonLayout="horizontal"
+              decrementButtonClass="p-button-danger"
+              incrementButtonClass="p-button-success"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+            />
+          </div>
+        </div>
+
+        <div class="divider my-md"></div>
+
+        <div>
+          <app-interval-multi-selector
+            [isPremium]="isPremium"
+            [currentTimeframe]="chartSettings.timeframe"
+            [selectedIntervals]="chartForm.get('horizontalLevelsTimeframes').value"
+            (selectedIntervalsChange)="chartForm.get('horizontalLevelsTimeframes').setValue($event)"
+          ></app-interval-multi-selector>
+        </div>
+
+
+      </p-tabPanel>
+
+      <!--      DENSITIES-->
+
+      <p-tabPanel>
+
+        <ng-template pTemplate="header">
+          <div>{{ 'densities' | translate }}</div>
+        </ng-template>
+
+        <div class="mt-lg flex justify-between show-tooltip-on-hover items-center">
+          <div class="flex gap-sm">
+            <div class="text-lg text-bold">{{ 'densities' | translate }}</div>
+            <app-tooltips identifier="DENSITIES" [size]="14"></app-tooltips>
+          </div>
+
+          <app-default-settings-button
+            label="{{ 'resetSettingsDensities' | translate }}"
+            chartSettingsType="densities"
+            (setDefaultSettings)="setDefaultSettings($event)"
+          />
+        </div>
+
+        <div class="divider my-lg"></div>
+
+        <app-premium-message-banner
+          *ngIf="!isPremium"
+          message="{{ 'premiumAccessMessageDensities' | translate }}"
+        ></app-premium-message-banner>
+
+        <div class="grid-2-1">
+          <div>
+            <input type="checkbox" [formControlName]="isPremium ? 'showLimitOrders' : ''" id="showLimitOrders">
+            <label [for]="isPremium ? 'showLimitOrders' : ''" [class.disabled]="!isPremium"
+                   class="checkbox-label">{{ 'showDensities' | translate }}</label>
+          </div>
+
+                    <div >
+                      <input
+                        type="checkbox" [formControlName]="isPremium ? 'showDensitiesWidget' : ''"
+                        id="showDensitiesWidget"
+                      >
+                      <label class="checkbox-label" [for]="isPremium ? 'showDensitiesWidget' : ''" [class.disabled]="!isPremium || !chartForm.controls['showLimitOrders'].value">{{ 'densitiesWidget.showDensitiesWidget' | translate }}</label>
+                    </div>
+        </div>
+
+        <div *ngIf="true" class="mt-md grid-2-1 grid-gap-md">
+          <div>
+            <label class="block mb-sm" for="limitOrderFilter">
+              {{ 'densityVolume' | translate }}
+            </label>
+            <div class="input-with-hint">
+              <p-inputNumber
+                inputId="limitOrderFilter"
+                [formControlName]="isPremium ? 'limitOrderFilter' : ''"
+                class="w-full"
+                [min]="0"
+                [max]="1000000"
+                [disabled]="!chartForm.controls['showLimitOrders'].value || !isPremium"
+                [readonly]="!chartForm.controls['showLimitOrders'].value || !isPremium"
+              />
+              <div class="input-hint">{{ chartForm.controls['limitOrderFilter'].value | convertPrice }}</div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block mb-sm" for="limitOrderDistance">{{ 'distanceToDensity' | translate }} (%)</label>
+            <p-inputNumber
+              inputId="limitOrderDistance"
+              [formControlName]="isPremium ? 'limitOrderDistance' : ''"
+              [min]="0"
+              [max]="10"
+              [step]="1"
+              [showButtons]="true"
+              [disabled]="!chartForm.controls['showLimitOrders'].value || !isPremium"
+              [readonly]="!chartForm.controls['showLimitOrders'].value || !isPremium"
+              spinnerMode="horizontal"
+              buttonLayout="horizontal"
+              decrementButtonClass="p-button-danger"
+              incrementButtonClass="p-button-success"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+            />
+          </div>
+
+          <div>
+            <label class="block mb-sm" for="limitOrderLife">{{ 'densityLifetime' | translate }}
+              ({{ 'minutes' | translate }})</label>
+            <p-inputNumber
+              inputId="limitOrderLife"
+              [formControlName]="isPremium ? 'limitOrderLife' : ''"
+              [min]="0"
+              [max]="1000"
+              [step]="1"
+              [showButtons]="true"
+              [disabled]="!chartForm.controls['showLimitOrders'].value || !isPremium"
+              [readonly]="!chartForm.controls['showLimitOrders'].value || !isPremium"
+              spinnerMode="horizontal"
+              buttonLayout="horizontal"
+              decrementButtonClass="p-button-danger"
+              incrementButtonClass="p-button-success"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+            />
+          </div>
+
+          <div>
+            <label class="block mb-sm" for="limitOrderCorrosionTime">{{ 'corrosionTime' | translate }}
+              ({{ 'minutes' | translate }})</label>
+            <p-inputNumber
+              inputId="limitOrderCorrosionTime"
+              [formControlName]="isPremium ? 'limitOrderCorrosionTime' : ''"
+              [min]="0"
+              [max]="50"
+              [step]="1"
+              [showButtons]="true"
+              [disabled]="!chartForm.controls['showLimitOrders'].value || !isPremium"
+              [readonly]="!chartForm.controls['showLimitOrders'].value || !isPremium"
+              spinnerMode="horizontal"
+              buttonLayout="horizontal"
+              decrementButtonClass="p-button-danger"
+              incrementButtonClass="p-button-success"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+            />
+          </div>
+
+          <div>
+            <input type="checkbox"
+                   [formControlName]="isPremium && chartForm.controls['showLimitOrders'].value ? 'round_density' : ''"
+                   id="round_density">
+            <label class="checkbox-label" [for]="isPremium ? 'round_density' : ''"
+                   [class.disabled]="!chartForm.controls['showLimitOrders'].value || !isPremium">{{ 'round_density' | translate }}</label>
+          </div>
+        </div>
+
+      </p-tabPanel>
+
+      <!--      TREND LEVELS-->
+
+      <p-tabPanel>
+
+        <ng-template pTemplate="header">
+          <div>{{ 'trendLevels' | translate }}</div>
+        </ng-template>
+
+        <div class="mt-lg flex justify-between items-center show-tooltip-on-hover">
+          <div class="flex gap-sm">
+            <div class="text-lg text-bold">{{ 'trendLevels' | translate }}</div>
+            <app-tooltips identifier="TREND_LEVELS" [size]="14"></app-tooltips>
+          </div>
+
+          <app-default-settings-button
+            label="{{ 'resetSettingsTrendLevels' | translate }}"
+            chartSettingsType="trendLevels"
+            (setDefaultSettings)="setDefaultSettings($event)"
+          />
+        </div>
+
+        <div class="divider my-lg"></div>
+
+        <app-premium-message-banner
+          *ngIf="!isPremium"
+          message="{{ 'premiumAccessMessageTrendLevels' | translate }}"
+        ></app-premium-message-banner>
+
+        <div>
+          <input type="checkbox" [formControlName]="isPremium ? 'showTrendLevels' : ''" id="showTrendLevels">
+          <label [for]="isPremium ? 'showTrendLevels' : ''" [class.disabled]="!isPremium"
+                 class="checkbox-label">{{ 'showTrendLevels' | translate }}</label>
+        </div>
+
+        <div *ngIf="true" class="grid-2-1 grid-gap-md mt-md">
+          <div>
+            <label class="block mb-sm" for="trendlinesPeriod">{{ 'trendlinesPeriod' | translate }}</label>
+            <p-inputNumber
+              inputId="trendlinesPeriod"
+              [formControlName]="isPremium ? 'trendlinesPeriod' : ''"
+              [disabled]="!chartForm.controls['showTrendLevels'].value || !isPremium || activeSortingId?.includes('TL')"
+              [readonly]="!chartForm.controls['showTrendLevels'].value || !isPremium || activeSortingId?.includes('TL')"
+              [min]="10"
+              [max]="80"
+              [step]="5"
+              [showButtons]="true"
+              spinnerMode="horizontal"
+              buttonLayout="horizontal"
+              decrementButtonClass="p-button-danger"
+              incrementButtonClass="p-button-success"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+              pTooltip="{{ 'trendlinesPeriodTooltip' | translate }}"
+              tooltipPosition="top"
+            />
+          </div>
+
+          <div>
+            <label class="block mb-sm" for="trendlinesSource">{{ 'trendlinesSource' | translate }}</label>
+            <p-dropdown
+              [formControlName]="isPremium ? 'trendlinesSource' : ''"
+              [disabled]="!chartForm.controls['showTrendLevels'].value || !isPremium || activeSortingId?.includes('TL')"
+              [readonly]="!chartForm.controls['showTrendLevels'].value || !isPremium || activeSortingId?.includes('TL')"
+              [options]="trendlineSources"
+              placeholder="{{ 'trendlinesSource' | translate }}"
+              optionLabel="label"
+              optionValue="name"
+              appendTo="body"
+            ></p-dropdown>
+          </div>
+        </div>
+
+      </p-tabPanel>
+
+    </p-tabView>
+
+  </form>
+</div>
+

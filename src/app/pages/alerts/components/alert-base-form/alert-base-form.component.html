@@ -1,0 +1,149 @@
+<form [formGroup]="form" class="app-form px-none">
+
+  <ng-template [ngIf]="!isPriceGrossingAlert && !isListingAlert">
+
+    <div class="divider my-lg"></div>
+
+    <section class="mb-sm">
+
+      <div class="text-lg text-bold">{{ 'alerts.filters' | translate }} {{ 'alerts.volume' | translate }}</div>
+
+      <div class="mt-md">
+        <div class="mb-sm">{{ 'alerts.interval' | translate }}</div>
+        <app-interval-selector
+          class="margin-top-1"
+          [selectedInterval]="form.get('volume_filter_interval').value"
+          (intervalChange)="intervalChange($event)"
+        ></app-interval-selector>
+
+        <div class="grid-2-1 grid-gap-lg mt-md">
+          <div>
+            <label for="volume_filter_from" class="block mb-sm">{{ 'alerts.volume_from' | translate }}</label>
+
+            <div class="input-with-hint">
+              <input id="volume_filter_from" aria-describedby="volume_filter_from-help"
+                     formControlName="volume_filter_from" type="number"/>
+              <div class="input-hint">{{ readableVolumeFrom }}</div>
+            </div>
+
+            <small *ngIf="form.get('volume_filter_from').errors?.['min'] && formTouched" class="text-danger block">{{ 'alerts.min_value_0' | translate }}</small>
+            <small *ngIf="form.get('volume_filter_from').errors?.['max'] && formTouched" class="text-danger block">{{ 'alerts.max_value_1bn' | translate }}</small>
+          </div>
+
+          <div>
+            <label for="volume_filter_to" class="block mb-sm">{{ 'alerts.volume_to' | translate }}</label>
+
+            <div class="input-with-hint">
+              <input id="volume_filter_to" aria-describedby="volume_filter_to-help" formControlName="volume_filter_to"
+                     type="number"/>
+              <div class="input-hint">{{ readableVolumeTo }}</div>
+            </div>
+
+            <small *ngIf="form.get('volume_filter_to').errors?.['min'] && formTouched" class="text-danger block">{{ 'alerts.min_value_0' | translate }}</small>
+            <small *ngIf="form.get('volume_filter_to').errors?.['max'] && formTouched" class="text-danger block">{{ 'alerts.max_value_100bn' | translate }}</small>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </ng-template>
+
+  <div class="divider my-xl" *ngIf="!isPriceGrossingAlert && !isListingAlert"></div>
+
+  <div class="grid-2-1 grid-gap-lg">
+    <div>
+      <input type="checkbox" formControlName="sound_alert" id="sound_alert">
+      <label for="sound_alert" class="checkbox-label">{{ 'alerts.enable_sound_notifications' | translate }}</label>
+    </div>
+
+    <div>
+      <input type="checkbox" formControlName="telegram_alert" id="telegram_alert">
+      <label for="telegram_alert" class="checkbox-label">{{ 'alerts.telegram_notification' | translate }}</label>
+      <!--      <div class="text-hint">Необходимо указать telegram chat id</div>-->
+    </div>
+  </div>
+
+  <div class="mt-md">
+    <div class="mb-sm">{{ 'alerts.alert_sound' | translate }}</div>
+    <app-sound-selector
+      *ngIf="form.get('sound_alert').value"
+      [selectedSound]="form.get('alert_sound_name').value"
+      (soundChanged)="changeSound($event)"
+    ></app-sound-selector>
+  </div>
+
+  <div class="divider my-xl" *ngIf="!isPriceGrossingAlert && !isListingAlert"></div>
+
+    <div>
+      <div class="mb-sm">{{ 'alerts.select_exchange' | translate }}</div>
+      <app-exchange-selector
+        [showOnlyMainExchanges]="isListingAlert"
+        [selectedMarket]="form.get('market').value"
+        (exchangeChange)="exchangeChange($event)"
+        [readonly]="false"
+        [premium]="true"
+        [includedExchanges]="includedExchanges"
+      ></app-exchange-selector>
+    </div>
+
+  <div *ngIf="isListingAlert" class="mt-lg">
+    <input type="checkbox" formControlName="show_chart_dialog" id="show_chart_dialog">
+    <label for="show_chart_dialog" class="checkbox-label">{{ 'alerts.enable_dialog_notifications' | translate }}</label>
+    <small class="block text-hint pl-xl">{{ 'alerts.show_chart_on_listing' | translate }}</small>
+  </div>
+
+  <section *ngIf="!isListingAlert">
+    <div class="grid-2-1 grid-gap-lg mt-md">
+      <div>
+        <label for="title" class="block mb-sm">{{ 'alerts.alert_title' | translate }}</label>
+        <input id="title" aria-describedby="title-help" formControlName="title" placeholder="{{ 'alerts.title_placeholder' | translate }}"/>
+        <small *ngIf="form.get('title').errors?.['required'] && formTouched" id="title-help" class="text-negative block">
+          {{ 'alerts.required_field' | translate }}
+        </small>
+      </div>
+
+      <div>
+        <label for="comment" class="block mb-sm">{{ 'alerts.comment' | translate }}</label>
+        <input id="comment" aria-describedby="comment-help" formControlName="comment" placeholder="{{ 'alerts.comment_placeholder' | translate }}"/>
+        <small *ngIf="form.get('comment').errors?.['required'] && formTouched" id="comment-help" class="text-negative block">
+          {{ 'alerts.required_field' | translate }}
+        </small>
+      </div>
+    </div>
+  </section>
+
+  <section *ngIf="!isPriceGrossingAlert && !isListingAlert">
+    <div class="grid-2-1 grid-gap-lg mt-lg">
+      <div *ngIf="!form.get('all_symbols')?.value">
+        <input type="checkbox" formControlName="watchlist_symbols" id="watchlist_symbols">
+        <label for="watchlist_symbols" class="checkbox-label">{{ 'alerts.watchlist_only' | translate }}</label>
+      </div>
+
+      <div *ngIf="!form.get('watchlist_symbols')?.value">
+        <input type="checkbox" formControlName="all_symbols" id="all_symbols">
+        <label for="all_symbols" class="checkbox-label">{{ 'alerts.all_symbols' | translate }}</label>
+      </div>
+    </div>
+
+    <div class="mt-md">
+      <div *ngIf="!form.get('watchlist_symbols')?.value && !form.get('all_symbols')?.value">
+        <label for="symbols" class="block mb-sm">{{ 'alerts.symbols_list' | translate }}</label>
+        <textarea id="symbols" aria-describedby="title-help" formControlName="symbols" placeholder="BTCUSDT,ETHUSDT">
+        </textarea>
+        <small *ngIf="form.get('symbols').errors?.['required']" id="symbols-help" class="error-message block">
+          {{ 'alerts.required_field' | translate }}
+        </small>
+      </div>
+
+      <div *ngIf="form.get('watchlist_symbols')?.value || form.get('all_symbols')?.value">
+        <label for="ignore_symbols" class="block mb-sm">{{ 'alerts.exclude_symbols' | translate }}</label>
+        <textarea id="ignore_symbols" aria-describedby="title-help" formControlName="ignore_symbols" placeholder="BTCUSDT,ETHUSDT">
+        </textarea>
+        <small *ngIf="form.get('ignore_symbols').errors?.['required']" id="ignore_symbols-help" class="error-message block">
+          {{ 'alerts.required_field' | translate }}
+        </small>
+      </div>
+    </div>
+  </section>
+
+</form>

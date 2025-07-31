@@ -1,0 +1,21 @@
+@import "src/variables";
+
+.depth-map-orders-block {
+  position: absolute;
+  width: 33.333%;
+  height: 25%;
+  outline: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+
+  @media (max-width: 992px) {
+    width: 100%;
+  }
+}
+
+.depth-map-orders-block-data {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}

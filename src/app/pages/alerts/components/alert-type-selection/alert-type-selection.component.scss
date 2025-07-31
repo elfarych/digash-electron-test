@@ -1,0 +1,25 @@
+.alert-types-list {
+    display: flex;
+    gap: var(--md);
+    flex-wrap: wrap;
+    margin-bottom: var(--md);
+
+    button {
+        padding: 0;
+        &.active {
+            background: var(--color-secondary-lighten);
+            border: 1px solid #795CEB;
+        }
+    }
+}
+
+//body.light-theme {
+//  .alert-types-list {
+//    button {
+//      &.active {
+//        background: ;
+//      }
+//    }
+//  }
+//}
+

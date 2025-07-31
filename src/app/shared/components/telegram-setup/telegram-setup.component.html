@@ -1,0 +1,26 @@
+<p-toast></p-toast>
+
+<div *ngIf="user$ | async as userData">
+  <div class="text-lg text-bold">{{ 'telegram.chatIdLabel' | translate }}</div>
+
+
+
+  <div class="mt-md flex column gap-md">
+
+    <div class="text-grey flex column gap-xs">
+      <div>{{ 'telegram.instruction1' | translate }} - <a href='https://t.me/digash_bot' target='_blank' class="text-primary">{{ 'telegram.botLinkText' | translate }}</a></div>
+      <div>{{ 'telegram.instruction2' | translate }} - <a href='https://t.me/raw_info_bot' target='_blank' class="text-primary">{{ 'telegram.rawInfoLinkText' | translate }}</a>)</div>
+    </div>
+
+    <p-inputNumber
+      [class.blur]="shouldHide(userData.username)"
+      [(ngModel)]="telegramChatId"
+      inputId="withoutgrouping"
+      [useGrouping]="false"
+      placeholder="123456"
+      (onBlur)="telegramChatIdChange()"
+    >
+    </p-inputNumber>
+  </div>
+
+</div>

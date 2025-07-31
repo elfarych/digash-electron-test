@@ -1,0 +1,76 @@
+<main class="position-relative" *ngIf="premiumIsActive$ | async">
+
+<!--  <div class="banner-bottom">-->
+<!--    <button class="advertising-button"> Реклама </button>-->
+<!--&lt;!&ndash;    <img src="https://public.bnbstatic.com/image/cms/blog/20230424/6c0c1b08-dbf2-4ee4-b2a0-4ec727cfc089" alt="">&ndash;&gt;-->
+<!--    <h2>На старт, внимание...</h2>-->
+<!--    <p>Рекламный текст, лого, ссылки, ваши цвета</p>-->
+<!--  </div>-->
+
+  <div class="toolbar">
+    <div class="settings">
+      <app-orderbook-map-settings *ngIf="settings$ | async as settings" [settings]="settings" [coins]="coins$ | async"
+        (changeSettings)="changeSettings($event)" />
+    </div>
+
+    <div class="size">
+      <button class="app-button" (click)="resize()">
+        <ng-template [ngIf]="size === 1">
+          <span class="pi pi-search-plus"></span>
+          <span>{{ 'depth_map.increase' | translate }}</span>
+        </ng-template>
+        <ng-template [ngIf]="size === 2">
+          <span class="pi pi-search-minus"></span>
+          <span>{{ 'depth_map.decrease' | translate }}</span>
+        </ng-template>
+      </button>
+    </div>
+
+    <div class="loader">
+      <app-orderbook-map-loader [settings$]="settings$" [loading]="loading$ | async" (reloadData)="reloadData()" />
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-item__marker depth-map corrosion-time flex no-wrap items-center">N<span
+          class="pi pi-bolt"></span></div>
+      <div class="legend-item__description">– {{ 'depth_map.corrosion_time' | translate }}</div>
+    </div>
+
+    <div class="legend-item">
+      <div class="legend-item__marker depth-map distance flex no-wrap items-center">1%</div>
+      <div class="legend-item__description">– {{ 'depth_map.distance_from_spread' | translate }}</div>
+    </div>
+
+    <div class="legend-item">
+      <div class="legend-item__marker depth-map limit-order bid flex no-wrap items-center"></div>
+      <div class="legend-item__description">– {{ 'depth_map.long_density' | translate }}</div>
+    </div>
+
+    <div class="legend-item">
+      <div class="legend-item__marker depth-map limit-order ask flex no-wrap items-center"></div>
+      <div class="legend-item__description">– {{ 'depth_map.short_density' | translate }}</div>
+    </div>
+  </div>
+
+  <div class="orderbook-area-container">
+    <app-orderbook-map-area
+      [orderBookMapData]="orderbookMapData$ | async"
+      [size]="size"
+      [settings]="settings$ | async"
+      [chartSettings]="chartSettings$ | async"
+      [preferences]="preferences$ | async"
+      [coinsData]="orderBookCoinsData$ | async" [alerts]="alerts$ | async"
+      (openChart)="openChart($event)"
+    >
+    </app-orderbook-map-area>
+  </div>
+  <app-progress-spinner *ngIf="pageLoading$ | async"></app-progress-spinner>
+</main>
+
+<div *ngIf="!(premiumIsActive$ | async)" class="premium-container" #premiumBlockTmpl>
+  <p-blockUI [target]="fakeBlockTmpl" [blocked]="true">
+    <app-premium-message-banner message="{{'depth_map.premium_access' | translate}}" [large]="true"></app-premium-message-banner>
+  </p-blockUI>
+</div>

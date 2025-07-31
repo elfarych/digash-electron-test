@@ -1,0 +1,43 @@
+<div class="container">
+
+  <div class="text-center my-xl">
+    <h1 class="text-title text-bold">{{ 'listing.newListings' | translate }}</h1>
+  </div>
+
+  <div class="bg-main rounded-borders-md pa-lg">
+
+    <div class="text-lg text-bold">{{ 'listing.header' | translate }}</div>
+
+    <div class="divider my-lg"></div>
+
+    <!-- <div class="my-xl">Тут будут карточки оповещений?</div> -->
+
+    <div class="text-grey text-italic">
+      {{ 'listing.instruction' | translate }}
+
+      <ul>
+        <li>{{ 'listing.step1' | translate }}</li>
+        <li>{{ 'listing.step2' | translate }}</li>
+      </ul>
+    </div>
+
+    <div class="mt-md">
+      <button class="app-button app-button-flat" (click)="navigateToAlerts()">
+        <span>{{ 'listing.button' | translate }}</span>
+        <span class="pi pi-angle-right ml-sm"></span>
+      </button>
+    </div>
+
+    <div>{{ dialogListings }}</div>
+
+  </div>
+
+  <div class="bg-main rounded-borders-md pa-lg mt-lg show-tooltip-on-hover">
+    <app-listing-table
+      [listings]="(listings$ | async) || dialogListings"
+      (openChart)="openChartDialog($event)"
+    >
+    </app-listing-table>
+  </div>
+
+</div>

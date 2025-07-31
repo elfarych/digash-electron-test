@@ -1,0 +1,29 @@
+<div class="orderbook-map-area" *ngIf="settings">
+  <div *ngIf="settings.displayLargeCirce" class="round-1" [class.large-1]="size === 2">
+    <div class="text-top">{{settings.largeCircleDistance}}%</div>
+    <div class="text-bottom">{{settings.largeCircleDistance}}%</div>
+    <div class="text-left">{{settings.largeCircleDistance}}%</div>
+    <div class="text-right">{{settings.largeCircleDistance}}%</div>
+
+    <div class="text-in-round-1-left">{{settings.largeCircleDistance}}%</div>
+    <div class="text-in-round-1-right">{{settings.largeCircleDistance}}%</div>
+    <div class="text-in-round-1-top">{{settings.largeCircleDistance}}%</div>
+    <div class="text-in-round-1-bottom">{{settings.largeCircleDistance}}%</div>
+  </div>
+  <div [style.opacity]="settings.displaySmallCircle ? 1 : 0" class="round-2" [class.large-2]="size === 2">
+    <div class="title">{{settings.smallCircleDistance}}%</div>
+
+    <div class="text-top">{{settings.smallCircleDistance}}%</div>
+    <div class="text-bottom">{{settings.smallCircleDistance}}%</div>
+    <div class="text-left">{{settings.smallCircleDistance}}%</div>
+    <div class="text-right">{{settings.smallCircleDistance}}%</div>
+  </div>
+
+  <app-orderbook-map-orders [orders]="orderBookMapData.asks" [size]="size" [settings]="settings" [coinsData]="coinsData"
+    [chartSettings]="chartSettings" [preferences]="preferences" [alerts]="alerts" (openChart)="openChart.emit($event)"
+    ordersType="ask" />
+
+  <app-orderbook-map-orders [orders]="orderBookMapData.bids" [size]="size" [settings]="settings" [coinsData]="coinsData"
+    [chartSettings]="chartSettings" [preferences]="preferences" [alerts]="alerts" (openChart)="openChart.emit($event)"
+    ordersType="bid" />
+</div>

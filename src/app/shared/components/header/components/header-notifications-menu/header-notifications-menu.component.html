@@ -1,0 +1,33 @@
+<div class="notifications-container bg-main rounded-borders-md pa-sm mt-md">
+  <header class="flex justify-between items-center">
+    <div class="text-lg">
+      {{ 'notifications.notifications' | translate }}
+    </div>
+    <div *ngIf="allNotificationsMode" class="action">
+      <button class="app-button-sm" (click)="viewAll()">{{ 'notifications.view_all' | translate }}</button>
+    </div>
+    <div *ngIf="!allNotificationsMode" class="action">
+      <button class="app-button-sm" (click)="deleteAll()">{{ 'notifications.clear_all' | translate }}</button>
+    </div>
+  </header>
+  <div class="notifications mt-md">
+    <ul>
+      <ng-template [ngIf]="notifications?.length" [ngIfThen]="notificationsTmpl"
+                   [ngIfElse]="notificationsEmptyTmpl"></ng-template>
+      <ng-template #notificationsTmpl>
+        <ng-container *ngFor="let notification of notifications">
+          <app-notifications-item
+            [notification]="notification"
+            (select)="clickNotification($event)"
+          ></app-notifications-item>
+        </ng-container>
+      </ng-template>
+      <ng-template #notificationsEmptyTmpl>
+        <div class="flex-center">
+          <h4>{{'notifications.empty' | translate}}</h4>
+        </div>
+      </ng-template>
+    </ul>
+  </div>
+</div>
+

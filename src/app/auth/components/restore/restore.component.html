@@ -1,0 +1,48 @@
+<div>
+  <ng-container [ngSwitch]="restorePasswordStage$ | async">
+    <form *ngSwitchCase="'email'" class="app-form flex column gap-md" [formGroup]="emailForm">
+      <input formControlName="email" type="email" pInputText placeholder="{{ 'auth.restore_password.email_placeholder' | translate }}"/>
+
+      <button
+        [disabled]="!emailForm.valid"
+        class="app-button-primary w-full mt-sm"
+        (click)="submitEmail()"
+      >
+        <span class="text-lg">{{ 'auth.restore_password.submit' | translate }}</span>
+      </button>
+    </form>
+
+    <form *ngSwitchCase="'code'" class="app-form flex column gap-md" [formGroup]="codeForm">
+      <p><i>{{ 'auth.restore_password.enter_code' | translate }}</i></p>
+      <input formControlName="code" type="text" pInputText placeholder="{{ 'auth.restore_password.code_placeholder' | translate }}"/>
+
+      <button
+        [disabled]="!codeForm.valid"
+        class="app-button-primary w-full mt-sm"
+        (click)="submitCode()"
+      >
+        <span class="text-lg">{{ 'auth.restore_password.confirm' | translate }}</span>
+      </button>
+    </form>
+
+    <form *ngSwitchCase="'password'" class="app-form flex column gap-md" [formGroup]="passwordForm">
+      <p><i>{{ 'auth.restore_password.new_password' | translate }}</i></p>
+      <input formControlName="password" type="password" pInputText placeholder="{{ 'auth.restore_password.new_password_placeholder' | translate }}"/>
+
+      <button
+        [disabled]="!passwordForm.valid"
+        class="app-button-primary w-full mt-sm"
+        (click)="submitPassword()"
+      >
+        <span class="text-lg">{{ 'auth.restore_password.confirm' | translate }}</span>
+      </button>
+    </form>
+  </ng-container>
+
+
+  <div class="mt-lg text-center">
+    {{ 'auth.restore_password.have_account' | translate }} <a (click)="redirectToSignIn.emit()" class="text-underline">{{ 'auth.restore_password.login' | translate }}</a>
+  </div>
+
+  <app-progress-spinner *ngIf="loading$ | async"></app-progress-spinner>
+</div>

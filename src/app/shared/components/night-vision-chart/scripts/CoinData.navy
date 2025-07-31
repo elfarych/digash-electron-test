@@ -1,0 +1,514 @@
+// Navy ~ 0.1-lite
+// ^^^ First comment should provide a NavyJS version
+
+// Meta tag
+[OVERLAY name = CoinData, ctx = Canvas, author = digash, version = 1.0.0]
+
+const fullChart = $props.fullChart;
+
+prop('showVolume', {type: 'boolean', def: true});
+prop('showTrades', {type: 'boolean', def: true});
+prop('showCorrelation', {type: 'boolean', def: true});
+prop('showVolatility', {type: 'boolean', def: true});
+prop('showChange', {type: 'boolean', def: true});
+prop('showVolumeSplash', {type: 'boolean', def: true});
+prop('showNatr', {type: 'boolean', def: true});
+prop('showFundingRate', {type: 'boolean', def: false});
+
+prop('volumeRange', {type: 'string', def: '24h'});
+prop('changeRange', {type: 'string', def: '24h'});
+prop('volatilityRange', {type: 'string', def: '24h'});
+prop('tradesRange', {type: 'string', def: '24h'});
+prop('correlationRange', {type: 'string', def: '24h'});
+prop('volumeSplashRange', {type: 'string', def: '24h'});
+prop('natrRange', {type: 'string', def: '24h'});
+prop('position', {type: 'string', def: 'top-left'});
+
+prop('width', {type: 'number', def: 60});
+prop('height', {type: 'number', def: 10});
+prop('rectColor', {type: 'color', def: '#fff'});
+
+// const position = 'bottom-left' // $props.position - this is a temporary solution
+
+
+const TimeframeToRus = {
+  '1m': '1м',
+  '2m': '2м',
+  '3m': '3м',
+  '5m': '5м',
+  '10m': '10м',
+  '15m': '15м',
+  '20m': '20м',
+  "30m": '30м',
+  "1h": "1ч",
+  "2h": "2ч",
+  "4h": "4ч",
+  "6h": "6ч",
+  "12h": "12ч",
+  "1d": "24ч",
+  '24h': "24ч",
+}
+
+const TimeframeToEn = {
+  '1m': '1m',
+  '2m': '2m',
+  '3m': '3m',
+  '5m': '5m',
+  '10m': '10m',
+  '15m': '15m',
+  '20m': '20m',
+  "30m": '30m',
+  "1h": "1h",
+  "2h": "2h",
+  "4h": "4h",
+  "6h": "6h",
+  "12h": "12h",
+  "1d": "24h",
+  '24h': "24h",
+}
+
+const TechnicalLabelsLong = {
+  ru: {
+    splash: 'Всплеск объема',
+    correlation: 'Корреляция',
+    trades: 'Сделки',
+    volatility: 'Волатильность',
+    price_change: 'Изм цены',
+    volume: 'Объем',
+    funding: 'Фандинг',
+    nextFundingTime: 'До расчета фандинга',
+  },
+  en: {
+    splash: 'Volume splash',
+    correlation: 'Correlation',
+    trades: 'Trades',
+    volatility: 'Volatility',
+    price_change: 'Price change',
+    volume: 'Volume',
+    funding: 'Funding',
+    nextFundingTime: 'Before funding calculation',
+  },
+  uk: {
+    splash: 'Сплеск обсягу',
+    correlation: 'Кореляція',
+    trades: 'Угоди',
+    volatility: 'Волатильність',
+    price_change: 'Зміна ціни',
+    volume: 'Обсяг',
+    funding: 'Фандинг',
+    nextFundingTime: 'До розрахунку фандингу',
+  },
+  hi: {
+    splash: 'वॉल्यूम स्प्लैश',
+    correlation: 'सहसंबंध',
+    trades: 'सौदे',
+    volatility: 'अस्थिरता',
+    price_change: 'कीमत में बदलाव',
+    volume: 'वॉल्यूम',
+    funding: 'फंडिंग',
+    nextFundingTime: 'फंडिंग की गणना से पहले',
+  },
+  bn: {
+    splash: 'ভলিউম স্প্ল্যাশ',
+    correlation: 'সহসম্বন্ধ',
+    trades: 'লেনদেন',
+    volatility: 'অস্থিরতা',
+    price_change: 'মূল্য পরিবর্তন',
+    volume: 'ভলিউম',
+    funding: 'ফান্ডিং',
+    nextFundingTime: 'ফান্ডিং গণনার আগে',
+  },
+  es: {
+    splash: 'Explosión de volumen',
+    correlation: 'Correlación',
+    trades: 'Operaciones',
+    volatility: 'Volatilidad',
+    price_change: 'Cambio de precio',
+    volume: 'Volumen',
+    funding: 'Financiamiento',
+    nextFundingTime: 'Próximo cálculo de financiamiento',
+  },
+
+  pt: {
+    splash: 'Explosão de volume',
+    correlation: 'Correlação',
+    trades: 'Negociações',
+    volatility: 'Volatilidade',
+    price_change: 'Mudança de preço',
+    volume: 'Volume',
+    funding: 'Financiamento',
+    nextFundingTime: 'Até o cálculo do financiamento',
+  }
+
+};
+
+const TechnicalLabelsShort = {
+  ru: {
+    splash: 'Вспл об',
+    correlation: 'Кор',
+    trades: 'Сд',
+    volatility: 'Вол',
+    price_change: 'Изм',
+    volume: 'Об',
+    funding: 'Фандинг',
+    nextFundingTime: 'До расчета фандинга',
+  },
+  en: {
+    splash: 'Splash',
+    correlation: 'Corr',
+    trades: 'Trd',
+    volatility: 'Vol',
+    price_change: 'Chg',
+    volume: 'Vol',
+    funding: 'Funding',
+    nextFundingTime: 'Before funding calculation',
+  },
+  uk: {
+    splash: 'Спл об',
+    correlation: 'Кор',
+    trades: 'Уг',
+    volatility: 'Вол',
+    price_change: 'Змін',
+    volume: 'Об',
+    funding: 'Фандинг',
+    nextFundingTime: 'До розрахунку фандингу',
+  },
+  hi: {
+    splash: 'स्प्ल',
+    correlation: 'सहस',
+    trades: 'सौद',
+    volatility: 'अस्',
+    price_change: 'बदलाव',
+    volume: 'वॉल',
+    funding: 'फंडिंग',
+    nextFundingTime: 'फंडिंग की गणना से पहले',
+  },
+  bn: {
+    splash: 'স্প্ল',
+    correlation: 'সহস',
+    trades: 'লেন',
+    volatility: 'অস্',
+    price_change: 'পরি',
+    volume: 'ভলি',
+    funding: 'ফান্ডিং',
+    nextFundingTime: 'ফান্ডিং গণনার আগে',
+  },
+  es: {
+    splash: 'Vol esp',
+    correlation: 'Cor',
+    trades: 'Ops',
+    volatility: 'Vol',
+    price_change: 'Camb',
+    volume: 'Vol',
+    funding: 'Fund',
+    nextFundingTime: 'Próx fund',
+  },
+
+  pt: {
+    splash: 'Vol exp',
+    correlation: 'Cor',
+    trades: 'Neg',
+    volatility: 'Vol',
+    price_change: 'Alt',
+    volume: 'Vol',
+    funding: 'Fund',
+    nextFundingTime: 'Próx fund',
+  }
+
+};
+
+
+let positionOffset = 0; // Adjust this value to control the vertical spacing between rectangles
+let questionMarks = {
+  'funding': {
+    x: 0,
+    y: 0,
+    arcRadius: 8,
+    type: 'funding'
+  }
+}
+
+function draw(ctx) {
+  const symbolData = $core.data[0];
+
+  positionOffset = fullChart ? 5 : 0;
+
+  const gap = fullChart ? 15 : 5;
+
+  if ($props.showVolume) {
+    let label = 'Объем';
+    label = !fullChart ? TechnicalLabelsShort[window.locale]?.['volume'] : TechnicalLabelsLong[window.locale]?.['volume']
+    let timeframe = TimeframeToEn[$props.volumeRange]
+
+    const key = 'volume_sum_' + $props.volumeRange?.replace('1d', '24h');
+    drawRectangle(ctx, `${label} (${timeframe}): `, convertPrice(symbolData?.volume_data?.[key]), positionOffset, true);
+    positionOffset += $props.height + gap;
+  }
+
+  if ($props.showChange) {
+    let label = !fullChart ? TechnicalLabelsShort[window.locale]?.['price_change'] ?? 'Изм цены' : TechnicalLabelsLong[window.locale]?.['price_change']
+    let timeframe = TimeframeToEn[$props.changeRange]
+
+    const key = 'priceChange' + $props.changeRange?.replace('1d', '24h');
+    drawRectangle(ctx, `${label}  (${timeframe}): `, `${symbolData?.price_changes?.[key]?.toFixed(2)}%`, positionOffset);
+    positionOffset += $props.height + gap;
+  }
+
+  if ($props.showVolatility) {
+    let label = !fullChart ? TechnicalLabelsShort[window.locale]?.['volatility'] ?? 'Волатильность' : TechnicalLabelsLong[window.locale]?.['volatility']
+    let timeframe = TimeframeToEn[$props.volatilityRange]
+
+    const key = 'volatilityIdx' + $props.volatilityRange?.replace('1d', '24h');
+    drawRectangle(ctx, `${label}  (${timeframe}): `, symbolData?.volatility_data?.[key]?.toFixed(2), positionOffset, true);
+    positionOffset += $props.height + gap;
+  }
+
+  if ($props.showNatr) {
+    let timeframe = TimeframeToEn[$props.natrRange]
+
+    const key = 'natr' + $props.natrRange?.replace('1d', '24h');
+    drawRectangle(ctx, `NATR (${timeframe}): `, `${(symbolData?.natr?.[key])?.toFixed(3)}`, positionOffset, true);
+    positionOffset += $props.height + gap;
+  }
+
+  if ($props.showTrades) {
+    let label = !fullChart ? TechnicalLabelsShort[window.locale]?.['trades'] ?? 'Сделки' : TechnicalLabelsLong[window.locale]?.['trades']
+    let timeframe = TimeframeToEn[$props.tradesRange]
+
+    const key = 'trades_sum_' + $props.tradesRange?.replace('1d', '24h');
+    drawRectangle(ctx, `${label} (${timeframe}): `, convertPrice(symbolData?.trades_data?.[key])?.replace('$', ''), positionOffset, true);
+    positionOffset += $props.height + gap;
+  }
+
+  if ($props.showCorrelation) {
+    let label = !fullChart ? TechnicalLabelsShort[window.locale]?.['correlation'] ?? 'Корреляция' : TechnicalLabelsLong[window.locale]?.['correlation']
+    let timeframe = TimeframeToEn[$props.correlationRange]
+
+    const key = 'correlationIdx' + $props.correlationRange?.replace('1d', '24h');
+    drawRectangle(ctx, `${label} (${timeframe}): `, `${(symbolData?.correlation_data?.[key] * 100)?.toFixed(2)}%`, positionOffset);
+    positionOffset += $props.height + gap;
+  }
+
+  if ($props.showVolumeSplash) {
+    let volumeIdxKeyPrefix = ''
+    if ($props.volumeSplashRange.endsWith('m') || $props.volumeSplashRange.endsWith('1h')) {
+      volumeIdxKeyPrefix = 'volumeIdx2h'
+    } else if ($props.volumeSplashRange.endsWith('h')) {
+      volumeIdxKeyPrefix = 'volumeIdx24h'
+    } else if ($props.volumeSplashRange.endsWith('d')) {
+      volumeIdxKeyPrefix = 'volumeIdx7d'
+    }
+    const key = `${volumeIdxKeyPrefix}_${$props.volumeSplashRange?.replace('1d', '24h')}`;
+    let label = !fullChart ? TechnicalLabelsShort[window.locale]?.['splash'] ?? 'Всплеск объемов' : TechnicalLabelsLong[window.locale]?.['splash']
+    let timeframe = TimeframeToEn[$props.volumeSplashRange]
+
+    drawRectangle(ctx, `${label} (${timeframe}): `, `x${(symbolData?.volume_data?.volume_idx?.[key])?.toFixed(2)}`, positionOffset, true);
+    positionOffset += $props.height + gap;
+  }
+
+  if (symbolData?.funding?.fundingRate && $props.showFundingRate) {
+    let fundingLabel = !fullChart ? TechnicalLabelsShort[window.locale]?.['funding'] ?? 'Фандинг' : TechnicalLabelsLong[window.locale]?.['funding']
+    drawRectangle(ctx, `${fundingLabel}: `, `${symbolData?.funding?.fundingRate}%`, positionOffset, false, true);
+    positionOffset += $props.height + gap;
+
+    let fundingTimeLabel = !fullChart ? TechnicalLabelsShort[window.locale]?.['nextFundingTime'] ?? 'Фандинг' : TechnicalLabelsLong[window.locale]?.['nextFundingTime']
+    drawRectangle(ctx, `${fundingTimeLabel}: `, `${getTimeUntil(symbolData?.funding?.nextFundingTime)}`, positionOffset, true);
+    positionOffset += $props.height + gap;
+  }
+}
+
+function getTimeUntil(timestamp) {
+  const now = Date.now();
+  const diff = timestamp - now;
+
+  if (diff <= 0) {
+    return '00:00';
+  }
+
+  const minutes = Math.floor(diff / (1000 * 60)) % 60;
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const pad = (n) => String(n).padStart(2, '0');
+
+  return `${pad(hours)}:${pad(minutes)}`;
+}
+
+function drawRectangle(ctx, label, value, positionOffset, neutralColor = false, funding = false) {
+  const x = calculateX();
+  const y = calculateY(positionOffset);
+
+  ctx.font = fullChart ? '13px Roboto' : '10px Roboto';
+  ctx.fillStyle = $core.colors?.text;
+  ctx.textBaseline = 'middle';
+
+  if ($props.position === 'top-right' || $props.position === 'bottom-right') {
+    ctx.textAlign = 'left';
+    ctx.direction = "rtl";
+
+    const labelWidth = 45;
+    ctx.fillText(label.replace(':', ''), x + labelWidth, y + $props.height / 2);
+    ctx.font = fullChart ? 'bold 13px Roboto' : 'bold 11px Roboto';
+    if (neutralColor) {
+      ctx.fillStyle = $core.colors?.text;
+    } else {
+      ctx.fillStyle = parseFloat(value) > 0 ? 'rgb(62, 164, 64)' : 'rgb(192, 46, 46)';
+    }
+
+    ctx.fillText(value, x, y + $props.height / 2);
+
+  } else {
+    ctx.textAlign = 'left';
+    ctx.direction = "ltr";
+
+    ctx.fillText(label, x, y + $props.height / 2);
+    const labelWidth = ctx.measureText(label).width + 10;
+    ctx.font = fullChart ? 'bold 13px Roboto' : 'bold 11px Roboto';
+    if (neutralColor) {
+      ctx.fillStyle = $core.colors?.text;
+    } else {
+      ctx.fillStyle = parseFloat(value) > 0 ? 'rgb(62, 164, 64)' : 'rgb(192, 46, 46)';
+    }
+    ctx.fillText(value, x + labelWidth, y + $props.height / 2);
+
+    if (funding) {
+      const valueWidth = fullChart ? ctx.measureText(value).width + 20 : ctx.measureText(value).width + 10;
+      drawQuestionMark(ctx, x + labelWidth + valueWidth, y + 2, 'funding');
+    }
+  }
+}
+
+function getCursorObject (event) {
+  const canvas = event.target;
+  if (!canvas) {
+    return void 0;
+  }
+  const rect = canvas.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+
+  for (const key in questionMarks) {
+    const obj = questionMarks[key];
+    if (Math.abs(x - obj.x) <= obj.arcRadius && Math.abs(y - obj.y) <= obj.arcRadius) {
+      return obj;
+    }
+  }
+  return null;
+}
+
+
+function mousemove(event) {
+  const canvas = event.target;
+  if (canvas) {
+    canvas.style.cursor = getCursorObject(event) ? 'help' : 'default';
+  }
+}
+
+function drawQuestionMark(ctx, x, y, key) {
+  const arcRadius = fullChart ? 8 : 4;
+
+  ctx.beginPath();
+  ctx.arc(x, y, arcRadius, 0, Math.PI * 2, true);
+  ctx.strokeWidth = '1px';
+  ctx.strokeStyle = $core.colors?.text;
+  ctx.stroke();
+  ctx.closePath();
+
+  ctx.fillStyle = $core.colors?.text;
+  ctx.font = fullChart ? "normal 11px Roboto" : "normal 8px Roboto";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("?", x, y + 1);
+
+  questionMarks[key] = {
+    x,
+    y,
+    arcRadius: arcRadius,
+    type: 'funding',
+  }
+}
+
+function click(event) {
+  const activeObj = getCursorObject(event);
+  const chartInOverlay = $props.chartInOverlay;
+
+  if (activeObj) {
+    if (chartInOverlay) {
+      activeObj.x = event.offsetX + 20;
+      activeObj.y = event.offsetY;
+    } else {
+      activeObj.x = event.clientX - 20;
+      activeObj.y = event.clientY;
+    }
+
+    if (event.target) {
+      event.target.dispatchEvent(new CustomEvent("coin-data-question", { detail: activeObj, bubbles: true }));
+    }
+  }
+}
+
+function calculateX() {
+  if ($props.position === 'top-left' || $props.position === 'bottom-left') {
+    return 10;
+  } else {
+    const offset = fullChart ? 150 : 100;
+    return $core.layout.width - $props.width - offset;
+  }
+}
+
+function calculateY(positionOffset) {
+  const chartElement = $core.hub.se.chart.root;
+  if (!chartElement) {
+    return $props.height + positionOffset;
+  }
+  const legendRect = chartElement.querySelector(".nvjs-legend")?.getBoundingClientRect() ?? {height: 0};
+
+  if ($props.position === 'top-left' || $props.position === 'top-right') {
+    let offsetY = 0;
+    if ($props.position === 'top-left') {
+      offsetY = legendRect?.height ?? 0;
+    }
+    return $props.height + positionOffset + offsetY;
+  } else {
+    return $core.layout.height - $props.height - positionOffset;
+  }
+}
+
+function legend(x) {
+  return '';
+}
+
+function convertPrice(price) {
+  if (!price) {
+    return void 0;
+  }
+
+  if (price <= 1) return '-'
+
+  const formatter = Intl.NumberFormat('en', {notation: 'compact'});
+  return `${formatter.format(price)}$`;
+}
+
+let initialLow = 0;
+let initialHigh = 0;
+yRange(data, a, low)
+{
+  const updData = $core.data.slice(-500);
+  let len = updData.length;
+
+  var h, l, high = -Infinity, low = Infinity
+  if (initialLow && initialHigh) {
+    low = initialLow;
+    high = initialHigh;
+  } else {
+    for (var i = 0; i < len; i++) {
+      let point = updData[i];
+      if (!point) {
+        break;
+      }
+      if (point[2] > high) high = point[2];
+      if (point[3] < low) low = point[3];
+    }
+    initialLow = low;
+    initialHigh = high;
+  }
+  return [high, low]
+}

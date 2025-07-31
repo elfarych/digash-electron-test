@@ -1,0 +1,16 @@
+<div
+  *ngIf="showColsTitle"
+  class="depth-map-orders-block-data-col-title"
+  [ngStyle]="columnTitleStyle"
+>
+  {{ columnTitle }}
+</div>
+
+<app-depth-map-order
+  *ngFor="let order of orders; trackBy: orderIdentify"
+  [order]="order"
+  [orderType]="ordersType"
+  [settings]="settings"
+  [blockType]="blockType"
+  (openChart)="openChart.emit($event)"
+></app-depth-map-order>

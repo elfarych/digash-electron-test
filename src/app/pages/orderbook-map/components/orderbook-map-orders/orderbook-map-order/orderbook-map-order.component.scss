@@ -1,0 +1,131 @@
+@import "src/mixins";
+
+.orderbook-map-order {
+  position: absolute;
+  width: 100px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  z-index: 5;
+  transition: .3s all;
+  transform: scale(0);
+  cursor: pointer;
+  border: 2px solid transparent;
+
+  @media (max-width: 992px) {
+    width: 75px;
+  }
+
+  &:hover, .active {
+    z-index: 6;
+    opacity: 1;
+  }
+  .sum {
+    font-weight: bold;
+    font-size: 100%;
+  }
+  .symbol {
+    opacity: .8;
+    font-size: 100%;
+  }
+
+}
+
+
+.ask {
+  background: var(--orderbook-map-aks-order-bg);
+
+  &:hover, .active {
+    border: 2px solid var(--color-danger);
+    box-shadow: 0 0 10px 10px var(--color-danger);
+  }
+}
+
+.bid {
+  background: var(--orderbook-map-bid-order-bg);
+
+  &:hover, .active {
+    border: 2px solid var(--color-positive);
+    box-shadow: 0 0 10px 10px var(--color-positive);
+  }
+}
+
+
+.orderbook-map-order-data {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+
+  .densities-per-coin {
+    position: absolute;
+    bottom: 10%;
+    right: 5%;
+    transform: translateX(50%);
+  }
+
+  .exchange-logo {
+    position: absolute;
+    bottom: -5%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    img {
+      width: 32px;
+    }
+  }
+
+  .distance-corrosion {
+    position: absolute;
+    top: -5%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: var(--sm);
+    z-index: 10;
+
+    .bid-distance {
+      @include outlined(
+        var(--color-positive),
+        var(--color-positive-ligthen),
+        transparent, 2px, 0
+      )
+    }
+
+    .ask-distance {
+      @include outlined(
+          var(--color-danger),
+          var(--color-danger-lighten),
+          transparent, 2px, 0
+      )
+    }
+  }
+
+  .orderbook-map-order-active-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+}
+
+.mini-chart-container {
+  width: 500px;
+  max-width: 100%;
+  height: 420px;
+
+  @media (max-width: 992px) {
+    width: 90%;
+  }
+}

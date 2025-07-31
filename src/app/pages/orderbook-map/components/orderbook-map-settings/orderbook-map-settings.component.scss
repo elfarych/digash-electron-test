@@ -1,0 +1,36 @@
+@import "src/variables";
+@import "src/mixins";
+
+.settings-form-container {
+  height: calc(100% - 60px);
+  padding-bottom: var(--lg);
+  overflow-y: scroll;
+}
+
+.orderbook-map-exchanges-settings {
+  .exchange-button {
+    @include default-button-style(2px, 6px);
+    padding: var(--xs) var(--sm);
+    transition: .5s all;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: var(--xs);
+
+    .exchange-button-logo {
+      margin-left: -6px;
+      margin-right: var(--xs);
+      padding-top: var(--xs);
+    }
+  }
+
+  .active {
+    border: 2px solid transparent;
+    background: linear-gradient(var(--color-main-bg), var(--color-main-bg)) padding-box,
+    linear-gradient(to bottom, var(--color-primary-ligthen), var(--color-primary)) border-box,
+    var(--color-main-bg) padding-box;
+    background-clip: padding-box, border-box;
+    box-shadow: 0 0 0 2px var(--color-main-outline-shadow);
+  }
+
+}

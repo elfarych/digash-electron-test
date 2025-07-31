@@ -1,0 +1,43 @@
+@import "./src/styles";
+
+.promo-codes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: var(--md);
+}
+
+.promo-code-card {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: var(--md);
+  text-align: center;
+
+  small {
+    display: block;
+    margin-bottom: var(--md);
+  }
+}
+
+.form {
+  padding: var(--md);
+}
+
+.referral-link {
+  flex-wrap: wrap;
+
+  label {
+    width: 100%;
+  }
+}
+
+@media (max-width: 992px) {
+  .promo-codes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .promo-codes-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

@@ -1,0 +1,45 @@
+<div class="">
+  <p-toast/>
+
+  <div class="bg-main pa-lg rounded-borders-md ">
+  <div class="text-lg text-bold">{{ 'profile.exportImportConfig' | translate }}</div>
+
+    <div class="divider my-lg"></div>
+
+    
+    <div class="grid-2-1 grid-gap-md">
+      <div class="app-form">
+        <div class="text-bold">{{ 'profile.whatToExport' | translate }}</div>
+        <div class="flex column gap-sm mt-lg">
+          <div *ngFor="let checkbox of checkboxExportData | keyvalue">
+            <input type="checkbox" (input)="onExportCheckboxChange(checkbox.key)" id="{{ checkbox.key }}">
+            <label for="{{ checkbox.key }}" class="checkbox-label">{{ checkbox.value | translate }}</label>
+          </div>
+        </div>
+        <div class="mt-lg">
+          <button class="app-button-primary" (click)="exportJson()" [disabled]="!selectedExportCheckboxes.length">
+            <span class="pi pi-upload"></span>
+            <span>{{ 'profile.exportButton' | translate }}</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="app-form">
+        <div class="text-bold">{{ 'profile.whatToImport' | translate }}</div>
+        <div class="flex column gap-sm mt-lg">
+          <div *ngFor="let checkbox of checkboxData | keyvalue">
+            <input type="checkbox" (input)="onCheckboxChange(checkbox.key)" id="{{ checkbox.key }}">
+            <label for="{{ checkbox.key }}" class="checkbox-label">{{ checkbox.value | translate }}</label>
+          </div>
+        </div>
+        <div class="mt-lg">
+          <p-fileUpload mode="basic" [disabled]="!selectedCheckboxes.length" chooseLabel="{{ 'profile.import' | translate }}" chooseIcon="pi pi-download" (onSelect)="onFileSelected($event)" accept=".json" />
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+

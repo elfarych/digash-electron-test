@@ -1,0 +1,52 @@
+<div class="settings">
+  <div  class="left-side">
+    <app-exchange-selector
+      *ngIf="standaloneChart"
+      [selectedMarket]="chartSettings.market ?? 'BINANCE_SPOT'"
+      [premium]="isPremium"
+      [excludedExchanges]="chartSettings.excludedExchanges"
+      (exchangeChange)="exchangeChange($event)"
+    ></app-exchange-selector>
+
+    <app-presets
+      [presets]="presets"
+      [selectedPreset]="selectedPreset"
+      (createPreset)="createPreset.emit($event)"
+      (selectPreset)="selectPreset.emit($event)"
+      (editPreset)="editPreset.emit($event)"
+      (deletePreset)="deletePreset.emit($event)"
+    >
+    </app-presets>
+
+  </div>
+
+  <div class="flex items-center gap-sm">
+
+    <div class="grow-1">
+      <app-coin-search [coins]="allCoins" (selectSymbol)="handleSelectSymbol($event)"></app-coin-search>
+    </div>
+
+    <app-chart-settings
+      *ngIf="standaloneChart"
+      [activeSortingId]="activeSortingId"
+      [coins]="coins"
+      [coinNavigationAutoSize]="coinNavigationAutoSize"
+      [selectedColumns]="selectedColumns"
+      [chartSettings]="chartSettings"
+      [isPremium]="isPremium"
+      (chartSettingsChange)="chartSettingsChange.emit($event)"
+      (columnSelectionChange)="columnSelectionChange.emit($event)"
+      (resetNavigationColumns)="resetNavigationColumns.emit()"
+      (toggleNavigationAutoSize)="toggleNavigationAutoSize.emit()"
+      (excludeExchanges)="excludeExchanges.emit($event)"
+    ></app-chart-settings>
+
+    <app-chart-update-mode-switcher
+      [mode]="dataLoaderMode"
+      (dataLoadButtonClick)="dataLoadButtonClick.emit()"
+      (switchDataLoaderMode)="switchDataLoaderMode.emit($event)"
+    >
+
+    </app-chart-update-mode-switcher>
+  </div>
+</div>

@@ -1,0 +1,178 @@
+<div class="charts-screener-container">
+  <p-confirmPopup></p-confirmPopup>
+  <p-toast/>
+
+  <ng-container *ngIf="selectedWorkspace$ | async as selectedWorkspace">
+
+    <ng-container>
+      <ng-container *ngIf="isDesktop">
+        <div class="chart-screener-header">
+          <div class="chart-screener-workspaces show-tooltip-on-hover">
+            <div *ngFor="let workspace of workspaces; trackBy: workspaceTrackBy" class="workspace-tab"
+                 [class.active]="getWorkspaceActiveStatus(workspace, selectedWorkspace)"
+                 (click)="selectWorkspace($event, workspace)"
+                 pDraggable
+                 pDroppable
+                 (onDragStart)="onWorkspaceDragStart($event, workspace)"
+                 (onDragEnd)="onWorkspaceDragEnd()"
+                 (onDragEnter)="onWorkspaceDragEnter(workspace)"
+                 pTooltip="{{ 'screener.tooltip_workspaces' | translate }}"
+                 tooltipPosition="bottom"
+                 showDelay="1000"
+            >
+
+              <div class="workspace-tab-title" [title]="workspace.title">
+                {{ workspace.title }}
+              </div>
+
+            <!--            Exchange short name-->
+            <span class="workspace-tab-exchange">
+              <span class="workspace-exchange">
+                  <svg-icon [src]="getExchangeData(workspace.market)?.icon" [svgStyle]="{ 'width.px': 12, 'height.px': 10 }"></svg-icon>
+                  <span>{{ 'screener.' + getExchangeData(workspace.market)?.translateKey | translate }} </span>
+                </span>
+            </span>
+
+              <div class="actions">
+                <ng-container *ngIf="selectedWorkspace[0]?.id === workspace.id">
+                  <i class="pi" [class.pi-lock-open]="!workspaceLink" [class.pi-unlock]="workspaceLink" appUnauthorized
+                     (click)="handleLink()"></i>
+                </ng-container>
+                <i class="pi pi-pencil" appUnauthorized (click)="handleOpenSettings($event, workspace)"></i>
+                <i class="pi pi-trash" appUnauthorized (click)="handleRemove($event, workspace)"></i>
+              </div>
+            </div>
+
+            <div class="workspace-tab" appUnauthorized (click)="createTab(workspaces)">
+              <span class="pi pi-sliders-h create-workspace-icon"></span>
+              <span>{{ 'screener.create_workspace' | translate }}</span>
+              <div class="actions">
+                <i class="pi pi-plus"></i>
+              </div>
+            </div>
+
+            <div>
+              <app-tooltips identifier="WORKSPACES" [size]="16"/>
+            </div>
+          </div>
+
+          <div *ngIf="workspaces?.length" class="update-sorting hide-on-mobile flex items-center gap-sm">
+            <app-workspace-timeframe-selector [selectedTimeframe]="selectedWorkspace[0].timeframe"
+                                              (changeTimeFrame)="changeWorkspaceTimeframe($event, selectedWorkspace[0])"></app-workspace-timeframe-selector>
+
+            <button *ngIf="selectedWorkspace[0]?.sortingTime === 'manual'" appUnauthorized
+                    pTooltip="{{ 'screener.refresh_sorting' | translate }}" class="app-button-md no-shadow-borders"
+                    (click)="updateSorting()">
+              <span class="pi pi-refresh"></span>
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template [ngIf]="selectedWorkspace?.length">
+
+        <div class="workspaces-container" appScrollTopButton>
+          <ng-container *ngIf="workspaceCoins$ | async as workspaceCoins">
+            <ng-template [ngIf]="selectedWorkspace.length === 1">
+              <app-workspace
+                [workspace]="selectedWorkspace[0]"
+                [coins]="(userData$ | async)?.premium_enabled
+              ? workspaceCoins[String(selectedWorkspace[0]?.id)]
+              : workspaceCoins[String(selectedWorkspace[0]?.id)]?.slice(0, 10)"
+                [preferences]="preferences$ | async"
+                [alerts]="alerts$ | async"
+                [loading]="loading$ | async"
+                (candlesLenUpdated)="onCandlesLenUpdate($event, selectedWorkspace[0])"
+                (chartIndicatorsUpdated)="onIndicatorsUpdate($event, selectedWorkspace[0])"
+              ></app-workspace>
+            </ng-template>
+
+
+            <ng-template [ngIf]="selectedWorkspace.length > 1">
+              <p-splitter *ngIf="preferences$ | async as preferences" [panelSizes]="[50, 50]" styleClass="mb-5"
+                          [style]="{ height: 'calc(100vh - 110px)' }" [layout]="'horizontal'">
+                <!--          TODO refactoring-->
+                <!--          <ng-container *ngFor="let item of selectedWorkspace; let i = index">-->
+                <!--            <ng-template pTemplate>-->
+                <!--              <section class="w-full">-->
+                <!--                <div class="padding-2">{{ item.title }}</div>-->
+                <!--                <app-workspace-->
+                <!--                  [workspace]="item"-->
+                <!--                  [coins]="workspaceCoins[String(selectedWorkspace[i].id)]"-->
+                <!--                  [preferences]="preferences$ | async"-->
+                <!--                  [alerts]="alerts$ | async"-->
+                <!--                  [loading]="loading$ | async"-->
+                <!--                  [watchlistCoins]="watchlistCoins$ | async"-->
+                <!--                ></app-workspace>-->
+                <!--              </section>-->
+
+                <!--            </ng-template>-->
+                <!--          </ng-container>-->
+
+                <ng-template pTemplate>
+                  <section class="w-full pr-sm">
+                    <div class="pa-sm">{{ selectedWorkspace[0].title }}</div>
+                    <app-workspace
+                      [workspace]="selectedWorkspace[0]"
+                      [coins]="workspaceCoins[String(selectedWorkspace[0].id)]"
+                      [preferences]="preferences"
+                      [alerts]="alerts$ | async"
+                      [loading]="loading$ | async"
+                      [multipleWorkspaces]="true"
+                      (candlesLenUpdated)="onCandlesLenUpdate($event, selectedWorkspace[0])"
+                      (chartIndicatorsUpdated)="onIndicatorsUpdate($event, selectedWorkspace[0])"
+                    ></app-workspace>
+                  </section>
+                </ng-template>
+
+                <ng-template pTemplate>
+                  <section class="w-full pl-sm">
+                    <div class="pa-sm">{{ selectedWorkspace[1].title }}</div>
+                    <app-workspace
+                      [workspace]="selectedWorkspace[1]"
+                      [coins]="workspaceCoins[String(selectedWorkspace[1].id)]"
+                      [preferences]="preferences"
+                      [alerts]="alerts$ | async"
+                      [loading]="loading$ | async"
+                      [multipleWorkspaces]="true"
+                      (candlesLenUpdated)="onCandlesLenUpdate($event, selectedWorkspace[1])"
+                      (chartIndicatorsUpdated)="onIndicatorsUpdate($event, selectedWorkspace[1])"
+                    ></app-workspace>
+                  </section>
+                </ng-template>
+
+              </p-splitter>
+
+            </ng-template>
+          </ng-container>
+        </div>
+      </ng-template>
+    </ng-container>
+
+    <ng-container *ngIf="!isDesktop">
+      <app-workspace-mobile-menu
+        [selectedWorkspaces]="selectedWorkspace$ | async"
+        [workspaces]="workspaces$ | async"
+        (openSettings)="editWorkspace($event)"
+        (removeWorkspace)="removeTab($event)"
+        (selectWorkspace)="selectWorkspace($event.event, $event.data)"
+        (changeTimeframe)="changeWorkspaceTimeframe($event.timeframe, $event.workspace)"
+      ></app-workspace-mobile-menu>
+    </ng-container>
+
+  </ng-container>
+
+  <div *ngIf="(workspaces$ | async)?.length === 0" class="flex flex-center column mt-xl">
+    <div>
+      <h3 class="text-title text-center">{{ 'screener.no_workspaces' | translate }}</h3>
+    </div>
+    <div class="mt-md">
+      <button class="app-button-primary" (click)="createTab()">
+        <span class="">{{ 'screener.create_workspace' | translate }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!--      <app-progress-spinner *ngIf="!selectedWorkspace"></app-progress-spinner>-->
+</div>
+<app-guard></app-guard>

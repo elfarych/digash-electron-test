@@ -1,0 +1,84 @@
+<div class="section-title">
+  <img src="assets/img/ellipse-primary.png">
+
+  <h1 class="text-title text-center mb-xl">{{ 'profile.friends.inviteFriend' | translate }}</h1>
+</div>
+
+<div class="invite-friends-block">
+<!--  <p class="title">{{ 'profile.friends.inviteFriend' | translate }}</p>-->
+
+
+  <div class="main-info">
+    <h3 class="text-sub-title">{{ 'profile.friends.friendsCount' | translate }}: {{ referralsCount }}</h3>
+    <p class="mt-md link-text">{{ 'profile.friends.yourInviteLink' | translate }}
+      <span class="referral-link" (click)="copyRefLink()">{{ 'profile.friends.link' | translate }}</span>
+    </p>
+  </div>
+
+
+  <div class="progress">
+    <h3 class="text-sub-title">{{ 'profile.friends.progress' | translate }}</h3>
+    <div class="referrals mt-md">
+
+      <div class="referral" [ngClass]="unclaimedReferralRewardCount >= 1 || !!unclaimedRewards?.length ? 'referral-active' : ' referral-inactive'">
+        <img src="assets/svg/friends-1.svg" class="friends">
+        <img src="assets/img/friend-ellipse.png" class="friends-ellipsis friends-ellipsis-1">
+        <span class="text">{{ 'profile.friends.oneOfThree' | translate }}</span>
+      </div>
+
+      <div class="referral" [ngClass]="unclaimedReferralRewardCount >= 2 || !!unclaimedRewards?.length ? 'referral-active' : ' referral-inactive'">
+        <img src="assets/svg/friends-2.svg" class="friends">
+        <img src="assets/img/friend-ellipse.png" class="friends-ellipsis friends-ellipsis-2">
+        <span class="text">{{ 'profile.friends.twoOfThree' | translate }}</span>
+        <span class="friend-connector">
+        <img src="assets/svg/friend-connector.svg" >
+      </span>
+      </div>
+
+      <div class="referral" [ngClass]="unclaimedReferralRewardCount >= 3 || !!unclaimedRewards?.length ? 'referral-active' : ' referral-inactive'">
+        <img src="assets/svg/friends-3.svg" class="friends">
+        <img src="assets/img/friend-ellipse.png" class="friends-ellipsis friends-ellipsis-3">
+        <span class="text">{{ 'profile.friends.threeOfThree' | translate }}</span>
+        <span class="friend-connector">
+        <img src="assets/svg/friend-connector.svg">
+      </span>
+      </div>
+
+      <button
+        class="premium-button"
+        [ngClass]="unclaimedReferralRewardCount >= 3 || !!unclaimedRewards?.length ? 'premium-button-active' : 'premium-button-inactive'"
+        (click)="claimReward()"
+      >
+        <span class="text">{{ 'profile.friends.getPremium' | translate }}</span>
+        <img src="assets/img/premium-ellipsis.png" class="ellipse">
+        <img src="assets/img/premium-ellipsis-inset.png" class="ellipse-inset">
+      </button>
+
+
+    </div>
+  </div>
+
+
+
+    <div *ngIf="unclaimedReferralRewardCount >= 3  || !!unclaimedRewards?.length" class="rewards">
+      <div class="reward">
+        <span class="pl-xl">{{ 'profile.friends.rewardsIsAvailable' | translate }}</span>
+        <img src="assets/img/premium-ticket.png" alt="">
+      </div>
+    </div>
+
+  <div *ngIf="unclaimedReferralRewardCount < 3 && !unclaimedRewards?.length" class="rewards">
+    <p class="text-hint text-italic">{{ 'profile.friends.inviteMoreMessage' | translate:{ count: (3 - unclaimedReferralRewardCount) } }} ({{ 'profile.friends.terms' | translate }})</p>
+  </div>
+
+  <div *ngIf="claimedRewards?.length" class="claimed-rewards">
+    <p class="title">{{ 'profile.friends.claimedRewards' | translate }}:</p>
+
+    <ul>
+      <li *ngFor="let reward of claimedRewards">{{ 'profile.friends.premium' | translate }}: {{ reward.premium_days }} {{ 'profile.friends.days' | translate }}</li>
+    </ul>
+
+
+  </div>
+
+</div>

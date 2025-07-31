@@ -1,0 +1,69 @@
+<p-confirmPopup></p-confirmPopup>
+
+<div class="bg-main pa-lg rounded-borders-md show-tooltip-on-hover">
+
+  <div class="flex items-center gap-sm">
+    <div class="text-lg text-bold">{{ 'profile.exchangeSetup.ExchangesConnect' | translate }}</div>
+    <app-tooltips identifier="EXCHANGE_API_KEY_SETUP" [size]="14"></app-tooltips>
+  </div>
+
+  <div class="divider my-lg"></div>
+
+  <ng-container *ngIf="errorMessage$ | async as errorMessage">
+    <div class="error-message bg-negative-dark pa-md rounded-borders-sm my-md">
+      <div>{{ 'profile.exchangeSetup.apiKeyError' | translate }}</div>
+    </div>
+  </ng-container>
+
+  <section>
+    <div class="flex justify-between items-center">
+      <div class="text-bold">Binance</div>
+      <ng-template [ngIf]="(user$ | async).binance_api_connected || connected">
+        <div class="flex gap-sm items-center">
+
+          <div class="bg-positive text-white rounded-borders-sm pa-sm">
+            <i class="pi pi-check"></i>
+            <span class="ml-sm">{{ 'profile.exchangeSetup.Connected' | translate }}</span>
+          </div>
+
+          <div>
+            <button class="app-button" (click)="changeBinanceApiKeys()">
+              <span class="pi pi-pencil"></span>
+            </button>
+          </div>
+
+          <div>
+            <button class="app-button" (click)="confirmDisconnectBinanceAccount()">
+              <span class="pi pi-trash"></span>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+
+    </div>
+
+    <ng-template [ngIf]="(!connected && !(user$ | async).binance_api_connected) || changeBinanceKeysMode">
+
+      <form [formGroup]="binanceForm" (submit)="submit()" class="app-form position-relative">
+        <div class="grid-2-1 grid-gap-md mt-sm">
+          <input formControlName="api_key" type="text" placeholder="{{'profile.exchangeSetup.api_key' | translate}}">
+          <input formControlName="api_secret" type="password" placeholder="{{'profile.exchangeSetup.api_secret' | translate}}">
+        </div>
+
+        <div class="flex justify-end mt-sm">
+          <button
+            class="app-button-primary"
+            type="submit"
+            [disabled]="!binanceForm.get('api_key').value || !binanceForm.get('api_secret').value"
+          >
+            <span>{{ 'profile.exchangeSetup.Connect' | translate }}</span>
+          </button>
+        </div>
+
+        <app-progress-spinner *ngIf="loading"></app-progress-spinner>
+      </form>
+
+    </ng-template>
+
+  </section>
+</div>

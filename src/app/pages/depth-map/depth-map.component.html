@@ -1,0 +1,24 @@
+<main>
+  <div class="settings">
+    <app-depth-map-settings
+      *ngIf="settings$ | async as settings"
+      [settings]="settings"
+      [coins]="coins$ | async"
+      (changeSettings)="changeSettings($event)"
+    ></app-depth-map-settings>
+
+    <app-depth-map-loader
+      [settings$]="settings$"
+      [loading]="loading$ | async"
+      (reloadData)="reloadData()"
+    ></app-depth-map-loader>
+  </div>
+
+  <div class="depth-map-area-container">
+    <app-depth-map-area
+      [depthData]="depthData$ | async"
+      [settings]="settings$ | async"
+      (openChart)="openChart($event)"
+    ></app-depth-map-area>
+  </div>
+</main>

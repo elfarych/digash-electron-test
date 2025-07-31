@@ -1,0 +1,21 @@
+<div
+  appUnauthorized
+  (click)="togglePanel($event, overlayPanel)"
+  (contextmenu)="selectColor($event, 'clear')"
+  class="color-pin flex flex-center"
+  [ngClass]="watchlistCoin?.color ? 'watchlist-color-' + watchlistCoin.color : 'watchlist-color'"
+  [class.hided]="hide && !watchlistCoin"
+>
+  <span class="pi pi-bookmark-fill"></span>
+</div>
+<p-overlayPanel #overlayPanel>
+  <div class="colors">
+    <div
+      *ngFor="let color of watchlistColors"
+      appUnauthorized
+      [ngClass]="'watchlist-bg-' + color"
+      class="color"
+      (click)="selectColor($event, color)">
+    </div>
+  </div>
+</p-overlayPanel>

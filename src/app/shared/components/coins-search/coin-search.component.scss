@@ -1,0 +1,21 @@
+.coin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--sm) var(--md);
+  cursor: pointer;
+  transition: .3s all;
+  border-radius: var(--sm);
+
+  &:hover {
+    background: var(--color-secondary);
+  }
+
+  svg-icon {
+    display: flex;
+    align-items: center;
+    margin-right: var(--sm);
+  }
+}
+
+

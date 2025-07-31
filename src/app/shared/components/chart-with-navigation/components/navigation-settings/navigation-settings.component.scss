@@ -1,0 +1,22 @@
+.settings {
+  background: var(--color-main-bg);
+  border-top: 3px solid var(--color-main-bg-accent-lighten);
+  border-bottom: 3px solid var(--color-main-bg-accent-lighten);
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  align-items: center;
+  grid-gap: var(--sm);
+  padding: 0 var(--sm);
+  height: 50px;
+
+  @media (max-width: 992px) {
+    border-top: none;
+    border-bottom: none;
+  }
+}
+
+.left-side {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--sm);
+}

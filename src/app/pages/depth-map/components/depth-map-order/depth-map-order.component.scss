@@ -1,0 +1,21 @@
+.depth-map-order {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  padding: 6px 4px;
+  border-radius: var(--border-radius);
+  box-shadow: 1px 1px 5px 0 rgba(0,0,0,.6);
+  font-size: 12px;
+  transition: .1s all;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: auto 50px;
+  grid-gap: 4px;
+  //display: flex;
+  //align-items: center;
+  //justify-content: space-between;
+  //flex-wrap: wrap;
+  //gap: 4px;
+  //white-space: nowrap;
+  //overflow: hidden;
+}

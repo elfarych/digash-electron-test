@@ -1,0 +1,84 @@
+:root {
+  --xl: 32px;
+  --lg: 24px;
+  --md: 16px;
+  --sm: 8px;
+  --xs: 4px;
+
+  --xl-m: 24px;
+  --lg-m: 18px;
+  --md-m: 12px;
+  --sm-m: 6px;
+  --xs-m: 3px;
+
+  --font-size-title: 32px;
+  --font-size-sub-title: 20px;
+  --font-size-text-lg: 16px;
+  --font-size-text: 14px;
+  --font-size-text-small: 10px;
+
+  --color-primary: #795ceb;
+  --color-primary-ligthen: #937bee;
+  --color-page-bg: #08080a;
+  --color-input-bg: #08080a;
+  --color-main-bg: #14141D;
+  --color-main-bg-accent: #1F1F28;
+  --color-main-bg-accent-lighten: #292a32; // Border Gradient start color
+  --color-main-outline-shadow: #0e0f15;
+  --color-main-text: #F3F3F3;
+  --color-sub-text: #9fa1a4;
+  --color-border: #9fa1a4;
+
+  --color-info: #5c8eeb;
+  --color-info-ligthen: #779ee8;
+
+  --color-chart-bg: #0e0e18;
+
+  --color-secondary: #201f36;
+  --color-secondary-lighten: #2a293e;
+  --color-positive: #0a9d61;
+  --color-positive-ligthen: #46b888;
+  --color-positive-dark: rgba(13, 78, 57, .9);
+
+  --color-premium: ;
+  border: 1px solid;
+
+border-image-source: linear-gradient(180deg, rgba(243, 243, 243, 0.1) 0%, rgba(243, 243, 243, 0) 194.57%),
+linear-gradient(202.93deg, rgba(181, 247, 220, 0.4) -2.14%, rgba(24, 233, 146, 0.4) 52.04%, rgba(11, 157, 96, 0.4) 109.58%);
+
+
+
+  --color-warning: #e59507;
+  --color-danger: #D92646;
+  --color-danger-dark: rgba(255, 0, 0, .09);
+  --color-danger-dark-2: rgba(117, 27, 48, .9);
+  --color-danger-lighten: #db5f72;
+
+  --transtion: .3s all;
+
+  --orderbook-map-aks-order-bg: rgba(117, 27, 48, .9);
+  --orderbook-map-bid-order-bg: rgba(13, 78, 57, .9);
+}
+
+body.light-theme {
+  --color-page-bg: #ffffff;
+  --color-input-bg: #e1e2ea;
+  --color-main-bg: #f0f0f5;
+  --color-main-bg-accent: #e2e2ea;
+  --color-main-bg-accent-lighten: #e2e2ea;
+  --color-main-outline-shadow: transparent;
+  --color-main-text: #1e1e1e;
+  --color-sub-text: #4a4a4a;
+  --color-border: #4a4a4a;
+
+  --color-chart-bg: #f4f4f7;
+
+  --color-secondary: #ebebf8;
+  --color-secondary-lighten: #ebebf8;
+
+  --color-positive-dark: rgba(13, 78, 57, .1);
+
+  --orderbook-map-aks-order-bg: #db5f72;
+  --orderbook-map-bid-order-bg: #46b888;
+}
+

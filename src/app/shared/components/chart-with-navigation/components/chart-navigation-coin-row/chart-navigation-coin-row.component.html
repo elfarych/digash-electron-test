@@ -1,0 +1,98 @@
+<div class="chart-navigation-row" [class.selected]="coin.symbol === selectedCoin">
+
+  <div *ngIf="showAlertColumn" class="chart-navigation-row-alert-column"
+    [class.active]="sortByAlerts || coin.symbol === selectedCoin">
+    <span [ngClass]="hasAlert ? 'pi pi-bell' : ''"></span>
+  </div>
+
+  <div *ngIf="showWatchlistColumn" class="chart-navigation-row-watchlist-column"
+    [class.active]="coin.symbol === selectedCoin || activeSortingId === 'Watchlist'">
+    <app-watchlist-selection [watchlistCoin]="watchlistCoin" [hide]="true"
+      (handleSelectColor)="handleSelectColor($event)">
+    </app-watchlist-selection>
+  </div>
+
+  <div class="chart-navigation-row-symbol-column" [ngClass]="!autoSize ? 'grow-1' : ''"
+    [class.active]="activeSortingId === 'Coin' || coin.symbol === selectedCoin">
+    <div class="chart-navigation-row-symbol-column__value">
+      {{ normalizeCoinQuoteSymbol(coin.symbol) }}
+
+      <div *ngIf="showLimitOrdersMarker" class="chart-navigation-row-symbol-column__value-orders">
+        <span *ngIf="hasAskLimitOrder" class="has-ask-limit-order has-limit-order" title="Есть плотность на продажу"></span>
+        <span *ngIf="hasBidLimitOrder" class="has-bid-limit-order has-limit-order" title="Есть плотность на покупку"></span>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngFor="let column of coinsNavigationColumns">
+    <div
+      class="chart-navigation-row-data-column"
+      [class.active]="activeSortingId === column.id || coin.symbol === selectedCoin"
+    >
+
+      <span
+        *ngIf="column.sorting === 'topGainers'"
+        [class.up]="coin.data?.price_changes?.['priceChange' + column.trendSubType] > 0"
+        [class.down]="coin.data?.price_changes?.['priceChange' + column.trendSubType] < 0"
+      >
+        {{ coin.data?.price_changes?.['priceChange' + column.trendSubType]?.toFixed(2) ?? 0 }}%
+      </span>
+
+      <span
+        *ngIf="column.sorting === 'volatility'"
+        [class.up]="coin.data?.volatility_data?.['volatilityIdx' + column.trendSubType] > 0"
+        [class.down]="coin.data?.volatility_data?.['volatilityIdx' + column.trendSubType] < 0"
+      >
+        {{ coin.data?.volatility_data?.['volatilityIdx' + column.trendSubType]?.toFixed(2) ?? 0 }}%
+      </span>
+
+      <span *ngIf="column.sorting === 'listing'">
+        {{ convertListing(coin.data?.listing) }}
+      </span>
+
+      <span *ngIf="column.sorting === 'volume'">
+        {{ coin.data?.volume_data?.['volume_sum_' + column.trendSubType] | convertPrice }}
+      </span>
+
+      <span *ngIf="column.sorting === 'volumeSplash'">
+        {{ coin.data?.volume_data?.volume_idx?.[getVolumeSplashField(column.trendSubType)]?.toFixed(2) }}
+      </span>
+
+      <span *ngIf="column.sorting === 'trades' && coin.data?.trades_data?.['trades_sum_' + column.trendSubType] > 1">{{
+        coin.data?.trades_data?.['trades_sum_' + column.trendSubType] ?? 0 | convertBigNumber }}</span>
+      <span *ngIf="column.sorting === 'trades' && coin.data?.trades_data?.['trades_sum_' + column.trendSubType] <= 1">
+        -
+      </span>
+
+      <span
+        *ngIf="column.sorting === 'funding' && coin.data?.funding?.fundingRate"
+        [class.up]="coin.data?.funding?.fundingRate > 0"
+        [class.down]="coin.data?.funding?.fundingRate < 0"
+      >{{ coin.data?.funding?.fundingRate.toFixed(4) ?? 0 }}%</span>
+      <span *ngIf="column.sorting === 'funding' && !coin.data?.funding?.fundingRate">-</span>
+
+      <span *ngIf="column.sorting === 'horizontalLevels' && coin.data?.horizontal_levels?.['distance_' + column.trendSubType]">
+        {{ coin.data?.horizontal_levels?.['distance_' + column.trendSubType]?.toFixed(2) }}%
+      </span>
+      <span *ngIf="column.sorting === 'horizontalLevels' && !coin.data?.horizontal_levels?.['distance_' + column.trendSubType]">
+        -
+      </span>
+
+      <span *ngIf="column.sorting === 'trendLevels' && coin.data?.trend_levels?.['distance_' + column.trendSubType]">
+        {{ coin.data?.trend_levels?.['distance_' + column.trendSubType]?.toFixed(2) }}%
+      </span>
+      <span *ngIf="column.sorting === 'trendLevels' && !coin.data?.trend_levels?.['distance_' + column.trendSubType]">
+        -
+      </span>
+
+      <span
+        *ngIf="column.sorting === 'correlation'"
+        [class.up]="coin.data?.correlation_data?.['correlationIdx' + column.trendSubType] > 0"
+        [class.down]="coin.data?.correlation_data?.['correlationIdx' + column.trendSubType] < 0"
+      >
+        {{ (coin.data?.correlation_data?.['correlationIdx' + column.trendSubType] * 100)?.toFixed(2) ?? 0 }}%
+      </span>
+    </div>
+  </ng-container>
+
+</div>

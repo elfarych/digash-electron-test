@@ -1,0 +1,119 @@
+<div class="premium-new-year">
+  <div class="close" *ngIf="showClose">
+    <p-button icon="pi pi-times" [rounded]="true" [text]="true" severity="secondary" (click)="closeDialog.emit()"></p-button>
+  </div>
+
+  <app-premium-new-year-ball imgSrc="assets/img/new-year/XRP.png" [styles]="{'top': '-10%', 'left': '10%'}" [index]="1"/>
+  <app-premium-new-year-ball imgSrc="assets/img/new-year/NEAR.png" [styles]="{'top': '10%', 'left': '3%', 'animation-delay': '3s'}" [index]="2"/>
+  <app-premium-new-year-ball imgSrc="assets/img/new-year/ETH.png" [styles]="{'top': '40%', 'left': '1%', 'animation-delay': '5s'}" [index]="3"/>
+
+  <app-premium-new-year-ball imgSrc="assets/img/new-year/SOL.png" [styles]="{'top': '-10%', 'right': '10%', 'animation-delay': '3s'}" [index]="4"/>
+  <app-premium-new-year-ball imgSrc="assets/img/new-year/BTC.png" [styles]="{'top': '0%', 'right': '-0%'}" [index]="5"/>
+  <app-premium-new-year-ball imgSrc="assets/img/new-year/TRX.png" [styles]="{'top': '55%', 'right': '15%', 'animation-delay': '3s'}" [index]="6"/>
+
+  <div class="premium-new-year-bg" [style]="{ 'background-image':'url(' + mainBgImg + ')' }"></div>
+  <div class="premium-new-year-light" [style]="{ 'background-image':'url(' + lightImg + ')' }"></div>
+  <div class="premium-new-year-snow" [style]="{ 'background-image':'url(' + snowImg + ')' }"></div>
+
+  <!-- <div class="main-title">
+    {{ 'pricing.newYearsDiscounts' | translate }}
+  </div> -->
+
+  <div class="main-card-wrapper">
+
+    <div class="main-card-block">
+      <img src="assets/img/new-year/price-block-1.png" alt="" class="free-price-block free-price-block-1">
+      <img src="assets/img/new-year/price-block-2.png" alt="" class="free-price-block free-price-block-2">
+
+      <div class="main-card" >
+
+        <div class="main-card-top-decoration" [style]="{ 'background-image':'url(' + gerlandImg + ')' }"></div>
+        <div class="main-card-bottom-decoration" [style]="{ 'background-image':'url(' + mainCardDecorationImg + ')' }"></div>
+
+        <div class="content">
+          <div class="title">{{ 'pricing.newYearsDiscounts' | translate }}</div>
+
+          <div class="main-card-price-grid gap-md price">
+            <div>
+              <div>
+                <span class="value">8$</span>{{ 'premium.monthly_short' | translate }}
+              </div>
+              <div class="old-value">18${{ 'premium.monthly_short' | translate }}</div>
+            </div>
+
+            <div>
+              <div>
+                <span class="value">97$</span>/{{ 'premium.period_one_year' | translate }}
+              </div>
+              <div class="old-value">216$/{{ 'premium.period_one_year' | translate }}</div>
+            </div>
+          </div>
+
+          <img [src]="'assets/img/new-year/new-year-discount.svg'" alt="discount" class="discount-img">
+
+          <div class="action">
+            <button class="action-button" (click)="payment()">
+              {{ 'pricing.subscribe' | translate }}
+            </button>
+          </div>
+        </div>
+
+        <div class="discount-lighting-wrapper">
+          <div>
+            <img [src]="'assets/img/new-year/discount-lighthing.png'" alt="discount" class="discount-lighting-img">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="all-plans">
+    <a (click)="allPlans()">{{ 'premium.all_plans' | translate }} &#8594;</a>
+  </div>
+
+  <div class="timer flex justify-center column text-center">
+    <div class="text-bold">{{ 'pricing.newYearUntilEnd' | translate }}:</div>
+    <div class="clock mt-md">
+      <div>
+        <div class="clock-value">
+          <span>{{ remainingTime.days[0] }}</span>
+          <span>{{ remainingTime.days[1] }}</span>
+        </div>
+        <div class="clock-label">{{ 'pricing.days' | translate }}</div>
+      </div>
+
+      <div>
+        <div class="clock-value">
+          <span>{{ remainingTime.hours[0] }}</span>
+          <span>{{ remainingTime.hours[1] }}</span>
+        </div>
+        <div class="clock-label">{{ 'pricing.hours' | translate }}</div>
+      </div>
+
+      <div>
+        <div class="clock-value">
+          <span>{{ remainingTime.minutes[0] }}</span>
+          <span>{{ remainingTime.minutes[1] }}</span>
+        </div>
+        <div class="clock-label">{{ 'pricing.minutes' | translate }}</div>
+      </div>
+
+      <div>
+        <div class="clock-value">
+          <span>{{ remainingTime.seconds[0] }}</span>
+          <span>{{ remainingTime.seconds[1] }}</span>
+        </div>
+        <div class="clock-label">{{ 'pricing.seconds' | translate }}</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="screener">
+    <img src="assets/img/new-year/screener.png" alt="">
+  </div>
+
+
+  <app-new-year-lightrope></app-new-year-lightrope>
+</div>

@@ -1,0 +1,74 @@
+@import "src/mixins";
+
+.indicators {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: var(--md);
+  position: relative;
+
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 700px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  div {
+    transition: .5s all;
+  }
+
+  .active-icon {
+    position: absolute;
+    bottom: -19px;
+    font-size: 24px;
+    color: var(--color-primary);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .indicator {
+    @include outlined-main();
+    padding: var(--md);
+    border-radius: var(--sm);
+    display: flex;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .active {
+    border: 1px solid var(--color-primary);
+  }
+
+  .selected {
+    background: linear-gradient(var(--color-secondary), var(--color-secondary)) padding-box,
+    linear-gradient(to bottom, var(--color-primary-ligthen), var(--color-primary)) border-box,
+    var(--color-secondary) padding-box;
+    background-clip: padding-box, border-box;
+    box-shadow: 0 0 0 2px var(--color-main-outline-shadow);
+
+    .title {
+      color: var(--color-primary);
+    }
+  }
+
+  .status {
+    @include outlined(var(--color-main-bg-accent),
+      var(--color-main-bg-accent-lighten),
+      var(--color-main-outline-shadow), 1px, 1px
+    );
+    cursor: pointer;
+    font-size: var(--font-size-text-small);
+    position: absolute;
+    padding: 4px;
+    color: var(--color-main-text);
+    border-radius: var(--xs);
+    top: var(--xs);
+    right: var(--xs);
+  }
+}
+

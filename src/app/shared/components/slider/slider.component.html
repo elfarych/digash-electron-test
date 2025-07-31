@@ -1,0 +1,12 @@
+<div
+  #track
+  class="slider-track"
+  (pointerdown)="onPointerDown($event)"
+>
+  <div class="slider-filled" [style.width.%]="percent"></div>
+  <div
+    class="slider-thumb"
+    [style.left.%]="percent"
+    (pointerdown)="onPointerDown($event)"
+  ></div>
+</div>

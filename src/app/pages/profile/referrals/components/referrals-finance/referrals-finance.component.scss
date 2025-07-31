@@ -1,0 +1,11 @@
+@import "./src/styles";
+
+p {
+  font-size: 14px;
+  display: grid;
+  grid-template-columns: 170px auto;
+  align-items: center;
+  margin-bottom: var(--md);
+}
+
+

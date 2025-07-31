@@ -1,0 +1,11 @@
+.notifications {
+  max-height: 90%;
+  overflow-y: scroll;
+}
+
+.notifications-container {
+  width: 400px;
+  max-width: calc(100vw - 32px);
+  height: 650px;
+  max-height: 90vh;
+}

@@ -1,0 +1,42 @@
+@import "src/mixins";
+
+.exclude-exchange-button {
+  @include default-button-style(2px, 6px);
+  padding: var(--xs) var(--sm);
+  transition: .5s all;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--xs);
+  justify-content: start;
+  font-size: 14px;
+
+  .logo {
+    margin-left: -6px;
+    margin-right: var(--xs);
+    padding-top: var(--xs);
+  }
+
+  @media (max-width: 992px) {
+    cursor: pointer;
+    position: relative;
+    padding: 4px;
+    color: var(--color-main-text);
+    border-radius: var(--sm);
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: var(--sm);
+    letter-spacing: .5px;
+    font-size: 12px;
+  }
+}
+
+.active {
+  border: 2px solid transparent;
+  background: linear-gradient(var(--color-main-bg), var(--color-main-bg)) padding-box,
+  linear-gradient(to bottom, var(--color-primary-ligthen), var(--color-primary)) border-box,
+  var(--color-main-bg) padding-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 0 0 2px var(--color-main-outline-shadow);
+}

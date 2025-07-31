@@ -1,0 +1,69 @@
+<div class="navigation-menu">
+  <div class="logo">
+    <a href="/app" matRipple (click)="redirect.emit()">
+      <img
+        src="../../../../../assets/img/logo7.png"
+        alt="logo">
+<!--      <div class="logo-text">Digash</div>-->
+    </a>
+  </div>
+
+  <menu>
+    <ul>
+      <li>
+        <a routerLink="/app/charts-screener" (click)="redirect.emit()">
+          <button mat-button>
+            <div class="link-wrapper">
+              <mat-icon fontSet="material-icons-outlined">workspaces</mat-icon>
+              {{ 'navigation.screener' | translate }}
+            </div>
+          </button>
+        </a>
+      </li>
+
+      <li>
+        <a routerLink="/app/coins-view" (click)="redirect.emit()">
+          <button mat-button>
+            <div class="link-wrapper">
+              <mat-icon fontSet="material-icons-outlined">query_stats</mat-icon>
+              {{ 'navigation.coins' | translate }}
+            </div>
+          </button>
+        </a>
+      </li>
+
+      <li>
+        <a routerLink="/app/alerts" (click)="redirect.emit()">
+          <button mat-button>
+            <div class="link-wrapper">
+              <mat-icon fontSet="material-icons-outlined">notifications</mat-icon>
+              {{ 'navigation.notifications' | translate }}
+            </div>
+          </button>
+        </a>
+      </li>
+
+<!--      <li>-->
+<!--        <a routerLink="/app/profile">-->
+<!--          <button mat-button>-->
+<!--            <div class="link-wrapper">-->
+<!--              <mat-icon>person_pin_circle</mat-icon>-->
+<!--              Профиль-->
+<!--            </div>-->
+<!--          </button>-->
+<!--        </a>-->
+<!--      </li>-->
+
+<!--      <li class="bottom">-->
+<!--        <a routerLink="/app/documentation">-->
+<!--          <button mat-button>-->
+<!--            <div class="link-wrapper">-->
+<!--              <mat-icon>book</mat-icon>-->
+<!--              Справочник-->
+<!--            </div>-->
+<!--          </button>-->
+<!--        </a>-->
+<!--      </li>-->
+    </ul>
+  </menu>
+</div>

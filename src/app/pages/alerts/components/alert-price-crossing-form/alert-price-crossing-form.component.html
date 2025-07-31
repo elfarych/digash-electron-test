@@ -1,0 +1,34 @@
+<form [formGroup]="form" class="app-form">
+
+  <section>
+    <div class="text-lg text-bold">{{ 'alerts.parameters.title' | translate }}</div>
+
+      <div class="grid-2-1 grid-gap-lg mt-md">
+
+        <div>
+          <label for="symbol" class="block mb-sm">{{ 'alerts.parameters.coin' | translate }}</label>
+          <input id="symbol" aria-describedby="symbol-help" formControlName="symbol" [readonly]="edit"/>
+          <small *ngIf="form.get('symbol').errors?.['required'] && formTouched" id="symbol-help" class="error-message block">
+            {{ 'alerts.parameters.required_field' | translate }}
+          </small>
+        </div>
+        <div>
+          <label for="price_crossing" class="block mb-sm">{{ 'alerts.parameters.price_crossing' | translate }}</label>
+          <input id="price_crossing" aria-describedby="price_crossing-help" formControlName="price_crossing" type="number"/>
+          <small *ngIf="form.get('price_crossing').errors?.['required'] && formTouched" id="price_crossing-help" class="error-message block">
+            {{ 'alerts.parameters.required_field' | translate }}
+          </small>
+        </div>
+
+      </div>
+  </section>
+
+  <div class="divider my-lg"></div>
+
+  <app-alert-base-form
+    [form]="form"
+    [edit]="edit"
+    [formTouched]="formTouched"
+    [isPriceGrossingAlert]="true"
+  ></app-alert-base-form>
+</form>

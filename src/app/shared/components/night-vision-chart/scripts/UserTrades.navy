@@ -1,0 +1,314 @@
+// Navy ~ 0.1-lite
+
+// Meta tag
+[OVERLAY name = UserTrades, ctx = Canvas, author = digash, version = 1.0.0]
+
+prop('buyColor', { type: 'color', def: 60 });
+prop('sellColor', { type: 'color', def: 60 });
+prop('size', { type: 'number', def: 1 });
+
+
+let drawnTrades = [];
+let currentTradePosition;
+let tradePositions;
+
+function draw(ctx) {
+  tradePositions = $core.data
+  const fullChart = $core.fullChart;
+  const trades = getTrades($core.data)
+  const layout = $core.layout;
+  let updateDrawnTrades = false
+
+  if (drawnTrades.length !== trades.length || (drawnTrades.length && drawnTrades[0].symbol !== trades?.[0]?.symbol)) {
+    drawnTrades = []
+    updateDrawnTrades = true
+  }
+
+  if (!trades?.length) return;
+
+  if (currentTradePosition) {
+    // Fill all trades
+    fillTrades(ctx, layout, $props, trades, updateDrawnTrades)
+
+    // Fill Open trades lines
+    const openTrades = currentTradePosition.trades.filter(t => +t.realizedPnl === 0);
+    const avgOpenPrice = calculateAveragePrice(openTrades);
+
+    const closeTrades = currentTradePosition.trades.filter(t => +t.realizedPnl !== 0);
+    const avgClosePrice = calculateAveragePrice(closeTrades);
+
+    fillTradeLines(ctx, layout, openTrades, avgOpenPrice, $props.textColor, fullChart)
+
+    if (currentTradePosition.positionClosed) {
+      fillTradeLines(ctx, layout, closeTrades, avgClosePrice, $props.textColor, fullChart)
+    }
+
+    // Fill PnL
+    ctx.font = fullChart ? '12px Quantico' : '14px Quantico';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    const textYPos = layout.value2y(Math.abs(avgOpenPrice - ((avgOpenPrice - avgClosePrice) / 2)));
+
+    if (currentTradePosition.positionClosed) {
+      const text =(currentTradePosition.pnl > 0 ? '+' : '') + currentTradePosition.pnl?.toFixed(2) + '%';
+      const textWidth = ctx.measureText(text).width;
+
+      ctx.fillStyle = currentTradePosition.pnl >= 0 ? $props.buyColor : $props.sellColor;
+      ctx.fillText(
+        text,
+        layout.width - 50,
+        textYPos
+      )
+      window.pnlPercentage = currentTradePosition.pnl
+      window.pnlDollars = currentTradePosition.pnlDollars;
+    } else {
+      // Update current PnL
+      updateCurrentPosition()
+      if (currentTradePosition) {
+        const currentPrice = $core.hub.mainOv.data[$core.hub.mainOv.data.length - 1][4] ?? 0;
+        let isLong = false;
+
+        let pnlPercentage = 0
+
+        if (currentTradePosition.openPrice > 0 && currentTradePosition.trades?.[0]?.side) {
+          isLong = currentTradePosition.trades?.[0]?.side === 'BUY'
+          pnlPercentage = ((currentPrice - currentTradePosition.openPrice) / currentTradePosition.openPrice) * 100;
+        }
+
+        if (!isLong) {
+          pnlPercentage = pnlPercentage * -1;
+        }
+
+        ctx.fillStyle = pnlPercentage >= 0 ? $props.buyColor : $props.sellColor;
+        ctx.fillText(
+          (pnlPercentage > 0 ? '+' : '') + pnlPercentage?.toFixed(2) + '%',
+          layout.width - 50,
+          layout.value2y(avgOpenPrice) + 16
+        )
+        window.pnlPercentage = pnlPercentage;
+        window.pnlDollars = currentTradePosition.pnlDollars;
+      }
+    }
+  }
+
+  if (!currentTradePosition) {
+    fillPositions(ctx, layout, $props, tradePositions, updateDrawnTrades)
+    window.pnlPercentage = undefined;
+    window.pnlDollars = undefined;
+  }
+}
+
+function fillTrade(ctx, layout, $props, trade, updateDrawnTrades) {
+  const x = layout.ti2x(getTradeTimestamp(trade), false);
+  const y = layout.value2y(+trade.price);
+
+  let size = Math.max(7.5, Math.min(layout.pxStep, 15));
+  let borderWidth = Math.max(2, size * 0.6);
+  let arrowWidth = Math.max(1, size * 0.5);
+
+  function drawArrow(strokeColor, lineWidth) {
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = lineWidth;
+
+    ctx.beginPath();
+    if (trade.side === 'BUY') {
+      ctx.moveTo(x - size, y + size);
+      ctx.lineTo(x, y);
+      ctx.lineTo(x + size, y + size);
+    } else {
+      ctx.moveTo(x - size, y - size);
+      ctx.lineTo(x, y);
+      ctx.lineTo(x + size, y - size);
+    }
+    ctx.stroke();
+  }
+
+  drawArrow('#000', borderWidth);
+  drawArrow(trade.side === 'BUY' ? $props.buyColor : $props.sellColor, arrowWidth);
+
+  if (updateDrawnTrades) {
+    drawnTrades.push({
+      x1: x - size,
+      x2: x + size,
+      y1: y - size,
+      y2: y + size,
+      data: trade
+    });
+  }
+}
+
+function getTradeTimestamp (trade) {
+  const candles = $core.hub.mainOv.data
+  const currentCandleIndex = candles.findIndex((c, index) => {
+    const nextCandleTime = candles[index + 1]?.[0] ?? Date.now()
+    return trade.time > c[0] && trade.time < nextCandleTime
+  })
+
+  if (currentCandleIndex !== -1) {
+    return candles[currentCandleIndex][0]
+  }
+
+  return trade.time
+}
+
+function fillPositions (ctx, layout, $props, positions, updateDrawnTrades) {
+  for (const position of positions) {
+    const openTrades = position.trades.filter(t => +t.realizedPnl === 0)
+    const closeTrades = position.trades.filter(t => +t.realizedPnl !== 0)
+    const openAvgPrice = calculateAveragePrice(openTrades)
+    const closeAvgPrice = calculateAveragePrice(closeTrades)
+    const firstTrade = position.trades[0]
+    const lastTrade = position.trades[position.trades.length - 1]
+
+    fillTrade(ctx, layout, $props, {...firstTrade, price: openAvgPrice}, updateDrawnTrades)
+    fillTrade(ctx, layout, $props, {...lastTrade, price: closeAvgPrice}, updateDrawnTrades)
+  }
+}
+
+function fillTrades (ctx, layout, $props, trades, updateDrawnTrades) {
+  for (const trade of trades) {
+    fillTrade(ctx, layout, $props, trade, updateDrawnTrades)
+  }
+}
+
+function fillTradeLines(ctx, layout, trades, avgPrice, textColor, fullChart) {
+  ctx.lineWidth = 1;
+  ctx.setLineDash([5, 5]); // ✅ Устанавливаем пунктир перед началом пути
+  ctx.strokeStyle = trades[0]?.side === 'BUY' ? $props.buyColor : $props.sellColor;
+  ctx.beginPath();
+
+  let prevY;
+
+  trades.forEach((t, index) => {
+    const avg = calculateAveragePrice(trades.slice(0, index + 1));
+    const x = layout.ti2x(t.time);
+    const y = layout.value2y(avg);
+
+    if (index === 0) {
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, prevY);
+      ctx.lineTo(x, y);
+    }
+
+    prevY = y;
+  });
+
+  // Добавляем пунктирную линию до конца графика
+  ctx.lineTo(layout.width, layout.value2y(avgPrice));
+
+  ctx.stroke(); // ✅ Рисуем пунктирную линию
+
+  // Сбрасываем пунктир для других элементов
+  ctx.setLineDash([]); // ✅ Вернем обычный стиль линий
+
+  // ctx.font = fullChart ? '8px Quantico' : '10px Quantico';
+  // ctx.fillStyle = textColor;
+  // ctx.fillText(
+  //   currentTradePosition.openPrice.toFixed(currentTradePosition?.pricePrecision ?? 0),
+  //   layout.width - 70,
+  //   layout.value2y(avgPrice) - 12
+  // );
+}
+
+function calculateAveragePrice(trades) {
+  const totalCost = trades.reduce(
+    (sum, trade) => sum + +trade.price * +trade.qty,
+    0,
+  );
+  const totalQty = trades.reduce((sum, trade) => sum + +trade.qty, 0);
+  return totalCost / totalQty;
+}
+
+function legend(x) {
+  return "";
+}
+
+function updateCurrentPosition () {
+  if (currentTradePosition) {
+    currentTradePosition = tradePositions.find(p => p.trades.some(t => t.id === currentTradePosition.trades[0]?.id))
+  }
+}
+
+function click (event) {
+  const activeObj = getCursorObject(event);
+  if (activeObj?.data) {
+    currentTradePosition = tradePositions.find(p => p.trades.some(t => t.id === activeObj.data.id))
+    if (currentTradePosition) {
+      // const canvas = event.target;
+      // canvas.style.cursor = 'zoom-out'
+      document.dispatchEvent(new CustomEvent("user-trade-selected", {detail: currentTradePosition}));
+    }
+  } else {
+    document.dispatchEvent(new CustomEvent("user-trade-selected", {detail: undefined}));
+    currentTradePosition = undefined
+  }
+}
+
+function getTrades(data) {
+  if (currentTradePosition) {
+    return currentTradePosition.trades
+  } else {
+    let trades = []
+    data.forEach(i => {
+      trades = [...trades, ...i.trades]
+    })
+    return trades
+  }
+}
+
+function mousemove(event) {
+  if (currentTradePosition) {
+    return void 0;
+  }
+  const canvas = event.target;
+  if (canvas) {
+    canvas.style.cursor = getCursorObject(event) ? 'pointer' : 'default';
+  }
+}
+
+function getCursorObject(event) {
+  const canvas = event.target;
+  if (!canvas) {
+    return void 0;
+  }
+  const rect = canvas.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+
+  for (const trade of drawnTrades) {
+    if (x >= trade.x1 && x <= trade.x2 && y >= trade.y1 && y <= trade.y2) {
+      return trade;
+    }
+  }
+
+  return null;
+}
+
+
+let initialLow = 0;
+let initialHigh = 0;
+yRange(data, a, low)
+{
+  const updData = $core.data.slice(-500);
+  let len = updData.length;
+
+  var h, l, high = -Infinity, low = Infinity
+  if (initialLow && initialHigh) {
+    low = initialLow;
+    high = initialHigh;
+  } else {
+    for (var i = 0; i < len; i++) {
+      let point = updData[i];
+      if (!point) {
+        break;
+      }
+      if (point[2] > high) high = point[2];
+      if (point[3] < low) low = point[3];
+    }
+    initialLow = low;
+    initialHigh = high;
+  }
+  return [high, low]
+}

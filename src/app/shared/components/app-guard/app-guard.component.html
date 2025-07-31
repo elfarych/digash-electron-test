@@ -1,0 +1,39 @@
+<div class="wrapper">
+  <div class="content mat-elevation-z20">
+    <div class="logo">
+      <img src="./assets/img/logo.png" alt="logo">
+    </div>
+
+    <ng-template [ngIf]="(isAuth$ | async) === false">
+      <h2>DIGASH.LIVE</h2>
+
+      <p>
+        {{ 'guard.description' | translate }}
+        <a href="https://www.youtube.com/@Digahka" target="_blank">youtube</a>
+      </p>
+      <p>
+        {{ 'guard.join' | translate }}
+        <a href="https://t.me/digashlive" target="_blank">{{ 'guard.telegram' | translate }}</a>
+        ,
+        <a href="https://www.youtube.com/@Digash-Screener/videos" target="_blank">{{ 'guard.videos' | translate }}</a>
+      </p>
+
+      <p-button label="Войти" severity="secondary" (click)="login()"></p-button>
+    </ng-template>
+
+    <!--    <ng-template #withoutPremiumTemplate>-->
+    <!--      <ng-template [ngIf]="!(user$ | async)?.premium_enabled" [ngIfThen]="updateAccountTemplate">-->
+    <!--      </ng-template>-->
+    <!--      <ng-template #updateAccountTemplate>-->
+    <!--        <h2></h2>-->
+    <!--        <p></p>-->
+
+    <!--        <a routerLink="/app/checkout">-->
+    <!--          <button class="tradehive-button">-->
+    <!--            -->
+    <!--          </button>-->
+    <!--        </a>-->
+    <!--      </ng-template>-->
+    <!--    </ng-template>-->
+  </div>
+</div>

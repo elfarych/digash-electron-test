@@ -1,0 +1,174 @@
+<p-button
+  [label]="'depth_map.settings' | translate"
+  [icon]="PrimeIcons.SLIDERS_H"
+  (click)="openSettings()"
+></p-button>
+
+<p-dialog
+  [(visible)]="dialogVisible"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '1024px', height: '100%', maxWidth: '100%' }"
+  [header]="'depth_map.settings' | translate"
+>
+  <p-scrollPanel [style]="{ width: '100%', height: 'calc(100% - 60px)' }">
+
+    <p-panel [header]="'depth_map.general_settings' | translate">
+
+      <form [formGroup]="settingsForm">
+        <div class="form-control-grid padding-top-4 padding-bottom-4">
+
+          <div>
+            <label class="block mb-2">{{ 'depth_map.data_update' | translate }}</label>
+            <p-dropdown
+              formControlName="loaderMode"
+              [options]="dataLoaderOptions"
+              optionLabel="label"
+              optionValue="value"
+              appendTo="body"
+            ></p-dropdown>
+          </div>
+
+          <div>
+            <label class="block mb-2" for="loaderIntervalSec">{{ 'depth_map.update_interval' | translate }}</label>
+            <p-inputNumber
+              inputId="loaderIntervalSec"
+              formControlName="loaderIntervalSec"
+              class="w-full"
+              [min]="5"
+              [max]="60"
+              [step]="1"
+              [showButtons]="true"
+              spinnerMode="horizontal"
+              buttonLayout="horizontal"
+              decrementButtonClass="p-button-danger"
+              incrementButtonClass="p-button-success"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+            />
+            <small class="block margin-top-1">{{ 'depth_map.min_value' | translate }}</small>
+          </div>
+
+          <div>
+            <label class="block mb-2">{{ 'depth_map.blacklist' | translate }}</label>
+            <app-blacklist-builder
+              [blacklist]="settings.blacklist"
+              [coins]="coins"
+              (selectSymbol)="selectBlacklistCoin($event)"
+            ></app-blacklist-builder>
+          </div>
+
+          <div>
+            <label class="block mb-2">{{ 'depth_map.chart_timeframe' | translate }}</label>
+            <p-selectButton
+              [options]="timeframes"
+              optionValue="name"
+              formControlName="chartTimeframe"
+              [allowEmpty]="false"
+            ></p-selectButton>
+          </div>
+
+          <div class="margin-top-4">
+            <label class="block mb-2" for="maxOrdersInColumn">{{ 'depth_map.max_orders' | translate }}</label>
+            <p-inputNumber
+              inputId="maxOrdersInColumn"
+              formControlName="maxOrdersInColumn"
+              class="w-full"
+              [min]="5"
+              [max]="100"
+              [step]="5"
+              [showButtons]="true"
+              spinnerMode="horizontal"
+              buttonLayout="horizontal"
+              decrementButtonClass="p-button-danger"
+              incrementButtonClass="p-button-success"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+            />
+            <small class="block margin-top-1">{{ 'depth_map.performance_warning' | translate }}</small>
+          </div>
+
+        </div>
+
+        <p-divider></p-divider>
+
+        <div class="form-control-grid padding-top-2">
+
+          <div class="digash-form-control">
+            <label>{{ 'depth_map.bid_color' | translate }}</label>
+            <input type="color" formControlName="bidOrdersColor" class="w-full">
+          </div>
+
+          <div class="digash-form-control">
+            <label>{{ 'depth_map.ask_color' | translate }}</label>
+            <input type="color" formControlName="askOrdersColor" class="w-full">
+          </div>
+
+          <div class="flex items-center checkbox">
+            <p-checkbox formControlName="showExchange" [binary]="true" inputId="showExchange"></p-checkbox>
+            <label for="showExchange">{{ 'depth_map.show_exchange' | translate }}</label>
+          </div>
+
+          <div class="flex items-center checkbox">
+            <p-checkbox formControlName="showDistance" [binary]="true" inputId="showDistance"></p-checkbox>
+            <label for="showDistance">{{ 'depth_map.show_distance' | translate }}</label>
+          </div>
+
+          <div class="flex items-center checkbox">
+            <p-checkbox formControlName="showCorrosionTime" [binary]="true" inputId="showCorrosionTime"></p-checkbox>
+            <label for="showCorrosionTime">{{ 'depth_map.show_corrosion_time' | translate }}</label>
+          </div>
+
+          <div class="flex items-center checkbox">
+            <p-checkbox formControlName="showOrderSum" [binary]="true" inputId="showOrderSum"></p-checkbox>
+            <label for="showOrderSum">{{ 'depth_map.show_order_sum' | translate }}</label>
+          </div>
+        </div>
+      </form>
+
+    </p-panel>
+
+    <div class="margin-top-8">
+
+      <p-panel [header]="'depth_map.exchange_settings' | translate">
+        <div class="depth-map-exchange-settings-tabs">
+          <p-tabView
+            [(activeIndex)]="activeTabIndex"
+            [scrollable]="true"
+          >
+            <p-tabPanel *ngFor="let exchange of exchanges">
+              <ng-template pTemplate="header">
+                <div class="settings-tab-header-container">
+                  <svg-icon [src]="exchange.icon" [svgStyle]="{ 'width.px': 18, 'height.px': 18 }"></svg-icon>
+                  <div class="margin-left-2">{{ exchange.name }}</div>
+                </div>
+              </ng-template>
+
+              <div class="margin-top-4">
+                <app-depth-map-exchange-settings
+                  [settings]="settings"
+                  [tabActiveIndex]="activeTabIndex"
+                  (changeSettings)="changeSettings.emit($event)"
+                >
+                </app-depth-map-exchange-settings>
+              </div>
+
+            </p-tabPanel>
+          </p-tabView>
+        </div>
+      </p-panel>
+
+    </div>
+
+  </p-scrollPanel>
+
+  <div class="actions">
+    <div>
+      <p-button [label]="isMobileDevice() ? ('depth_map.reset' | translate) : ('depth_map.reset_settings' | translate)" severity="secondary" (click)="resetSettings()"></p-button>
+    </div>
+    <div class="flex gap-4">
+      <p-button [label]="'depth_map.cancel' | translate" severity="secondary" (click)="close()"></p-button>
+      <p-button [label]="'depth_map.save' | translate" (click)="save()" severity="success"></p-button>
+    </div>
+  </div>
+</p-dialog>

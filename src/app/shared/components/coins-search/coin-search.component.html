@@ -1,0 +1,57 @@
+<p-dialog
+  header="{{ 'search.coinSearch' | translate }}"
+  [(visible)]="searchDialogVisible"
+  [style]="{ width: '700px', maxWidth: '100%', height: height + 'vh' }"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [modal]="true"
+  (onHide)="onDialogHide()"
+>
+  <div class="divider my-lg"></div>
+  <form [formGroup]="searchForm" class="app-form">
+    <input
+      #inputField
+      type="text"
+      formControlName="searchText"
+      (input)="onInputChange($event)"
+    />
+  </form>
+
+  <div class="mt-md">
+
+    <div class="flex justify-between items-center w-full mb-md">
+      <div class="f-weight-700">{{ 'search.searchResults' | translate }}:</div>
+      <div>
+        <ng-template [ngIf]="loading">
+          <p-progressSpinner
+            styleClass="w-md h-md text-primary"
+            strokeWidth="5"
+            animationDuration="2s"
+          />
+        </ng-template>
+        <ng-template [ngIf]="!loading">
+          {{ 'search.coinCount' | translate }}: {{ coins.length }}
+        </ng-template>
+
+      </div>
+    </div>
+
+    <p-scrollPanel [style]="{ width: '100%', height: 'calc(' + height + 'vh - 230px)' }">
+      <div
+        *ngFor="let coin of coins"
+        class="coin"
+        (click)="navigateToCoinDetail(coin)"
+      >
+        <div>{{ coin.symbol }}</div>
+        <div class="flex justify-end items-start gap-md">
+          <div>{{ getExchangeData(coin.market)?.name }}</div>
+          <svg-icon
+            [src]="getExchangeData(coin.market)?.icon"
+            [svgStyle]="{ 'width.px': 16, 'height.px': 16 }"
+          ></svg-icon>
+        </div>
+      </div>
+    </p-scrollPanel>
+  </div>
+
+</p-dialog>

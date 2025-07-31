@@ -1,0 +1,82 @@
+<form [formGroup]="form" class="app-form flex column gap-sm">
+
+  <div class="pb-md">
+    <label for="theme" class="block mb-sm">{{ 'preferences.themeColor' | translate }}</label>
+    <p-dropdown
+      id="theme"
+      [options]="themeOptions"
+      optionLabel="label"
+      optionValue="value"
+      formControlName="theme"
+      appendTo="body"
+    >
+    </p-dropdown>
+  </div>
+
+  <div class="divider my-sm"></div>
+
+  <div>
+    <div>{{ 'preferences.screenerView' | translate }}</div>
+
+    <div class="layout-switcher mt-sm">
+      <div
+        class="layout-selection"
+        [class.selected]="form.get('layout').value === '1c'"
+        (click)="selectLayout('1c')"
+      >
+        <div class="block"></div>
+      </div>
+
+      <div
+        class="layout-selection"
+        [class.selected]="form.get('layout').value === '2c'"
+        (click)="selectLayout('2c')"
+      >
+        <div class="block"></div>
+        <div class="block"></div>
+      </div>
+
+      <div
+        class="layout-selection"
+        [class.selected]="form.get('layout').value === '3c'"
+        (click)="selectLayout('3c')"
+      >
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+      </div>
+
+      <div
+        class="layout-selection"
+        [class.selected]="form.get('layout').value === '4c'"
+        (click)="selectLayout('4c')"
+      >
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+      </div>
+
+      <div
+        class="layout-selection"
+        [class.selected]="form.get('layout').value === '5c'"
+        (click)="selectLayout('5c')"
+      >
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider my-md"></div>
+
+  <button class="app-button" (click)="clearWatchlist($event)">
+    <span>{{'preferences.clearFavorites' | translate}}</span>
+  </button>
+
+  <p-confirmPopup></p-confirmPopup>
+
+</form>

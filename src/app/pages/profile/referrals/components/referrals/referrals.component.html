@@ -1,0 +1,15 @@
+<div>
+  <app-referrals-promo-codes [coupons]="coupons$ | async" [closeUpdateDialog]="getCloseEditCouponDialog$ | async"
+    (createCoupon)="createCoupon($event)" (updateCoupon)="updateCoupon($event)" (removeCoupon)="removeCoupon($event)" />
+</div>
+
+<div class="mt-lg">
+  <app-referrals-finance [user]="user$ | async" [referrals]="referrals$ | async" [withdraws]="withdraws$ | async"
+    [periodRevenue]="periodRevenue$ | async" [periodCompletedWithdraw]="periodCompletedWithdraw$ | async"
+    [periodInWorkWithdraw]="periodInWorkWithdraw$ | async" [selectedDataPeriod]="selectedDataPeriod"
+    (changeSelectedDataPeriod)="changeSelectedDataPeriodHandler($event)" (createWithdraw)="createWithdraw($event)" />
+</div>
+
+<div class="mt-lg">
+  <app-referrals-table [referralsData]="referrals$ | async" />
+</div>

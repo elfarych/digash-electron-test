@@ -1,0 +1,67 @@
+<ng-template #exchangeIconTemplate let-type="type">
+
+  <ng-container [ngSwitch]="type">
+    <svg-icon *ngSwitchCase="'BINANCE_SPOT'" src="assets/svg/binance.svg"
+              [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+    <svg-icon *ngSwitchCase="'BINANCE_FUTURES'" src="assets/svg/binance.svg"
+              [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+    <svg-icon *ngSwitchCase="'BINANCE_SPOT_WITH_FUTURES'" src="assets/svg/binance.svg"
+              [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+    <svg-icon *ngSwitchCase="'BINANCE_SPOT_WITHOUT_FUTURES'" src="assets/svg/binance.svg"
+              [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+    <svg-icon *ngSwitchCase="'BYBIT_SPOT'" src="assets/svg/bybit.svg"
+              [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+    <svg-icon *ngSwitchCase="'BYBIT_FUTURES'" src="assets/svg/bybit.svg"
+              [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+    <svg-icon *ngSwitchCase="'BITGET_SPOT'" src="assets/svg/bitget.svg"
+              [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+    <svg-icon *ngSwitchCase="'BITGET_FUTURES'" src="assets/svg/bitget.svg"
+              [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+    <svg-icon *ngSwitchCase="'BITGET_SPOT_WITHOUT_BINANCE'" src="assets/svg/bitget.svg"
+              [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+    <svg-icon *ngSwitchCase="'BITGET_FUTURES_WITHOUT_BINANCE'" src="assets/svg/bitget.svg"
+              [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+
+    <svg-icon *ngSwitchCase="'GATE_SPOT'" src="assets/svg/gate.svg"
+              [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+    <svg-icon *ngSwitchCase="'GATE_FUTURES'" src="assets/svg/gate.svg"
+              [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+
+    <svg-icon *ngSwitchCase="'OKX_SPOT'" src="assets/svg/okx.svg"
+              [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+    <svg-icon *ngSwitchCase="'OKX_FUTURES'" src="assets/svg/okx.svg"
+              [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+
+    <svg-icon *ngSwitchCase="'MEXC_SPOT'" src="../../../../../assets/svg/mexc.svg"
+              [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+    <svg-icon *ngSwitchCase="'MEXC_FUTURES'" src="../../../../../assets/svg/mexc.svg"
+              [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+  </ng-container>
+</ng-template>
+
+<p-dropdown
+  [options]="exchanges"
+  [(ngModel)]="selectedMarket"
+  optionLabel="label"
+  optionValue="value"
+  placeholder="{{ 'exchange.selectExchange' | translate }}"
+  (onChange)="handleExchangeChange($event)"
+  [readonly]="readonly"
+  [disabled]="readonly"
+  optionDisabled="isDisable"
+  appendTo="body"
+>
+  <ng-template pTemplate="selectedItem">
+    <div class="item flex align-items-center gap-2" *ngIf="selectedMarket">
+      <ng-container *ngTemplateOutlet="exchangeIconTemplate; context:{type: selectedMarket}"></ng-container>
+      <div>{{ readableExchangeName }}</div>
+    </div>
+  </ng-template>
+  <ng-template let-exchange pTemplate="item">
+    <div class="item flex align-items-center gap-2">
+      <ng-container *ngTemplateOutlet="exchangeIconTemplate; context:{type: exchange.value}"></ng-container>
+
+      <div>{{ exchange.label }}</div>
+    </div>
+  </ng-template>
+</p-dropdown>

@@ -1,0 +1,84 @@
+<div class="mobile-navigation">
+  <div class="coin">
+
+    <div class="coin-logo">
+      <img
+        [src]="'https://s3-symbol-logo.tradingview.com/crypto/XTVC'+ normalizeCoinQuoteSymbol(selectedCoin) + '.svg'"
+        alt="logo"
+        onerror="this.onerror=null;this.src='../assets/svg/binance.svg';"
+      >
+    </div>
+
+    <div>
+      <div class="symbol">{{ selectedCoin }}</div>
+      <div *ngIf="exchangeData" class="exchange">
+        {{ exchangeData.name }}
+      </div>
+    </div>
+  </div>
+
+  <div class="flex no-wrap gap-sm items-center">
+    <app-chart-indicators-selection
+      [selectedChartIndicators]="chartIndicators"
+      (selectTechnicalIndicator)="selectTechnicalIndicator.emit($event)"
+    />
+
+    <button class="app-button" (click)="toggleMenu($event)">
+      <span class="pi pi-sort-amount-up icon"></span>
+    </button>
+
+  </div>
+</div>
+
+<div *ngIf="showMenu" class="mobile-navigation-overlay"></div>
+
+<div class="navigation" [style]="navigationStyle" #navigationContainer>
+  <app-progress-spinner *ngIf="loading" />
+
+  <app-navigation-settings
+    [selectedColumns]="selectedColumns"
+    [coins]="coins"
+    [allCoins]="allCoins"
+    [activeSortingId]="activeSortingId"
+    [standaloneChart]="standaloneChart"
+    [chartSettings]="chartSettings"
+    [dataLoaderMode]="dataLoaderMode"
+    [isPremium]="isPremium"
+    [coinNavigationAutoSize]="coinNavigationAutoSize"
+    [presets]="presets"
+    [selectedPreset]="selectedPreset"
+    (columnSelectionChange)="columnSelectionChange.emit($event)"
+    (selectSymbol)="selectSymbol.emit($event)"
+    (chartSettingsChange)="chartSettingsChange.emit($event)"
+    (switchDataLoaderMode)="switchDataLoaderMode.emit($event)"
+    (dataLoadButtonClick)="dataLoadButtonClick.emit()"
+    (resetNavigationColumns)="resetNavigationColumns.emit()"
+    (toggleNavigationAutoSize)="toggleNavigationAutoSize.emit()"
+    (excludeExchanges)="excludeExchanges.emit($event)"
+    (createPreset)="createPreset.emit($event)"
+    (editPreset)="editPreset.emit($event)"
+    (selectPreset)="selectPreset.emit($event)"
+    (deletePreset)="deletePreset.emit($event)"
+  >
+  </app-navigation-settings>
+
+  <app-chart-navigation
+    [autoSize]="autoSize"
+    [columnsData]="columnsData"
+    [coins]="coins"
+    [activeSortingId]="activeSortingId"
+    [sortByAlerts]="sortByAlerts"
+    [sortingDirection]="sortingDirection"
+    [wathclist]="wathclist"
+    [selectedCoin]="selectedCoin"
+    [showPScroller]="showPScroller"
+    [chartSettings]="chartSettings"
+    [disableSorting]="disableSorting"
+    [premium]="premium"
+    [popupFromWorkspace]="popupFromWorkspace"
+    (updateSorting)="updateSorting.emit($event)"
+    (toggleSortingByAlerts)="toggleSortingByAlerts.emit()"
+    (selectCoin)="onCoinSelect($event)"
+    (selectColor)="selectColor.emit($event)"
+  ></app-chart-navigation>
+</div>

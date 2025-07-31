@@ -1,0 +1,35 @@
+@import 'src/mixins';
+
+:host {
+  display: block;
+}
+
+.chart-layout {
+  cursor: pointer;
+  @include outlined-main(1px);
+  padding: var(--sm);
+  border-radius: var(--sm);
+}
+
+.svg-icon, svg-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-layout-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: var(--sm);
+
+  .chart-layout-options-grid-item {
+    cursor: pointer;
+    transition: .3s all;
+    border-radius: var(--sm);
+    padding: var(--sm);
+
+    &:hover {
+      background: var(--color-main-bg-accent-lighten);
+    }
+  }
+}

@@ -1,0 +1,69 @@
+// Navy ~ 0.1-lite
+// ^^^ First comment should provide a NavyJS version
+
+// Meta tag
+[OVERLAY name = HighLowLevels, ctx = Canvas, author = digash, version = 1.0.0]
+
+function draw(ctx) {
+  const data = $core.data;
+  const layout = $core.layout;
+
+  if (!data.length) {
+    return void 0;
+  }
+
+  const [lowTimestamp, lowValue] = data[0];
+  const [highTimestamp, highValue] = data[1];
+
+  drawLine(layout, lowValue, lowTimestamp, 'low', ctx);
+  drawLine(layout, highValue, highTimestamp, 'high', ctx);
+}
+
+function drawLine(layout, value, timestamp, type, ctx) {
+  const fillColor = $props.color;
+  const fullChart = $props.fullChart;
+
+  const y = layout.value2y(value);
+  const x = layout.ti2x(timestamp);
+
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = fillColor;
+
+  ctx.beginPath();
+  ctx.setLineDash([2, 2]);
+  ctx.moveTo(x, y);
+  ctx.lineTo(layout.width, y);
+  ctx.stroke();
+  ctx.fill();
+
+  // Draw text
+  ctx.font = fullChart ? '10px Quantico' : '8px Quantico';
+  ctx.fillStyle = fillColor;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  if (type === 'high') {
+    ctx.fillText($props.highTitle, layout.width - 40, y - 7.5);
+    ctx.fillText(`${value}`, x, y - 10);
+  } else {
+    ctx.fillText($props.lowTitle, layout.width - 40, y + 7.5);
+    ctx.fillText(`${value}`, x, y + 10);
+  }
+}
+
+function legend(x) {
+  return '';
+}
+
+let initialLow = 0;
+let initialHigh = 0;
+static yRange(data) {
+  let len = data.length
+  var h, l, high = -Infinity, low = Infinity
+  for(var i = 0; i < len; i++) {
+    let point = data[i]
+    if (point[2] > high) high = point[2]
+    if (point[3] < low) low = point[3]
+  }
+  return [high, low]
+}

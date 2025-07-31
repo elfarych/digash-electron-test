@@ -1,0 +1,105 @@
+@import "src/mixins";
+
+app-header {
+  position: relative;
+  z-index: 50;
+
+  a.active {
+    background: var(--color-main-bg-accent-lighten);
+    color: var(--color-main-text);
+  }
+
+  .p-menubar {
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    gap: var(--md);
+    background: var(--color-main-bg);
+    padding: var(--md);
+
+    .p-menuitem-link {
+      position: relative;
+      .new-year-hat {
+        position: absolute;
+        top: 3.5px;
+        right: 2px;
+      }
+    }
+
+    p-menubarsub {
+      ul {
+        display: flex;
+        justify-content: center;
+        gap: var(--sm);
+
+        .p-menuitem-link {
+          color: var(--color-sub-text);
+          text-decoration: none;
+          padding: var(--sm);
+          transition: var(--transtion);
+          border-radius: var(--sm);
+        }
+
+        .p-menuitem-link:hover{
+          color: var(--color-main-text);
+          background: var(--color-main-bg-accent);
+        }
+
+        .p-menuitem-link-active {
+          color: var(--color-main-text);
+          @include outlined-main(0);
+        }
+      }
+    }
+  }
+
+  .right-side-menu {
+    display: flex;
+    gap: var(--md);
+  }
+}
+
+.header-mobile {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .header-desktop {
+    display: none;
+  }
+
+  .header-mobile {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--sm);
+    background: var(--color-main-bg);
+  }
+
+  .mobile-menu {
+    width: calc(100vw - 32px);
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: var(--md);
+    }
+
+    .mobile-nav {
+      li {
+        list-style-type: none;
+
+        a {
+          display: block;
+          padding: var(--md);
+          text-align: center;
+          font-size: var(--font-size-text-lg);
+        }
+      }
+    }
+
+  }
+
+}

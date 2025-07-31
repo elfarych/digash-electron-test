@@ -1,0 +1,14 @@
+<div class="card flex justify-content-center">
+  <p-autoComplete
+    [(ngModel)]="selectedSymbol"
+    [suggestions]="filteredSymbols"
+    (completeMethod)="filterSymbols($event)"
+    (onSelect)="handleSelectSymbol($event)"
+    (input)="onInputChange($event)"
+    field="symbol"
+
+    [dropdown]="true"
+    placeholder="{{ 'search.placeholder' | translate }}"
+    emptyMessage="{{ 'search.emptyMessage' | translate }}"
+  ></p-autoComplete>
+</div>

@@ -1,0 +1,66 @@
+<div
+  class="orderbook-map-order"
+  [ngClass]="orderType === 'bid' ? 'bid' : 'ask'"
+  [ngStyle]="orderStyle"
+  (mouseenter)="onOrderMouseEnter(chart, $event)"
+  (mouseleave)="onOrderMouseLeave(chart)"
+  (click)="openChart.emit({exchange: order.exchange, symbol: order.symbol})"
+>
+
+  <div class="orderbook-map-order-data">
+    <div [class.active]="overlayIsActive" class="orderbook-map-order-active-overlay"></div>
+
+    <div *ngIf="settings.showExchange" class="exchange-logo">
+      <img class="exchange-logo" [src]="exchangeData.iconWithBg ?? exchangeData.icon" [alt]="exchangeData.name">
+    </div>
+
+    <div
+      *ngIf="order.densitiesPerCoin > 1"
+      class="depth-map densities-per-coin flex no-wrap items-center"
+    >
+      {{ order.densitiesPerCoin }}
+      <span class="pi pi-link"></span>
+    </div>
+
+    <div *ngIf="settings.showOrderSum" class="sum">{{ order.full_price | convertBigNumber }}$</div>
+    <div class="symbol">{{ normalizeCoinQuoteSymbol(order.symbol) }}.{{ exchangeData?.market }}</div>
+
+    <div class="distance-corrosion">
+      <div *ngIf="settings.showDistance" class="depth-map distance"
+           [ngClass]="orderType === 'bid' ? 'bid-distance' : 'ask-distance'">
+        {{ order.distance > 0 ? order.distance?.toFixed(2) : 0 }}%
+      </div>
+
+      <div *ngIf="settings.showCorrosionTime" class="depth-map corrosion-time flex no-wrap items-center">
+        {{ order.corrosion_time?.toFixed(0) }}
+        <span class="pi pi-bolt"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-overlayPanel #chart styleClass="chart-tooltip" (onShow)="onOverlayPanelShow()" (onHide)="onOverlayPanelHide()">
+  <div
+    class="mini-chart-container"
+    (mouseenter)="onChartMouseEnter()"
+    (mouseleave)="onChartMouseLeave(chart)"
+  >
+    <app-mini-chart
+      *ngIf="showChart"
+      [chartId]="miniChartId"
+      [coin]="order.symbol"
+      [exchange]="order.exchange"
+      [coinData]="coinData"
+      [chartSettings]="mergedChartSettings"
+      [preferences]="preferences"
+      [timeframe]="settings.chartTimeframe"
+      [showWatchlist]="true"
+      [fullChart]="false"
+      [alerts]="alerts"
+      [chartInOverlay]="true"
+      [watchlistCoins]="getWatchlistCoins(order.exchange) | async"
+      chartLayout="single"
+      (openChart)="openChart.emit({exchange: order.exchange, symbol: order.symbol})"
+    ></app-mini-chart>
+  </div>
+</p-overlayPanel>

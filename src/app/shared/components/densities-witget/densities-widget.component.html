@@ -1,0 +1,82 @@
+<div class="densities-widget" id="densities-widget-id" [ngStyle]="widgetStyle" (contextmenu)="onContextMenu($event)">
+  <div class="header flex gap-sm justify-between items-center">
+    <div class="flex gap-sm items-center">
+      <button class="draggable" (mousedown)="onDragStart($event)">
+        <span class="pi pi-arrows-alt"></span>
+      </button>
+
+      <span>{{ 'densities' | translate }}</span>
+    </div>
+
+    <div class="slider-wrapper">
+      <app-slider [value]="opacity$ | async" [min]="0.1" [max]="1" [step]="0.01"
+                  (valueChanged)="changeOpacity($event)"></app-slider>
+    </div>
+
+    <div class="flex gap-xs">
+      <button (click)="collapse()">
+        <span class="pi" [ngClass]="settings.collapsed ? 'pi-window-maximize' : 'pi-window-minimize'"></span>
+      </button>
+
+      <!--        <button (click)="onContextMenu($event)">-->
+      <!--          <span class="pi pi-sliders-h"></span>-->
+      <!--        </button>-->
+
+      <button (click)="onClose()">
+        <span class="pi pi-times"></span>
+      </button>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!settings.collapsed">
+    <div class="densities-list-wrapper" [ngStyle]="{ opacity: (opacity$ | async) }">
+      <div class="densities-columns-header">
+        <div>{{'densitiesWidget.coin' | translate}}</div>
+        <div
+          (click)="changeSorting('size')"
+          [class.active]="settings.sorting === 'size'"
+        >{{'densitiesWidget.volume' | translate}}
+        </div>
+        <div
+          (click)="changeSorting('distance')"
+          [class.active]="settings.sorting === 'distance'"
+        >{{'densitiesWidget.distance' | translate}}
+        </div>
+        <div
+          (click)="changeSorting('corrosionTime')"
+          [class.active]="settings.sorting === 'corrosionTime'"
+        >{{'densitiesWidget.strength' | translate}}
+        </div>
+      </div>
+      <div class="densities-list">
+        <ng-container *ngFor="let item of densities">
+          <div class="density" (click)="onSelect(item)">
+            <div class="symbol text-ellipsis">
+              <span class="weight" [class]="item.type"></span>
+              <span class="name">{{ item.symbol }}</span>
+            </div>
+            <div class="sum">{{ convertPrice(item.size) }}</div>
+            <div class="distance">{{ item.distance?.toFixed(2) }}%</div>
+
+            <div class="corrosion">
+              <span>{{ item.corrosionTime?.toFixed(2) }}</span>
+              <span class="pi pi-bolt text-primary"></span>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <div
+    *ngIf="!settings.collapsed"
+    class="resize"
+    (mousedown)="onResizeStart($event)"
+  ></div>
+</div>
+
+
+<p-toast></p-toast>
+
+<!--<p-contextMenu #cm [model]="menu" />-->
+

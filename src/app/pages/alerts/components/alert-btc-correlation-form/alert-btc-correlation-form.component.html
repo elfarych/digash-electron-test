@@ -1,0 +1,33 @@
+<form [formGroup]="form" class="app-form">
+
+  <section class="mt-lg">
+    <div class="text-lg text-bold">{{ 'alerts.correlation_parameters.title' | translate }}</div>
+
+      <div class="grid-2-1 grid-gap-lg mt-md">
+
+        <div>
+          <label class="block mb-sm">{{ 'alerts.correlation_parameters.interval' | translate }}</label>
+          <app-interval-selector
+            [selectedInterval]="form.get('interval').value"
+            (intervalChange)="intervalChange($event)"
+          ></app-interval-selector>
+        </div>
+
+        <div>
+          <label for="value" class="block mb-sm">{{ 'alerts.correlation_parameters.value_up_to' | translate }}</label>
+          <input pInputText id="value" aria-describedby="value-help" formControlName="value" type="number"/>
+          <small *ngIf="form.get('value').errors?.['required'] && formTouched" class="error-message block">{{ 'alerts.correlation_parameters.required_field' | translate }}</small>
+          <small *ngIf="form.get('value').errors?.['min'] && formTouched" class="error-message block">{{ 'alerts.correlation_parameters.min_value_minus100' | translate }}</small>
+          <small *ngIf="form.get('value').errors?.['max'] && formTouched" class="error-message block">{{ 'alerts.correlation_parameters.max_value_20' | translate }}</small>
+          <small id="value-help" class="mt-sm block text-grey"></small>
+        </div>
+      </div>
+  </section>
+
+  <app-alert-base-form
+    [form]="form"
+    [edit]="edit"
+    [formTouched]="formTouched"
+  ></app-alert-base-form>
+
+</form>

@@ -1,0 +1,201 @@
+<button class="app-button" (click)="openSettings()">
+  <span class="pi pi-cog"></span>
+</button>
+
+
+<p-dialog
+  header="{{'chartSettings.chartDesign' | translate}}"
+  [(visible)]="showDialog"
+  [breakpoints]="{ '960px': '95vw' }"
+  [style]="{ width: '800px' }"
+  [draggable]="false"
+  [resizable]="false"
+  [modal]="true"
+  [dismissableMask]="true"
+>
+
+  <div class="divider my-md"></div>
+
+  <div class="chart-settings">
+    <div class="navigation">
+
+      <ng-container *ngFor="let item of sections">
+        <div
+          class="navigation-item"
+          [class.active]="item === section"
+          (click)="changeSection(item)"
+        >{{ 'chartSettings.' + item | translate }}</div>
+      </ng-container>
+
+    </div>
+
+    <form [formGroup]="form" class="app-form">
+      <div class="settings-form-container">
+
+<!--        instrument-->
+
+        <ng-template [ngIf]="section === 'instrument'">
+          <div class="chart-bg-select-2">
+            <label for="candleBuyColor">{{ 'chartSettings.candleColorChoice' | translate }}</label>
+            <input formControlName="candleBuyColor" type="color" id="candleBuyColor">
+            <input formControlName="candleSellColor" type="color" id="candleSellColor">
+          </div>
+
+          <div class="chart-bg-select-2">
+            <label for="candleShadowBuyColor">{{ 'chartSettings.candleShadowColorChoice' | translate }}</label>
+            <input formControlName="candleShadowBuyColor" type="color" id="candleShadowBuyColor">
+            <input formControlName="candleShadowSellColor" type="color" id="candleShadowSellColor">
+          </div>
+
+          <div class="chart-bg-select-3">
+            <label for="volumeBuyColor">{{ 'chartSettings.volumeColorChoice' | translate }}</label>
+
+            <div>
+              <input type="checkbox" formControlName="showVolume" id="showVolume">
+              <label for="showVolume" class="checkbox-label"></label>
+            </div>
+
+            <input formControlName="volumeBuyColor" type="color" id="volumeBuyColor">
+            <input formControlName="volumeSellColor" type="color" id="volumeSellColor">
+          </div>
+
+          <div class="chart-bg-select-flex">
+            <label for="chartType">{{ 'chartSettings.chartType' | translate }}</label>
+            <p-dropdown
+              id="chartType"
+              [options]="ChartTypes"
+              optionLabel="label"
+              optionValue="value"
+              appendTo="body"
+              formControlName="chartType"
+            >
+            </p-dropdown>
+          </div>
+        </ng-template>
+
+<!--        Chart design-->
+
+        <ng-template [ngIf]="section === 'chart'">
+          <div class="chart-bg-select-2">
+            <label for="chartBackgroundColor">{{ 'chartSettings.chartBackgroundColor' | translate }}</label>
+            <input formControlName="chartBackgroundColor" type="color" id="chartBackgroundColor">
+            <input formControlName="chartBackgroundSecondColor" type="color" id="chartBackgroundSecondColor">
+          </div>
+
+          <div class="chart-bg-select-2">
+            <label for="chartGridColor">{{ 'chartSettings.chartGridColor' | translate }}</label>
+            <div>
+              <input type="checkbox" formControlName="showChartGrid" id="showChartGrid">
+              <label for="showChartGrid" class="checkbox-label"></label>
+            </div>
+
+            <input [disabled]="!form.get('showChartGrid').value" formControlName="chartGridColor" type="color" id="chartGridColor">
+          </div>
+
+          <div class="chart-bg-select-1">
+            <label for="chartCrosshairColor">{{ 'chartSettings.chartCrosshairColor' | translate }}</label>
+            <input formControlName="chartCrosshairColor" type="color" id="chartCrosshairColor">
+          </div>
+
+          <div class="chart-bg-select-1">
+            <label for="chartTextColor">{{ 'chartSettings.chartTextColor' | translate }}</label>
+            <input formControlName="chartTextColor" type="color" id="chartTextColor">
+          </div>
+
+          <div class="chart-bg-select-1">
+            <label for="chartPanelColor">{{ 'chartSettings.chartPanelColor' | translate }}</label>
+            <input formControlName="chartPanelColor" type="color" id="chartPanelColor">
+          </div>
+
+          <div class="chart-bg-select-1">
+            <label for="doubleClickAlert">{{ 'chartSettings.doubleClickAlert' | translate }}</label>
+            <div>
+              <input type="checkbox" formControlName="doubleClickAlert" id="doubleClickAlert">
+              <label for="doubleClickAlert" class="checkbox-label"></label>
+            </div>
+          </div>
+
+          <div class="chart-bg-select-1">
+            <label for="showLegend">{{ 'chartSettings.showLegend' | translate }}</label>
+            <div>
+              <input type="checkbox" formControlName="showLegend" id="showLegend">
+              <label for="showLegend" class="checkbox-label"></label>
+            </div>
+          </div>
+
+          <div class="chart-bg-select-flex">
+            <label for="chartYScale">{{ 'chartSettings.yScale' | translate }}</label>
+            <p-dropdown
+              id="chartYScale"
+              [options]="ChartYScaleTypes"
+              optionLabel="label"
+              optionValue="value"
+              appendTo="body"
+              formControlName="chartYScale"
+            >
+            </p-dropdown>
+          </div>
+
+        </ng-template>
+
+<!--        Drawing tools-->
+
+        <ng-template [ngIf]="section === 'drawingTools'">
+          <div class="chart-bg-select-2">
+            <label for="buyLimitOrderColor">{{ 'chartSettings.chartLimitOrderColor' | translate }}</label>
+            <input formControlName="buyLimitOrderColor" type="color" id="buyLimitOrderColor">
+            <input formControlName="sellLimitOrderColor" type="color" id="sellLimitOrderColor">
+          </div>
+
+          <div class="chart-bg-select-2">
+            <label for="trendLevelSupportColor">{{ 'chartSettings.trendLevelColor' | translate }}</label>
+            <input formControlName="trendLevelSupportColor" type="color" id="trendLevelSupportColor">
+            <input formControlName="trendLevelResistanceColor" type="color" id="trendLevelResistanceColor">
+          </div>
+
+          <div class="chart-bg-select-1">
+            <label for="horizontalLevelColor">{{ 'chartSettings.horizontalLevelColor' | translate }}</label>
+            <input formControlName="horizontalLevelColor" type="color" id="horizontalLevelColor">
+          </div>
+
+          <div class="chart-bg-select-1">
+            <label for="dailyHighLowColor">{{ 'chartSettings.dailyHighLowColor' | translate }}</label>
+            <input formControlName="dailyHighLowColor" type="color" id="dailyHighLowColor">
+          </div>
+
+          <div class="chart-bg-select-1">
+            <label for="rectangleColor">{{ 'chartSettings.rectangleColor' | translate }}</label>
+            <input formControlName="rectangleColor" type="color" id="rectangleColor">
+          </div>
+
+          <div class="chart-bg-select-1">
+            <label for="brushColor">{{ 'chartSettings.brushColor' | translate }}</label>
+            <input formControlName="brushColor" type="color" id="brushColor">
+          </div>
+
+        </ng-template>
+      </div>
+
+      <div class="flex justify-between items-center wrap pl-sm gap-md">
+        <div>
+          <button class="app-button app-button-flat" (click)="discard()">
+            <span class="text-lg">{{ 'chartSettings.discard' | translate }}</span>
+          </button>
+        </div>
+        <div class="flex justify-end gap-md pa-xs">
+          <button class="app-button app-button-flat" (click)="cancel()">
+            <span class="text-lg">{{ 'chartSettings.cancel' | translate }}</span>
+          </button>
+
+          <button class="app-button-primary" (click)="save()">
+            <span class="text-lg">{{ 'chartSettings.save' | translate }}</span>
+          </button>
+        </div>
+      </div>
+
+
+    </form>
+
+  </div>
+
+</p-dialog>

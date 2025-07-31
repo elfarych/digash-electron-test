@@ -1,0 +1,40 @@
+<div
+  class="depth-map-orders-block"
+  [ngStyle]="styles"
+>
+  <div class="depth-map-orders-block-data">
+
+    <app-depth-map-orders-column
+      [orders]="depthDataOrdersGroup.small"
+      [ordersType]="ordersType"
+      [showColsTitle]="showColsTitle"
+      [settings]="settings"
+      [blockType]="blockType"
+      [titlePosition]="titlePosition"
+      columnTitle="Маленькие"
+      (openChart)="openChart.emit($event)"
+    ></app-depth-map-orders-column>
+
+    <app-depth-map-orders-column
+      [orders]="depthDataOrdersGroup.medium"
+      [ordersType]="ordersType"
+      [showColsTitle]="showColsTitle"
+      [settings]="settings"
+      [blockType]="blockType"
+      [titlePosition]="titlePosition"
+      columnTitle="Средние"
+      (openChart)="openChart.emit($event)"
+    ></app-depth-map-orders-column>
+
+    <app-depth-map-orders-column
+      [orders]="depthDataOrdersGroup.large"
+      [ordersType]="ordersType"
+      [showColsTitle]="showColsTitle"
+      [settings]="settings"
+      [blockType]="blockType"
+      [titlePosition]="titlePosition"
+      columnTitle="Большие"
+      (openChart)="openChart.emit($event)"
+    ></app-depth-map-orders-column>
+  </div>
+</div>

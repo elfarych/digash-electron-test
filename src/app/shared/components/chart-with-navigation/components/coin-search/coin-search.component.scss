@@ -1,0 +1,60 @@
+@import "./src/styles";
+
+:host {
+  display: block;
+}
+
+app-menu {
+  border: 1px solid var(--border-color);
+  width: 200px;
+  right: 10px;
+}
+
+ul {
+  height: 300px;
+  overflow-y: auto;
+  border-radius: var(--border-radius);
+
+  li {
+    transition: .5s all;
+    cursor: pointer;
+    padding: calc(var(--md) / 2) var(--md);
+    font-size: 11px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--dark-background-second-color);
+
+    display: flex;
+    align-items: center;
+
+    svg-icon {
+      margin-right: calc(var(--md) / 2);
+    }
+
+    &.active {
+      background-color: var(--dark-background-hover-color);
+    }
+
+    &:hover {
+      background-color: var(--dark-background-hover-color);
+    }
+  }
+}
+
+.empty {
+  padding: calc(var(--md) / 2) var(--md);
+}
+
+.symbol-search {
+  input {
+    border-radius: var(--border-radius);
+
+    border: none !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-bottom: 1px solid var(--border-color) !important;
+
+    &:focus {
+      box-shadow: none !important;
+    }
+  }
+}

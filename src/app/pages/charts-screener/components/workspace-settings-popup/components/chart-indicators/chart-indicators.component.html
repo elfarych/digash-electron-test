@@ -1,0 +1,46 @@
+<div class="indicators">
+
+  <div
+    class="indicator"
+    [class.selected]="indicatorIsSelected(indicator.name)"
+    [class.active]="selectedChartIndicator?.name === indicator.name"
+    *ngFor="let indicator of indicators"
+    (click)="selectChartIndicator($event, indicator)"
+  >
+    <span *ngIf="selectedChartIndicator?.name === indicator.name" class="pi pi-sort-down-fill active-icon"></span>
+    <div>
+      <div class="title">
+        {{'technical_indicators.' + indicator.name + 'Label' | translate}}
+      </div>
+
+      <div class="text-hint text-sm mt-md">
+        {{'technical_indicators.' + indicator.name + 'Description' | translate}}
+      </div>
+
+      <div class="status" (click)="toggleIndicator($event, indicator)">
+        <i
+          *ngIf="!indicatorIsSelected(indicator.name)"
+          class="pi pi-plus"
+          pTooltip="{{ 'workspace.addIndicator' | translate }}"
+          tooltipPosition="top"
+        ></i>
+        <i
+          *ngIf="indicatorIsSelected(indicator.name)"
+          class="pi pi-trash"
+          pTooltip="{{ 'workspace.removeIndicator' | translate }}"
+          tooltipPosition="top"
+        ></i>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="mt-lg grid-2-1 grid-gap-md items-center">
+  <app-chart-indicators-question
+    *ngFor="let question of questions"
+    [question]="question"
+    [form]="form">
+  </app-chart-indicators-question>
+</div>
+

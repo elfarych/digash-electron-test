@@ -1,0 +1,70 @@
+<ng-container *ngIf="post">
+
+  <div class="container">
+
+    <div class="bg-main post-detail rounded-borders-lg mt-xl" [class.dialog]="dialog">
+      <img [src]="post.image" [alt]="title" class="image">
+      <div class="title-container mt-md">
+        <div class="title-img">
+          <img src="./assets/img/candles_v.png" alt="candles">
+        </div>
+        <h2 class="text-title text-center">
+          {{ title }}
+        </h2>
+      </div>
+
+
+      <div class="divider my-lg"></div>
+
+<!--      <p class="mt-md text-bold">{{ description }}</p>-->
+
+<!--      <div class="divider my-lg"></div>-->
+
+      <div class="changelog-post" [innerHTML]="content | safeHtml"></div>
+
+      <div class="divider my-lg"></div>
+
+      <div class="post-action my-lg">
+        <div class="open-premium">
+          <i>{{"updates.premium_features" | translate}}</i>
+          <button class="app-button-primary w-full mt-sm" (click)="redirectToPremium()">
+            <span class="text-lg">{{"updates.open_premium_features" | translate}}</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="divider my-lg"></div>
+
+      <div class="post-footer">
+        <div class="follow">
+          <h4 class="text-lg text-bold">{{ 'footer.ourLinks' | translate }}</h4>
+          <div class="social-links mt-md">
+            <a href="https://youtube.com/@Digash-Screener" target="_blank">
+              <svg-icon src="../../../../../assets/svg/youtube.svg"
+                        [svgStyle]="{ 'width.px':20, 'height.px': 20 }"></svg-icon>
+            </a>
+            <a href="https://t.me/digashlive" target="_blank">
+              <svg-icon src="../../../../../assets/svg/telegram.svg"
+                        [svgStyle]="{ 'width.px':20, 'height.px': 20 }"></svg-icon>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="publish-time flex justify-end">
+        <span class="text-italic">{{ post.created_at | date:"short" }}</span>
+      </div>
+
+      <div *ngIf="!dialog" class="bg-effect">
+        <img src="./assets/img/bg_effect.png" alt="bg">
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="dialog" class="bg-effect">
+    <img src="./assets/img/bg_effect.png" alt="bg">
+  </div>
+
+  <app-footer *ngIf="!dialog"></app-footer>
+
+</ng-container>

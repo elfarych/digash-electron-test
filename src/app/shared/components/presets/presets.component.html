@@ -1,0 +1,61 @@
+
+<div class="presets-wrapper">
+  <div class="presets-btn" (click)="toggleShowPresets()">
+    <ng-template [ngIf]="selectedPreset">
+      <div class="text-ellipsis">
+        {{ selectedPreset.name }}
+      </div>
+    </ng-template>
+
+    <ng-template [ngIf]="!selectedPreset">
+      <div>
+        {{ "presets.presets" | translate }}
+      </div>
+    </ng-template>
+  </div>
+
+  <div *ngIf="showPresets" class="presets-container">
+
+    <ng-template [ngIf]="!presets?.length && !selectPreset">
+      <p class="text-center mt-sm">
+        {{ "presets.noPresets" | translate }}
+      </p>
+
+      <div class="divider my-md"></div>
+    </ng-template>
+
+    <ng-template [ngIf]="presets?.length">
+      <div class="presets-list">
+        <app-preset
+          *ngFor="let preset of presets"
+          [preset]="preset"
+          (selectPreset)="selectPreset.emit($event)"
+          (editPreset)="onEditPreset($event)"
+          (deletePreset)="deletePreset.emit($event)"
+        >
+        </app-preset>
+      </div>
+      <div class="divider my-md"></div>
+    </ng-template>
+
+
+    <div *ngIf="!showCreatePresetForm">
+      <button class="app-button w-full" (click)="toggleShowCreatePresetForm($event)">
+        {{ "presets.createPreset" | translate }}
+      </button>
+    </div>
+
+    <div *ngIf="showCreatePresetForm">
+      <form [formGroup]="form" class="app-form" (ngSubmit)="onSubmit()">
+        <label for="name" class="block mb-sm">{{ "presets.presetName" | translate }}</label>
+        <input id="name" formControlName="name" (keydown)="handleTyping($event)"/>
+
+        <button class="app-button w-full mt-sm" type="submit" [disabled]="!form.valid">
+          <span *ngIf="!presetToEdit">{{ "presets.createPreset" | translate }}</span>
+          <span *ngIf="!!presetToEdit">{{ "presets.editPreset" | translate }}</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,51 @@
+<div
+  *ngIf="showChart"
+  class="chart-container"
+  [id]="fullChart ? 'chart-container-' + id : 'mini-chart-container-' + id"
+  #candlestickRef
+  [ngClass]="fullChart ? 'full-chart' : 'mini-chart'"
+  [ngStyle]="fixHeight ? { height: 'calc(100% - 50px)' } : { height: '100%' }"
+  (contextmenu)="handleRightClick($event)"
+>
+  <p-toast></p-toast>
+  <textarea id="canvas-drawing-tool-textarea"
+            style="white-space: nowrap; position: absolute; z-index: 10; font: 14px sans-serif; display: none; resize: none; padding: 0; margin: 0; border: none; background: transparent; outline: none; color: white;"></textarea>
+  <div class="watermark symbol-name watermark-screenshot">
+    {{ symbol | symbolNormalize }} {{ timeframe }}
+  </div>
+  <div [class.active]="chartId" class="watermark symbol-name">
+    {{ timeframe }}
+  </div>
+  <div class="pnl-result">
+    <span id="pnlPercentage"></span>
+    <span id="currentPnL"></span>
+  </div>
+
+  <div class="watermark website-link watermark-screenshot">
+    <div>
+      <img src="./assets/svg/logo.svg" alt="logo">
+      <div>digash.live</div>
+    </div>
+  </div>
+
+  <div id="tooltip-target"></div>
+</div>
+<app-progress-spinner *ngIf="displayProgressSpinner"></app-progress-spinner>
+
+<p-overlayPanel #limitOrderTooltip>
+  <div class="tooltip-content" [innerHTML]="limitOrderTooltipHtml"></div>
+</p-overlayPanel>
+
+<p-overlayPanel #coinDataTooltip>
+  <div class="tooltip-content" [innerHTML]="coinDataTooltipHtml"></div>
+</p-overlayPanel>
+
+<app-chart-drawing-tool-configuration
+  *ngIf="selectedDrawingTool"
+  [tool]="selectedDrawingTool"
+  (handleRemove)="removeDrawingTool(selectedDrawingTool)"
+></app-chart-drawing-tool-configuration>
+
+<div class="error-message">
+  {{ errorMessage }}
+</div>

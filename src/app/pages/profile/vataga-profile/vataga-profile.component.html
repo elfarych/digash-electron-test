@@ -1,0 +1,81 @@
+<p-toast></p-toast>
+
+<div class="vataga-block mt-lg">
+
+  <img class="vataga-background-effect" src="assets/img/vataga.png" class="ellipse">
+
+  <div class="logo mt-lg text-center flex flex-center">
+    <img src="assets/svg/vataga.svg">
+  </div>
+
+  <ng-template [ngIf]="!vatagaConnected">
+
+    <div class="mt-xl text-center text-lg text-bold position-relative z-index-10">
+      <span>{{ 'vataga.promoTitle' | translate }}</span>
+    </div>
+
+    <div class="mt-xl">
+
+      <div class="app-form">
+        <div class="connect-form-grid">
+          <input type="text" placeholder="Vataga Crypto uid" [(ngModel)]="vatagaId" class="vataga-uid-input" />
+          <button (click)="connect()">
+            <span>{{ 'profile.connect' | translate }}</span>
+          </button>
+        </div>
+
+        <div class="my-lg text-center text-sm">
+          <span>{{ 'vataga.promoDescription' | translate }}</span>
+        </div>
+
+        <div class="flex justify-between grid-gap-md mt-md vataga-text text-underline">
+          <div class="cursor-pointer" (click)="helpDialogVisible = true">
+            {{ 'profile.whereToGetVatagaUid' | translate }}
+          </div>
+
+          <div class="cursor-pointer text-right" (click)="openVataga()">
+            {{ 'profile.terms' | translate }}
+          </div>
+        </div>
+
+        <div class="mt-md">
+          {{ 'profile.connectInfo' | translate }} <br><a href="https://app.vataga.trading/register/?referrer=Digash"
+            target="_blank" class="vataga-text text-underline">
+            {{ 'profile.vataga_link' | translate }}
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </ng-template>
+
+  <ng-template [ngIf]="vatagaConnected">
+    <div class="mt-xl flex column gap-lg justify-center text-center position-relative z-index-10">
+      <div class="flex justify-center gap-md">
+        <div class="text-lg">{{'profile.vatagaBalance' | translate}}</div>
+        <div class="balance-value">{{vatagaBalance}}$</div>
+      </div>
+
+      <div>
+        <button *ngIf="!user.premium_enabled" [disabled]="activationDisabled()" (click)="activatePremium()">
+          <span>{{ 'profile.activatePremium' | translate }} (18$)</span>
+        </button>
+
+        <button *ngIf="user.premium_enabled" [disabled]="activationDisabled()" (click)="activatePremium()">
+          <span>{{ 'profile.renewPremium' | translate }} (18$)</span>
+        </button>
+      </div>
+
+      <button class="cursor-pointer vataga-text text-underline" (click)="openVataga()">
+        {{ 'profile.terms' | translate }}
+      </button>
+    </div>
+  </ng-template>
+  <p-dialog header="{{ 'profile.whereToGetVatagaUid' | translate }}" [(visible)]="helpDialogVisible"
+    [style]="{ width: '70%' }" className="help-content" [modal]="true" [dismissableMask]="true">
+    <div class="mt-lg">
+      <a class="help-content-link" href="https://app.vataga.trading/profile/account-settings/" target="_blank">{{"vataga.link_label" | translate}}</a>
+      <img class="mt-lg" src="../../../../assets/img/vataga_uuid.png" [style]="{width: '100%'}" />
+    </div>
+  </p-dialog>
+</div>

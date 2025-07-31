@@ -1,0 +1,26 @@
+.chart-navigation-row-symbol-column__value {
+    position: relative;
+}
+
+.chart-navigation-row-symbol-column__value-orders {
+    position: absolute;
+    top: -5px;
+    right: 0;
+
+    display: flex;
+    gap: 3px;
+
+    .has-limit-order {
+        width: 8px;
+        height: 8px;
+        border-radius: 100%;
+    
+        &.has-ask-limit-order {
+            background-color: var(--color-danger);
+        }
+    
+        &.has-bid-limit-order {
+            background-color: var(--color-positive);
+        }
+    }
+}

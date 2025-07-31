@@ -1,0 +1,41 @@
+:host {
+  line-height: 1.8;
+}
+
+table {
+  width: 100%;
+}
+
+th, td {
+  outline: 1px solid var(--color-border);
+  padding: 8px;
+  text-align: left;
+}
+
+li {
+  margin-left: var(--md);
+}
+
+
+.toc {
+  width: 100%;
+  border-collapse: collapse;
+}
+.toc td {
+  padding: 5px;
+}
+.toc td:first-child {
+  text-align: left;
+}
+.toc td:last-child {
+  text-align: right;
+}
+
+ol {
+  margin: var(--sm) 0 0 var(--md) ;
+  li {
+    cursor: pointer;
+    margin-top: var(--xs);
+    text-decoration: underline;
+  }
+}

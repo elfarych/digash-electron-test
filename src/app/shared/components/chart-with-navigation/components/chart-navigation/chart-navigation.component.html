@@ -1,0 +1,87 @@
+<div class="chart-navigation">
+
+  <div class="chart-navigation-header">
+    <div class="chart-navigation-row">
+      <div *ngIf="showSortingByAlerts" class="chart-navigation-row-alert-column" [class.disable]="disableSorting"
+           [class.active]="sortByAlerts"
+           (click)="toggleSortingByAlerts.emit()">
+        <span class="pi pi-bell"></span>
+      </div>
+      <div *ngIf="showSortingByWatchlist" class="chart-navigation-row-watchlist-column" [class.disable]="disableSorting"
+           [class.active]="activeSortingId === 'Watchlist'"
+           (click)="updateSorting.emit('Watchlist')">
+        <span class="pi pi-bookmark watchlist-icon"></span>
+      </div>
+      <div
+        class="chart-navigation-row-symbol-column"
+        [class.active]="activeSortingId === 'Coin'"
+        [class.disable]="disableSorting"
+        [ngClass]="!autoSize ? 'grow-1' : ''"
+        (click)="updateSorting.emit('Coin')">
+        {{ 'chart.coin' | translate }}
+        <div *ngIf="activeSortingId === 'Coin'" class="chart-navigation-cort-direction-arrows">
+          <span class="pi pi-caret-up up" [class.active]="sortingDirection === 'desc'"></span>
+          <span class="pi pi-caret-down down" [class.active]="sortingDirection === 'asc'"></span>
+        </div>
+      </div>
+
+      <ng-container *ngFor="let col of columns">
+        <div
+          class="chart-navigation-row-data-column"
+          [class.active]="activeSortingId === col.id"
+          [class.disable]="disableSorting"
+          (click)="updateSorting.emit(col.id)"
+        >
+          {{ col.shortLabel ?? col.label }}
+
+          <div *ngIf="activeSortingId === col.id" class="chart-navigation-cort-direction-arrows">
+            <span class="pi pi-caret-up up" [class.active]="sortingDirection === 'desc'"></span>
+            <span class="pi pi-caret-down down" [class.active]="sortingDirection === 'asc'"></span>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+
+  <!--  Coins-->
+  <div class="coins">
+
+    <div *ngIf="popupFromWorkspace && !premium" class="premium-message-container pt-md pl-md pr-md">
+      <app-premium-message-banner
+        message="{{'workspace.premium_block_message' | translate}}"
+        (redirectHappened)="close()"></app-premium-message-banner>
+    </div>
+
+    <p-scroller
+      *ngIf="showPScroller"
+      [items]="coins"
+      [itemSize]="34"
+      [style]="{'width': '100%', 'height': 'calc(100% - 32px)'}">
+      <ng-template pTemplate="item" let-coin let-options="options">
+        <div
+          [class.active]="coin.symbol === selectedCoin"
+          (click)="selectCoin.emit(coin)"
+        >
+          <app-chart-navigation-coin-row
+            [coin]="coin"
+            [autoSize]="autoSize"
+            [sortByAlerts]="sortByAlerts"
+            [selectedCoin]="selectedCoin"
+            [hasAlert]="coin.hasAlert"
+            [watchlistCoins]="wathclist"
+            [coinsNavigationColumns]="columns"
+            [activeSortingId]="activeSortingId"
+            [showAlertColumn]="showSortingByAlerts"
+            [showWatchlistColumn]="showSortingByWatchlist"
+            [chartSettings]="chartSettings"
+            [showLimitOrdersMarker]="showLimitOrdersMarker"
+            (selectColor)="selectColor.emit({ color: $event, symbol: coin.symbol })"
+          ></app-chart-navigation-coin-row>
+        </div>
+      </ng-template>
+    </p-scroller>
+
+  </div>
+</div>
+

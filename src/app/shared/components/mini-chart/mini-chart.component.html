@@ -1,0 +1,497 @@
+<div [ngClass]="isMobile || !fullChart ? 'mini-chart' : 'full-chart'">
+
+  <div class="header">
+    <p-toast></p-toast>
+    <div class="header-content">
+      <div class="left-side">
+
+        <!--      Icon-->
+
+        <ng-container [ngSwitch]="exchange">
+          <div *ngSwitchCase="'BINANCE_SPOT'" class="coin-exchange" pTooltip="{{ 'chart.binance_spot' | translate }}"
+               tooltipPosition="top">
+            <img [src]="'https://s3-symbol-logo.tradingview.com/crypto/XTVC'+ normalizeCoinQuoteSymbol(coin) + '.svg'"
+                 alt="logo" onerror="this.onerror=null;this.src='assets/svg/binance.svg';">
+          </div>
+          <div *ngSwitchCase="'BINANCE_SPOT_WITHOUT_FUTURES'" class="coin-exchange"
+               pTooltip="{{ 'chart.binance_spot_without_futures' | translate }}" tooltipPosition="top">
+            <img [src]="'https://s3-symbol-logo.tradingview.com/crypto/XTVC'+ normalizeCoinQuoteSymbol(coin) + '.svg'"
+                 alt="logo" onerror="this.onerror=null;this.src='assets/svg/binance.svg';">
+          </div>
+          <div *ngSwitchCase="'BINANCE_SPOT_WITH_FUTURES'" class="coin-exchange"
+               pTooltip="{{ 'chart.binance_spot_with_futures' | translate }}" tooltipPosition="top">
+            <img [src]="'https://s3-symbol-logo.tradingview.com/crypto/XTVC'+ normalizeCoinQuoteSymbol(coin) + '.svg'"
+                 alt="logo" onerror="this.onerror=null;this.src='assets/svg/binance.svg';">
+          </div>
+          <div *ngSwitchCase="'BINANCE_FUTURES'" class="coin-exchange"
+               pTooltip="{{ 'chart.binance_futures' | translate }}" tooltipPosition="top">
+            <img [src]="'https://s3-symbol-logo.tradingview.com/crypto/XTVC'+ normalizeCoinQuoteSymbol(coin) + '.svg'"
+                 alt="logo" onerror="this.onerror=null;this.src='assets/svg/binance.svg';">
+          </div>
+          <div *ngSwitchCase="'BYBIT_SPOT'" class="coin-exchange" pTooltip="{{ 'chart.bybit_spot' | translate }}"
+               tooltipPosition="top">
+            <img [src]="'https://s3-symbol-logo.tradingview.com/crypto/XTVC'+ normalizeCoinQuoteSymbol(coin) + '.svg'"
+                 alt="logo" onerror="this.onerror=null;this.src='assets/svg/bybit.svg';">
+          </div>
+          <div *ngSwitchCase="'BYBIT_FUTURES'" class="coin-exchange" pTooltip="{{ 'chart.bybit_futures' | translate }}"
+               tooltipPosition="top">
+            <img [src]="'https://s3-symbol-logo.tradingview.com/crypto/XTVC'+ normalizeCoinQuoteSymbol(coin) + '.svg'"
+                 alt="logo" onerror="this.onerror=null;this.src='assets/svg/bybit.svg';">
+          </div>
+
+          <div *ngSwitchCase="'BITGET_SPOT'" class="coin-exchange" pTooltip="{{ 'chart.bitget_spot' | translate }}"
+               tooltipPosition="top">
+            <img [src]="'https://s3-symbol-logo.tradingview.com/crypto/XTVC'+ normalizeCoinQuoteSymbol(coin) + '.svg'"
+                 alt="logo" onerror="this.onerror=null;this.src='assets/svg/bitget.svg';">
+          </div>
+
+          <div *ngSwitchCase="'BITGET_FUTURES'" class="coin-exchange"
+               pTooltip="{{ 'chart.bitget_futures' | translate }}" tooltipPosition="top">
+            <img [src]="'https://s3-symbol-logo.tradingview.com/crypto/XTVC'+ normalizeCoinQuoteSymbol(coin) + '.svg'"
+                 alt="logo" onerror="this.onerror=null;this.src='assets/svg/bitget.svg';">
+          </div>
+
+          <div *ngSwitchCase="'BITGET_SPOT_WITHOUT_BINANCE'"
+               pTooltip="{{ 'chart.bitget_spot_without_binance' | translate }}" class="coin-exchange"
+               tooltipPosition="top">
+            <img [src]="'https://s3-symbol-logo.tradingview.com/crypto/XTVC'+ normalizeCoinQuoteSymbol(coin) + '.svg'"
+                 alt="logo" onerror="this.onerror=null;this.src='assets/svg/bitget.svg';">
+          </div>
+
+          <div *ngSwitchCase="'BITGET_FUTURES_WITHOUT_BINANCE'"
+               pTooltip="{{ 'chart.bitget_futures_without_binance' | translate }}" class="coin-exchange"
+               tooltipPosition="top">
+            <img [src]="'https://s3-symbol-logo.tradingview.com/crypto/XTVC'+ normalizeCoinQuoteSymbol(coin) + '.svg'"
+                 alt="logo" onerror="this.onerror=null;this.src='assets/svg/bitget.svg';">
+          </div>
+
+          <div *ngSwitchCase="'GATE_SPOT'" class="coin-exchange" pTooltip="{{ 'chart.gate_spot' | translate }}"
+               tooltipPosition="top">
+            <img [src]="'https://s3-symbol-logo.tradingview.com/crypto/XTVC'+ normalizeCoinQuoteSymbol(coin) + '.svg'"
+                 alt="logo" onerror="this.onerror=null;this.src='assets/svg/gate.svg';">
+          </div>
+
+          <div *ngSwitchCase="'GATE_FUTURES'" class="coin-exchange" pTooltip="{{ 'chart.gate_futures' | translate }}"
+               tooltipPosition="top">
+            <img [src]="'https://s3-symbol-logo.tradingview.com/crypto/XTVC'+ normalizeCoinQuoteSymbol(coin) + '.svg'"
+                 alt="logo" onerror="this.onerror=null;this.src='assets/svg/gate.svg';">
+          </div>
+
+          <div *ngSwitchCase="'OKX_SPOT'" class="coin-exchange" pTooltip="{{ 'chart.okx_spot' | translate }}"
+               tooltipPosition="top">
+            <img [src]="'https://s3-symbol-logo.tradingview.com/crypto/XTVC'+ normalizeCoinQuoteSymbol(coin) + '.svg'"
+                 alt="logo" onerror="this.onerror=null;this.src='assets/svg/okx.svg';">
+          </div>
+
+          <div *ngSwitchCase="'OKX_FUTURES'" class="coin-exchange" pTooltip="{{ 'chart.okx_futures' | translate }}"
+               tooltipPosition="top">
+            <img [src]="'https://s3-symbol-logo.tradingview.com/crypto/XTVC'+ normalizeCoinQuoteSymbol(coin) + '.svg'"
+                 alt="logo" onerror="this.onerror=null;this.src='assets/svg/okx.svg';">
+          </div>
+        </ng-container>
+
+        <!--      Symbol-->
+
+        <div class="symbol-title cursor-pointer" (click)="copyTicker($event)">
+          {{ coin | symbolNormalize }}.{{ getExchangeData(exchange)?.market }}
+        </div>
+
+        <div class="flex flex-center">
+          <span
+            *ngIf="hasAlert && showAlertIcon"
+            class="pi pi-bell coin-alert-icon"
+            pTooltip="{{ 'chart.alert_price_crossed' | translate }}"
+          >
+          </span>
+        </div>
+
+        <div *ngIf="!isMobile && (chartSettings.showActiveCoinTooltips || formation === 'ActiveCoins')">
+          <app-formation-tooltip
+            [coinData]="coinData"
+            [exchange]="exchange"
+            [chartSettings]="chartSettings"
+          />
+        </div>
+
+        <!--      Swap exchange-->
+
+        <ng-template [ngIf]="fullChart && !inDialog && coinToSwap && !isMobile">
+          <div
+            (click)="swapExchange($event)"
+            class="swap-exchange-button ml-md"
+            pTooltip="{{ 'chart.swap_spot_futures' | translate }}"
+            tooltipPosition="bottom"
+          >
+            <i class="pi pi-sync chart-swap-icon" [ngStyle]="{'transform': 'rotate(' + swapRotationAngle + 'deg)'}"></i>
+          </div>
+        </ng-template>
+
+        <!--      Indicators-->
+
+        <ng-template [ngIf]="fullChart && !inDialog && !isMobile">
+          <div>
+            <app-chart-indicators-selection
+              [selectedChartIndicators]="chartIndicators"
+              (selectTechnicalIndicator)="selectTechnicalIndicator.emit($event)"
+            />
+          </div>
+        </ng-template>
+
+        <!--      Layout selector-->
+
+        <ng-template [ngIf]="fullChart && !isMobile && showLayoutSelector">
+          <div class="hide-on-mobile">
+            <app-chart-layout-selector
+              appUnauthorized
+              [layout]="chartLayout"
+              (layoutChanged)="layoutChange($event)"
+            />
+          </div>
+        </ng-template>
+
+      </div>
+
+      <!--    Timeframe-->
+
+      <div class="timeframe-selection">
+        <p-dropdown
+          *ngIf="timeframeView === 'dropdown'"
+          [options]="timeframes"
+          optionValue="name"
+          [(ngModel)]="selectedTimeframe"
+          (onChange)="changeTimeframe($event)"
+          appendTo="body"
+        ></p-dropdown>
+
+        <p-selectButton
+          *ngIf="timeframeView === 'list'"
+          [options]="timeframes"
+          optionValue="name"
+          [(ngModel)]="selectedTimeframe"
+          [allowEmpty]="false"
+          (onOptionClick)="changeTimeframeFromList($event)"
+        ></p-selectButton>
+      </div>
+
+      <div class="right-side">
+        <div class="watchlist right-side-button" *ngIf="showWatchlist">
+          <app-watchlist-selection
+            [watchlistCoin]="watchlistCoin"
+            (handleSelectColor)="handleSelectColor($event)"
+          ></app-watchlist-selection>
+        </div>
+
+        <ng-template
+          [ngIf]="selectedTrade"
+          [ngIfThen]="userTradesScreenshotTemplate"
+          [ngIfElse]="commonScreenshotTemplate"
+        ></ng-template>
+
+        <ng-template #userTradesScreenshotTemplate>
+          <div
+            *ngIf="fullChart && !isMobile"
+            class="screenshot right-side-button hide-on-mobile"
+            (click)="saveTemplate.toggle($event)"
+            pTooltip="Сделать скриншот"
+          >
+            <span class="pi pi-save"></span>
+
+            <p-overlayPanel #saveTemplate>
+              <div
+                *ngFor="let item of screenshotItems"
+                class="screenshot-item"
+                (click)="makeTradeScreenshot(saveTemplate, item.withIncome)"
+              >
+                {{ item.label }}
+              </div>
+            </p-overlayPanel>
+          </div>
+        </ng-template>
+
+        <ng-template #commonScreenshotTemplate>
+          <div class="screenshot right-side-button hide-on-mobile" *ngIf="fullChart && !isMobile" (click)="screenshot()"
+               pTooltip="Сделать скриншот">
+            <span class="pi pi-save"></span>
+          </div>
+        </ng-template>
+
+        <div *ngIf="userTradesIndicator && (userData$ | async).binance_api_connected" class="trades right-side-button hide-on-mobile" (click)="loadTrades()"
+             title="Загрузить сделки (SHIFT+t)">
+          <span class="pi pi-wallet"></span>
+        </div>
+
+        <div *ngIf="fullChart">
+          <app-chart-theme-settings></app-chart-theme-settings>
+        </div>
+
+        <div class="open right-side-button hide-on-mobile" *ngIf="!fullChart && !inDialog && !isMobile"
+             (click)="openChart.emit(coinData)">
+          <span appUnauthorized class="pi pi-window-maximize"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- <app-formation-info
+      *ngIf="coinData?.formation && !isMobile"
+      [coinData]="coinData"
+      [formation]="formation"
+    ></app-formation-info> -->
+  </div>
+
+
+  <ng-template [ngIf]="!fullChart">
+    <night-vision-chart
+      [style]="{ height: 'calc(100% - 40px)' }"
+      *ngIf="coinData"
+      [isAuth]="isAuth$ | async"
+      [premium]="isPremium$ | async"
+      [id]="chartId || coin + fullChart + inDialog"
+      [symbol]="coin"
+      [timeframe]="selectedTimeframe"
+      [exchange]="exchange"
+      [chartSettings]="chartSettings"
+      [coinData]="coinData"
+      [coinAlerts]="coinAlerts"
+      [preferences]="preferences"
+      [fullChart]="fullChart && !isMobile"
+      [technicalIndicators]="chartIndicators"
+      [chartInOverlay]="chartInOverlay"
+      [notifications]="notifications$ | async"
+      (candlesLenUpdated)="candlesLenUpdated.emit($event)"
+      (chartIndicatorsChange)="selectTechnicalIndicator.emit($event)"
+      class="night-vision-chart"
+    >
+    </night-vision-chart>
+  </ng-template>
+
+  <ng-template [ngIf]="fullChart">
+
+    <div class="chart-workspace">
+
+      <div class="chart-toolbar-wrapper" [class.open]="isToolbarOpen" #toolbar>
+        <button
+          class="toolbar-toggle-btn"
+          *ngIf="!isToolbarOpen && isMobile"
+          (click)="openToolbar($event)">
+          <span class="pi pi-angle-right"></span>
+        </button>
+
+        <div class="chart-toolbar">
+          <div
+            *ngFor="let toolbar of toolbarTools"
+            class="toolbar-item"
+            [class.active]="activeDrawingTool === toolbar.type || (toolbar.type === 'Magnet' && magnetIsActive)"
+            (click)="activateDrawingTool(toolbar)"
+          >
+            <span [innerHTML]="sanitizeIcon(toolbar.icon)"></span>
+          </div>
+        </div>
+      </div>
+
+      <ng-template [ngIf]="chartLayout === 'single'">
+        <night-vision-chart
+          [style]="{ height: 'calc(100% - 0px)' }"
+          *ngIf="coinData"
+          [isAuth]="isAuth$ | async"
+          [premium]="isPremium$ | async"
+          [id]="coin"
+          [symbol]="coin"
+          [timeframe]="selectedTimeframe"
+          [exchange]="exchange"
+          [chartSettings]="chartSettings"
+          [coinData]="coinData"
+          [coinAlerts]="coinAlerts"
+          [preferences]="preferences"
+          [fullChart]="fullChart && !isMobile"
+          [technicalIndicators]="chartIndicators"
+          [chartInOverlay]="chartInOverlay"
+          [setPriceTitle]="setPriceTitle"
+          [fixHeight]="isDesktop"
+          [notifications]="notifications$ | async"
+          (chartIndicatorsChange)="selectTechnicalIndicator.emit($event)"
+          (drawingToolChange)="drawingToolChange($event)"
+        >
+        </night-vision-chart>
+      </ng-template>
+
+      <ng-template [ngIf]="chartLayout === 'horizontal'">
+        <p-splitter
+          [panelSizes]="[50, 50]"
+          [layout]="'vertical'"
+          [style]="{ height: '100%' }"
+        >
+          <ng-template *ngFor="let chartData of chartHorizontalGridData; let index=index; trackBy: chartIdentify"
+                       pTemplate>
+            <night-vision-chart
+              *ngIf="coinData"
+              [isAuth]="isAuth$ | async"
+              [premium]="isPremium$ | async"
+              [selectedChartId]="selectedChartId"
+              [chartId]="chartData.id"
+              [id]="coin + chartData.id"
+              [symbol]="coin"
+              [timeframe]="chartData.timeframe"
+              [exchange]="exchange"
+              [chartSettings]="chartSettings"
+              [coinData]="coinData"
+              [coinAlerts]="coinAlerts"
+              [preferences]="preferences"
+              [fullChart]="fullChart && !isMobile"
+              [technicalIndicators]="chartIndicators"
+              [fixHeight]="index === 1"
+              [setPriceTitle]="setPriceTitle && index === 0"
+              [isMainChart]="index === 0"
+              [notifications]="notifications$ | async"
+              (click)="changeChartId.emit(chartData.id)"
+              (chartIndicatorsChange)="selectTechnicalIndicator.emit($event)"
+              (drawingToolChange)="drawingToolChange($event)"
+            >
+            </night-vision-chart>
+          </ng-template>
+
+        </p-splitter>
+      </ng-template>
+
+      <ng-template [ngIf]="chartLayout === 'vertical'">
+        <p-splitter
+          [panelSizes]="[50, 50]"
+          [layout]="'horizontal'"
+          [style]="{ height: 'calc(100% - 0px)' }"
+        >
+          <ng-template *ngFor="let chartData of chartVerticalGridData; let index=index; trackBy: chartIdentify"
+                       pTemplate>
+            <night-vision-chart
+              *ngIf="coinData"
+              [isAuth]="isAuth$ | async"
+              [premium]="isPremium$ | async"
+              [selectedChartId]="selectedChartId"
+              [chartId]="chartData.id"
+              [id]="coin + chartData.id"
+              [symbol]="coin"
+              [timeframe]="chartData.timeframe"
+              [exchange]="exchange"
+              [chartSettings]="chartSettings"
+              [coinData]="coinData"
+              [coinAlerts]="coinAlerts"
+              [preferences]="preferences"
+              [fullChart]="fullChart && !isMobile"
+              [technicalIndicators]="chartIndicators"
+              [fixHeight]="true"
+              [setPriceTitle]="setPriceTitle && index === 0"
+              [isMainChart]="index === 0"
+              [notifications]="notifications$ | async"
+              (click)="changeChartId.emit(chartData.id)"
+              (chartIndicatorsChange)="selectTechnicalIndicator.emit($event)"
+              (drawingToolChange)="drawingToolChange($event)"
+            >
+            </night-vision-chart>
+          </ng-template>
+
+        </p-splitter>
+      </ng-template>
+
+      <ng-template [ngIf]="chartLayout === 'combined'">
+        <p-splitter
+          [layout]="'horizontal'"
+          [panelSizes]="[50, 50]"
+          [style]="{ height: 'calc(100% - 0px)' }"
+        >
+          <ng-template pTemplate>
+            <p-splitter
+              [layout]="'vertical'"
+              [panelSizes]="[50, 50]"
+              [style]="{ height: '100%' }"
+            >
+              <ng-template *ngFor="let chartData of chartHorizontalGridData; let index=index; trackBy: chartIdentify"
+                           pTemplate>
+                <night-vision-chart
+                  *ngIf="coinData"
+                  [isAuth]="isAuth$ | async"
+                  [premium]="isPremium$ | async"
+                  [selectedChartId]="selectedChartId"
+                  [chartId]="chartData.id"
+                  [id]="coin + chartData.id"
+                  [symbol]="coin"
+                  [timeframe]="chartData.timeframe"
+                  [exchange]="exchange"
+                  [chartSettings]="chartSettings"
+                  [coinData]="coinData"
+                  [coinAlerts]="coinAlerts"
+                  [preferences]="preferences"
+                  [fullChart]="fullChart && !isMobile"
+                  [technicalIndicators]="chartIndicators"
+                  [fixHeight]="index === 1"
+                  [isMainChart]="index === 0"
+                  [setPriceTitle]="setPriceTitle && index === 0"
+                  [notifications]="notifications$ | async"
+                  (click)="changeChartId.emit(chartData.id)"
+                  (chartIndicatorsChange)="selectTechnicalIndicator.emit($event)"
+                  (drawingToolChange)="drawingToolChange($event)"
+                >
+                </night-vision-chart>
+              </ng-template>
+
+            </p-splitter>
+          </ng-template>
+
+          <ng-template pTemplate>
+            <p-splitter
+              [layout]="'vertical'"
+              [panelSizes]="[50, 50]"
+              [style]="{ height: '100%' }"
+            >
+              <ng-template *ngFor="let chartData of chartVerticalGridData; let index=index; trackBy: chartIdentify"
+                           pTemplate>
+                <night-vision-chart
+                  *ngIf="coinData"
+                  [isAuth]="isAuth$ | async"
+                  [premium]="isPremium$ | async"
+                  [selectedChartId]="selectedChartId"
+                  [chartId]="chartData.id"
+                  [id]="coin + chartData.id"
+                  [symbol]="coin"
+                  [timeframe]="chartData.timeframe"
+                  [exchange]="exchange"
+                  [chartSettings]="chartSettings"
+                  [coinData]="coinData"
+                  [coinAlerts]="coinAlerts"
+                  [preferences]="preferences"
+                  [fullChart]="fullChart && !isMobile"
+                  [technicalIndicators]="chartIndicators"
+                  [fixHeight]="index === 1"
+                  [isMainChart]="false"
+                  [setPriceTitle]="setPriceTitle && index === 0"
+                  [notifications]="notifications$ | async"
+                  (chartIndicatorsChange)="selectTechnicalIndicator.emit($event)"
+                  (click)="changeChartId.emit(chartData.id)"
+                  (drawingToolChange)="drawingToolChange($event)"
+                >
+                </night-vision-chart>
+              </ng-template>
+
+            </p-splitter>
+          </ng-template>
+        </p-splitter>
+
+      </ng-template>
+    </div>
+  </ng-template>
+
+
+  <div class="clipboard-preview" [class.show]="showClibpoardPreview">
+    <img src="" #clipboardImage alt="preview">
+    <div class="title" *ngIf="showClibpoardPreview">График скопирован в буффер обмена</div>
+  </div>
+
+  <div *ngIf="displayProgressSpinner" class="h-full w-full bg-chart">
+    <app-progress-spinner></app-progress-spinner>
+  </div>
+
+  <div *ngIf="showMobileHint" class="mobile-hint">
+    <button class="close-button" (click)="closeMobileHint($event)"><i class="pi pi-times"></i></button>
+    Для рисования и редактирования инструментов рисования удерживайте палец на экране - всё просто
+  </div>
+
+
+</div>
+

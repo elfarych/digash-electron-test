@@ -1,0 +1,28 @@
+<div class="app-wrapper">
+  <p-dialog [dismissableMask]="true" [showHeader]="true" [modal]="true" [style]="{width: '360px', maxWidth: '95%'}"
+    [position]="'topright'" [(visible)]="showPreferences">
+    <ng-template pTemplate="header">
+
+      <div class="flex justify-between gap-sm">
+        <div class="text-lg text-bold">{{ 'app.preferences.title' | translate }}</div>
+        <app-tooltips identifier="PREFERENCES" [size]="14"></app-tooltips>
+      </div>
+
+    </ng-template>
+
+    <div class="mt-xl">
+      <app-preferences></app-preferences>
+    </div>
+
+  </p-dialog>
+
+  <div class="app-container">
+    <app-header (openPreferences)="showPreferences = !showPreferences"
+      [preferences]="preferences$ | async"></app-header>
+    <div class="app-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+ <app-promotion-dialog></app-promotion-dialog>

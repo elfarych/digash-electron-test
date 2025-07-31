@@ -1,0 +1,107 @@
+<div
+  #dragElement
+  class="config-panel app-form"
+  [style.left.px]="positionLeft"
+  [style.top.px]="positionTop"
+  cdkDrag
+  (cdkDragEnded)="dragUpdate($event)"
+>
+  <div cdkDragHandle class="drag-handle config-panel__tool">
+    <span class="pi pi-ellipsis-v"></span>
+    <span class="pi pi-ellipsis-v"></span>
+  </div>
+  <div *ngIf="tool.color" class="config-panel__tool">
+    <div class="control action-control" (click)="showLineColor(lineColorPicker)">
+      <svg-icon src="./assets/svg/pencil.svg" [svgStyle]="{ 'width.px': 16,'height.px': 16 }"></svg-icon>
+      <input type="color" #lineColorPicker [(ngModel)]="tool.color" (change)="updateConfig()"/>
+    </div>
+  </div>
+
+  <div *ngIf="tool.fillColor" class="config-panel__tool">
+    <div class="control action-control" (click)="showFillColor(fillColorPicker)">
+      <svg-icon src="./assets/svg/fill.svg" [svgStyle]="{ 'width.px': 16,'height.px': 16 }"></svg-icon>
+      <input type="color" #fillColorPicker [(ngModel)]="tool.fillColor" (change)="updateConfig()"/>
+    </div>
+  </div>
+
+  <div *ngIf="tool.lineWidth" class="config-panel__tool">
+    <div class="control">
+      <ng-template #lineWidthTemplate let-value="value">
+        <ng-container [ngSwitch]="value">
+          <svg-icon *ngSwitchCase="1" src="./assets/svg/line1.svg" [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+          <svg-icon *ngSwitchCase="2" src="./assets/svg/line2.svg"
+                    [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+          <svg-icon *ngSwitchCase="3" src="./assets/svg/line3.svg"
+                    [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+          <svg-icon *ngSwitchCase="4" src="./assets/svg/line4.svg"
+                    [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+        </ng-container>
+      </ng-template>
+
+      <p-dropdown
+        [options]="lineWidthOptions"
+        [(ngModel)]="tool.lineWidth"
+        optionLabel="label"
+        optionValue="value"
+        (onChange)="updateLineWidth($event)"
+        appendTo="body"
+        class="no-chevron"
+      >
+        <ng-template pTemplate="selectedItem">
+          <div class="item with-label flex align-items-center gap-2">
+            <ng-container *ngTemplateOutlet="lineWidthTemplate; context:{value: tool.lineWidth}"></ng-container>
+            <div>{{ tool.lineWidth }}px</div>
+          </div>
+        </ng-template>
+        <ng-template let-config pTemplate="item">
+          <div class="item with-label flex align-items-center gap-2">
+            <ng-container *ngTemplateOutlet="lineWidthTemplate; context:{value: config.value}"></ng-container>
+            <div>{{ config.label }}</div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+  </div>
+
+  <div *ngIf="tool.lineType" class="config-panel__tool">
+    <div class="control">
+      <ng-template #lineTypeTemplate let-value="value">
+        <ng-container [ngSwitch]="value">
+          <svg-icon *ngSwitchCase="'solid'" src="./assets/svg/solid.svg"
+                    [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+          <svg-icon *ngSwitchCase="'dotted'" src="./assets/svg/dotted.svg"
+                    [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+          <svg-icon *ngSwitchCase="'dashed'" src="./assets/svg/dashed.svg"
+                    [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+          <svg-icon *ngSwitchDefault src="./assets/svg/solid.svg"
+                    [svgStyle]="{ 'width.px': 16 }"></svg-icon>
+        </ng-container>
+      </ng-template>
+
+      <p-dropdown
+        [options]="lineTypeOptions"
+        [(ngModel)]="tool.lineType"
+        (onChange)="updateLineType($event)"
+        appendTo="body"
+        class="no-chevron"
+      >
+        <ng-template pTemplate="selectedItem">
+          <div class="item flex align-items-center gap-2">
+            <ng-container *ngTemplateOutlet="lineTypeTemplate; context:{value: tool.lineType}"></ng-container>
+          </div>
+        </ng-template>
+        <ng-template let-config pTemplate="item">
+          <div class="item flex align-items-center gap-2">
+            <ng-container *ngTemplateOutlet="lineTypeTemplate; context:{value: config.value}"></ng-container>
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+  </div>
+
+  <div class="config-panel__tool">
+    <div class="control action-control" (click)="remove()">
+      <span class="pi pi-trash"></span>
+    </div>
+  </div>
+</div>

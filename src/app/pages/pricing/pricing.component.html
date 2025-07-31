@@ -1,0 +1,27 @@
+<div>
+
+  <!-- <div>
+    <app-premium-new-year></app-premium-new-year>
+  </div> -->
+
+<!--  <div>-->
+<!--    <app-pricing-summer-discount></app-pricing-summer-discount>-->
+<!--  </div>-->
+
+  <div class="container position-relative pricing-container">
+
+    <div class="primary-ellipse">
+      <img src="assets/img/ellipse-primary.png">
+    </div>
+
+    <div class="text-center my-xl" id="premium-block">
+      <h1 class="text-title position-relative z-index-10">{{ 'pricing.premium' | translate }}</h1>
+    </div>
+
+    <app-premium></app-premium>
+  </div>
+</div>
+
+<app-guard></app-guard>
+
+<app-footer></app-footer>

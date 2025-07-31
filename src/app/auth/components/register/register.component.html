@@ -1,0 +1,25 @@
+<div>
+  <form class="app-form flex column gap-md" [formGroup]="form" (ngSubmit)="submit()">
+    <div>
+      <input formControlName="email" type="email" pInputText placeholder="{{ 'auth.email_placeholder' | translate }}"/>
+      <div *ngIf="emailNumberError" class="error-message">{{ 'auth.email_number_error' | translate }}</div>
+    </div>
+
+    <input formControlName="username" type="text" pInputText placeholder="{{ 'auth.username_placeholder' | translate }}"/>
+    <input formControlName="password" type="password" pInputText placeholder="{{ 'auth.password_placeholder' | translate }}"/>
+
+    <button
+      [disabled]="!form.valid"
+      class="app-button-primary w-full mt-md"
+      type="submit"
+    >
+      <span class="text-lg">{{ 'auth.register' | translate }}</span>
+    </button>
+  </form>
+
+  <div class="mt-md text-center">
+    {{ 'auth.have_account' | translate }} <a (click)="redirectToSignIn.emit()" class="text-underline">{{ 'auth.login' | translate }}</a>
+  </div>
+
+  <app-progress-spinner *ngIf="loading$ | async"></app-progress-spinner>
+</div>

@@ -1,0 +1,22 @@
+@import "src/variables";
+
+main {
+  height: 100%;
+  position: relative;
+  padding: var(--md);
+
+  .settings {
+    position: absolute;
+    left: var(--md);
+    top: var(--md);
+    z-index: 10;
+    display: flex;
+    gap: var(--md);
+  }
+
+  .depth-map-area-container {
+    width: 100%;
+    height: calc(100vh - 70px);
+    position: relative;
+  }
+}

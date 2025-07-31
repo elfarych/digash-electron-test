@@ -1,0 +1,12 @@
+<p-dropdown
+  [options]="options"
+  [(ngModel)]="selectedInterval"
+  [disabled]="disabled"
+  optionLabel="label"
+  optionValue="value"
+  placeholder="{{ 'interval.placeholder' | translate }}"
+  (onChange)="handleIntervalChange($event)"
+  appendTo="body"
+>
+<!--  <ng-template let-interval pTemplate="selectedItem">Интервал: {{ interval.label }}</ng-template>-->
+</p-dropdown>

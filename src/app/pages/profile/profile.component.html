@@ -1,0 +1,111 @@
+<div class="container" *ngIf="user$ | async as userData">
+
+  <div class="text-center my-xl">
+    <h1 class="text-title">{{ 'profile.header' | translate }}</h1>
+  </div>
+
+  <div class="bg-main pa-lg rounded-borders-md mt-lg">
+    <div class="text-lg text-bold">{{ 'profile.header' | translate }}</div>
+    <div class="divider my-lg"></div>
+
+    <div class="grid-2-1 grid-gap-lg">
+
+      <div class="flex column gap-lg profile-data">
+        <div class="h-divider"></div>
+
+        <div class="flex items-center justify-between">
+          <div>{{ 'profile.username' | translate }}:</div>
+          <div class="text-right text-grey" [class.blur]="shouldHide(userData.username)">{{ userData.username }}</div>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <div>{{ 'profile.email' | translate }}:</div>
+          <div class="text-right text-grey" [class.blur]="shouldHide(userData.username)">{{ userData.email }}</div>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <div>{{ 'profile.registrationDate' | translate }}:</div>
+          <div class="text-right text-grey">{{ userData.created_at | date:'mediumDate':'':locale }}</div>
+        </div>
+
+
+        <div class="flex items-center justify-between">
+          <div>{{ 'profile.premiumStatusLabel' | translate }}:</div>
+          <ng-template [ngIf]="userData?.premium_enabled">
+            <div
+              class="text-right text-positive"
+              [class.blur]="shouldHide(userData.username)"
+            >{{ 'profile.premiumStatusActiveUntil' | translate }} {{ userData.premium_due_date | date:'mediumDate':'':locale }}</div>
+          </ng-template>
+
+          <ng-template [ngIf]="!userData?.premium_enabled">
+              <div
+                class="text-right text-negative"
+              >{{ 'profile.freeVersion' | translate }}</div>
+          </ng-template>
+        </div>
+
+        <div *ngIf="userData.partner_username" class="flex items-center justify-between">
+          <div>{{ 'profile.partner' | translate }}:</div>
+          <div class="text-right text-grey flex items-center gap-xs">
+            <span>{{ userData.partner_username }}</span>
+            <button class="app-button-xs" (click)="deactivatePartner()">
+              <span>{{ 'profile.partnerDeactivate' | translate }}</span>
+              <span class="pi pi-times"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between app-form">
+          <div>{{ 'profile.UseProxy' | translate }}:</div>
+          <input type="checkbox" [(ngModel)]="useProxy" id="use_proxy" (ngModelChange)="changeUseProxy()">
+          <label for="use_proxy" class="checkbox-label"></label>
+        </div>
+      </div>
+
+      <div>
+        <app-telegram-setup></app-telegram-setup>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="user$ | async as userData" class="">
+    <app-profile-friends [user]="userData"></app-profile-friends>
+  </div>
+
+  <div class="mt-lg">
+    <div class="grid-2-1 gap-md">
+      <div class="partner">
+        <app-vataga-profile id="vataga-profile" [user]="userData"></app-vataga-profile>
+      </div>
+      <div class="partner">
+        <app-bitget-profile id="bitget-profile" [user]="userData"></app-bitget-profile>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-lg">
+    <app-exchange-keys-setup></app-exchange-keys-setup>
+  </div>
+
+  <div class="mt-lg">
+    <app-profile-settings-export-import id="profile-export-import"></app-profile-settings-export-import>
+  </div>
+
+
+
+  <div *ngIf="userData?.ref_access" class="mt-xl">
+    <div class="text-center mb-xl">
+      <h1 class="text-title">{{ 'profile.ref_program' | translate }}</h1>
+    </div>
+
+    <app-referrals />
+  </div>
+
+</div>
+
+<app-guard></app-guard>
+
+<app-footer></app-footer>

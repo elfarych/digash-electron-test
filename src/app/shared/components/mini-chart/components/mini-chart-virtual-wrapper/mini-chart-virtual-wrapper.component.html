@@ -1,0 +1,25 @@
+<app-mini-chart
+  *ngIf="isVisible"
+  [hasAlert]="hasAlert"
+  [showAlertIcon]="showAlertIcon"
+  [coin]="coin"
+  [coinData]="coinData"
+  [preferences]="preferences"
+  [exchange]="exchange"
+  [timeframe]="timeframe"
+  [chartSettings]="chartSettings"
+  [alerts]="alerts"
+  [formation]="formation"
+  [watchlistCoins]="watchlistCoins"
+  [chartIndicators]="chartIndicators"
+  [fullChart]="fullChart"
+  [chartId]="chartId"
+  [timeframeView]="timeframeView"
+  (openChart)="openChart.emit(coinData)"
+  (click)="chartIsActive = true"
+  (candlesLenUpdated)="candlesLenUpdated.emit($event)"
+  (selectTechnicalIndicator)="chartIndicatorsUpdated.emit($event)"
+></app-mini-chart>
+
+<!--[ngClass]="chartIsActive ? '' : 'chart-overlay'"-->
+

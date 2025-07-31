@@ -1,0 +1,102 @@
+<div class="header-desktop">
+  <p-menubar styleClass="header" [model]="items">
+    <ng-template pTemplate="start">
+      <div class="logo">
+        <a routerLink="/app">
+          <svg-icon [src]="logoSrc" alt="logo"></svg-icon> 2
+        </a>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="item" let-item let-root="root">
+      <a class="flex align-items-center p-menuitem-link" routerLink="{{item.routerLink}}" routerLinkActive="active">
+        <span [class]="item.icon"></span>
+        <span class="ml-2">{{ item.label }}</span>
+        <span *ngIf="item.badge === 'new-year'" class="new-year-hat"><img src="assets/img/new-year/hat.png" alt="hat"></span>
+        <span *ngIf="item.shortcut" class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1">{{
+          item.shortcut }}</span>
+        <i *ngIf="item.items" [ngClass]="['pi', root ? 'pi-angle-down ml-2' : 'pi-angle-right ml-auto']"></i>
+      </a>
+    </ng-template>
+    <ng-template pTemplate="end">
+      <div class="right-side-menu">
+
+
+        <button appUnauthorized class="app-button" (click)="openPreferences.emit()">
+          <span class="pi pi-sliders-h"></span>
+        </button>
+
+        <app-hotkey-map></app-hotkey-map>
+
+        <button appUnauthorized class="app-button" (click)="notificationsTemplate.toggle($event)">
+          <span class="app-badge">{{ newNotifications > 10 ? '10+' : String(newNotifications) }}</span>
+          <span class="pi pi-bell"></span>
+        </button>
+
+        <app-header-user-menu [isAuth]="isAuth$ | async" [user]="user$ | async" (login)="handleLogin()"
+          (logout)="handleLogout()"></app-header-user-menu>
+
+        <app-language-switcher></app-language-switcher>
+      </div>
+    </ng-template>
+  </p-menubar>
+</div>
+
+
+<div class="header-mobile">
+  <div class="logo">
+    <a routerLink="/app">
+      <img src="assets/svg/logo-mobile.svg" alt="logo">
+    </a>
+  </div>
+
+  <div class="flex items-center gap-sm">
+    <button appUnauthorized class="app-button" (click)="openPreferences.emit()">
+      <span class="pi pi-sliders-h"></span>
+    </button>
+
+    <button appUnauthorized class="app-button" (click)="notificationsTemplate.toggle($event)">
+      <span class="app-badge">{{ newNotifications > 10 ? '10+' : String(newNotifications) }}</span>
+      <span class="pi pi-bell"></span>
+    </button>
+
+    <app-hotkey-map></app-hotkey-map>
+
+    <app-header-user-menu [isAuth]="isAuth$ | async" [user]="user$ | async" (login)="handleLogin()"
+      (logout)="handleLogout()"></app-header-user-menu>
+
+
+    <button class="app-button" (click)="mobileMenu.toggle($event)">
+      <span class="pi pi-bars"></span>
+    </button>
+  </div>
+</div>
+
+<p-overlayPanel #mobileMenu>
+  <div class="mobile-menu">
+
+    <div class="divider mb-lg"></div>
+
+    <div class="actions">
+      <app-language-switcher></app-language-switcher>
+    </div>
+
+    <div class="divider my-lg"></div>
+
+    <div class="mobile-nav">
+      <nav>
+        <ul>
+          <li *ngFor="let item of items">
+            <a [routerLink]="item.routerLink" (click)="mobileMenu.hide()">
+              {{ item.label }}
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</p-overlayPanel>
+
+<p-overlayPanel #notificationsTemplate>
+  <app-header-notifications-menu *ngIf="isAuth$ | async"
+    [notifications]="notifications$ | async" (closeMenu)="notificationsTemplate.hide()"></app-header-notifications-menu>
+</p-overlayPanel>

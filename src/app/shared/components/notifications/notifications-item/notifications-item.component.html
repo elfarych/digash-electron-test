@@ -1,0 +1,38 @@
+<li
+  class="menu-item"
+  [class.watched]="notification.watched"
+  (click)="openNotification()"
+  [ngStyle]="{'--alert-color': getAlertColor(notification.alert_type)}"
+>
+
+  <div class="content">
+    <div class="notification-type-badge">{{ getAlertTypeText() }}</div>
+    <div class="flex items-center gap-xs">
+
+      <div>
+        <svg-icon [src]="exchangeIcon" [svgStyle]="{ 'width.px': 18, 'height.px': 18 }"></svg-icon>
+      </div>
+
+      <div>
+        <div class="text-bold title">
+          {{notificationTitle}}
+        </div>
+        <div class="text-bold title">
+          {{exchangeName}}
+        </div>
+      </div>
+
+
+    </div>
+
+
+    <div class="notification-content mt-sm" [innerHTML]="notificationContent">
+    </div>
+    <div class="text-sm text-right">
+      {{notificationCreated}}<br>
+      {{notification.created_at | date:"medium":"":'ru'}}
+    </div>
+  </div>
+
+  <div class="divider mt-sm"></div>
+</li>

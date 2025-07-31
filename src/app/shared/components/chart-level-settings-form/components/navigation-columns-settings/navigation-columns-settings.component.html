@@ -1,0 +1,135 @@
+<app-premium-message-banner
+  *ngIf="!isPremium"
+  message="{{'chart_levels_settings.premiumMessageColumns' | translate}}"
+></app-premium-message-banner>
+
+<div class="flex column gap-md position-relative">
+<!--  <ng-container *ngIf="!isPremium">-->
+<!--    <div class="column-settings-disable"></div>-->
+<!--  </ng-container>-->
+  <div>
+    <div class="text-lg">{{ 'chart_levels_settings.other' | translate }}</div>
+
+    <div class="mt-sm">
+      <app-navigation-column-selection
+        [selectedColumnIds]="selectedColumnIds"
+        [columns]="commonColumns"
+        (selectColumn)="columnSelected($event)"
+      ></app-navigation-column-selection>
+    </div>
+  </div>
+
+  <div class="show-tooltip-on-hover">
+    <div class="flex items-center gap-sm">
+      <div class="text-lg">{{ 'chart_levels_settings.volume' | translate }}</div>
+      <app-tooltips identifier="NAVIGATION_SETTING_COLUMNS_VOLUME" [size]="14"></app-tooltips>
+    </div>
+    <div class="mt-sm">
+      <app-navigation-column-selection
+        [selectedColumnIds]="selectedColumnIds"
+        [columns]="volumeColumns"
+        (selectColumn)="columnSelected($event)"
+      ></app-navigation-column-selection>
+    </div>
+  </div>
+
+  <div class="show-tooltip-on-hover">
+    <div class="flex items-center gap-sm">
+      <div class="text-lg">{{ 'chart_levels_settings.volumeSplash' | translate }}</div>
+      <app-tooltips identifier="NAVIGATION_SETTING_COLUMNS_VOLUME_SPLASH" [size]="14"></app-tooltips>
+    </div>
+    <div class="mt-sm">
+      <app-navigation-column-selection
+        [selectedColumnIds]="selectedColumnIds"
+        [columns]="volumeSplashColumns"
+        (selectColumn)="columnSelected($event)"
+      ></app-navigation-column-selection>
+    </div>
+  </div>
+
+  <div class="show-tooltip-on-hover">
+    <div class="flex items-center gap-sm">
+      <div class="text-lg">{{ 'chart_levels_settings.priceChange' | translate }} (%)</div>
+      <app-tooltips identifier="NAVIGATION_SETTING_COLUMNS_PRICE" [size]="14"></app-tooltips>
+    </div>
+    <div class="mt-sm">
+      <app-navigation-column-selection
+        [selectedColumnIds]="selectedColumnIds"
+        [columns]="priceChangeColumns"
+        (selectColumn)="columnSelected($event)"
+      ></app-navigation-column-selection>
+    </div>
+  </div>
+
+  <div class="show-tooltip-on-hover">
+    <div class="flex items-center gap-sm">
+      <div class="text-lg">{{ 'chart_levels_settings.correlationToBTC' | translate }}</div>
+      <app-tooltips identifier="NAVIGATION_SETTING_COLUMNS_CORRELATION" [size]="14"></app-tooltips>
+    </div>
+    <div class="mt-sm">
+      <app-navigation-column-selection
+        [selectedColumnIds]="selectedColumnIds"
+        [columns]="correlationColumns"
+        (selectColumn)="columnSelected($event)"
+      ></app-navigation-column-selection>
+    </div>
+  </div>
+
+  <div class="show-tooltip-on-hover">
+    <div class="flex items-center gap-sm">
+      <div class="text-lg">{{ 'chart_levels_settings.volatility' | translate }}</div>
+      <app-tooltips identifier="NAVIGATION_SETTING_COLUMNS_VOLATILITY" [size]="14"></app-tooltips>
+    </div>
+    <div class="mt-sm">
+      <app-navigation-column-selection
+        [selectedColumnIds]="selectedColumnIds"
+        [columns]="volatilityColumns"
+        (selectColumn)="columnSelected($event)"
+      ></app-navigation-column-selection>
+    </div>
+  </div>
+
+  <div class="show-tooltip-on-hover">
+    <div class="flex items-center gap-sm">
+      <div class="text-lg">{{ 'chart_levels_settings.trades' | translate }}</div>
+      <app-tooltips identifier="NAVIGATION_SETTING_COLUMNS_TRADES" [size]="14"></app-tooltips>
+    </div>
+    <div class="mt-sm">
+      <app-navigation-column-selection
+        [selectedColumnIds]="selectedColumnIds"
+        [columns]="tradesColumns"
+        (selectColumn)="columnSelected($event)"
+      ></app-navigation-column-selection>
+    </div>
+  </div>
+
+  <div class="show-tooltip-on-hover">
+    <div class="flex items-center gap-sm">
+      <div class="text-lg">{{ 'chart_levels_settings.horizontalLevels' | translate }}</div>
+      <app-tooltips identifier="NAVIGATION_SETTING_COLUMNS_HORIZONTAL_LEVELS" [size]="14"></app-tooltips>
+    </div>
+    <div class="mt-sm">
+      <app-navigation-column-selection
+        [selectedColumnIds]="selectedColumnIds"
+        [columns]="horizontalLevelsColumns"
+        (selectColumn)="columnSelected($event)"
+      ></app-navigation-column-selection>
+    </div>
+  </div>
+
+  <div class="show-tooltip-on-hover">
+    <div class="flex items-center gap-sm">
+      <div class="text-lg">{{ 'chart_levels_settings.trendLevels' | translate }}</div>
+      <app-tooltips identifier="NAVIGATION_SETTING_COLUMNS_TREND_LEVELS" [size]="14"></app-tooltips>
+    </div>
+    <div class="mt-sm">
+      <app-navigation-column-selection
+        [selectedColumnIds]="selectedColumnIds"
+        [columns]="trendLevelsColumns"
+        (selectColumn)="columnSelected($event)"
+      ></app-navigation-column-selection>
+    </div>
+  </div>
+
+</div>
+

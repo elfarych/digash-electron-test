@@ -1,0 +1,78 @@
+<p-toast></p-toast>
+
+<div class="bitget-block mt-lg">
+
+  <img src="assets/img/bitget-ellipse-2.png" class="ellipse">
+
+  <div class="logo mt-lg text-center flex flex-center">
+    <img src="assets/svg/bitget-logo.svg">
+  </div>
+
+  <ng-template [ngIf]="!bitgetConnected">
+
+    <div class="mt-xl text-center text-lg text-bold position-relative z-index-10">
+      {{ 'profile.tradeOnBitget' | translate }}
+    </div>
+
+    <div class="mt-xl">
+
+      <div class="app-form">
+        <div class="connect-form-grid">
+          <input type="text" placeholder="{{ 'profile.yourBitgetUid' | translate }}" [(ngModel)]="bitgetId"
+            class="bitget-uid-input" />
+          <button (click)="connect()">
+            <span>{{ 'profile.connect' | translate }}</span>
+          </button>
+        </div>
+
+        <div class="flex justify-between grid-gap-md mt-md bitget-text text-underline">
+          <div class="cursor-pointer" (click)="helpDialogVisible = true">
+            {{ 'profile.whereToGetUid' | translate }}
+          </div>
+
+          <div class="cursor-pointer text-right" (click)="openBitget()">
+            {{ 'profile.terms' | translate }}
+          </div>
+        </div>
+
+        <div class="mt-md">
+          {{ 'profile.connectInfo' | translate }} <br><a href="https://partner.bitget.com/bg/Digash" target="_blank"
+            class="bitget-text text-underline">
+            {{ 'profile.bitget_link' | translate }}
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+
+
+  </ng-template>
+
+  <ng-template [ngIf]="bitgetConnected">
+    <div class="mt-xl flex column gap-lg justify-center text-center position-relative z-index-10">
+      <div class="flex justify-center gap-md">
+        <div class="text-lg">{{'profile.bitgetBalance' | translate}}</div>
+        <div class="balance-value">{{bitgetBalance}}$</div>
+      </div>
+
+      <div>
+        <button *ngIf="!user.premium_enabled" [disabled]="activationDisabled()" (click)="activatePremium()">
+          <span>{{ 'profile.activatePremium' | translate }} (18$)</span>
+        </button>
+
+        <button *ngIf="user.premium_enabled" [disabled]="activationDisabled()" (click)="activatePremium()">
+          <span>{{ 'profile.renewPremium' | translate }} (18$)</span>
+        </button>
+      </div>
+
+      <button class="cursor-pointer bitget-text text-underline" (click)="openBitget()">
+        {{ 'profile.terms' | translate }}
+      </button>
+    </div>
+  </ng-template> 
+  <p-dialog header="{{ 'profile.whereToGetUid' | translate }}" [(visible)]="helpDialogVisible"
+    [style]="{ width: '70%' }" className="help-content" [modal]="true" [dismissableMask]="true">
+    <img src="../../../../assets/img/bitgetuid.png" [style]="{width: '100%'}" />
+  </p-dialog>
+</div>

@@ -1,0 +1,19 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+label {
+  font-size: 12px;
+}
+
+input[type="color"] {
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+}
+
+.digash-form-control {
+  align-items: center;
+}

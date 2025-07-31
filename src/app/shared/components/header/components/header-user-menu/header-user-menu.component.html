@@ -1,0 +1,23 @@
+<ng-template [ngIf]="isAuth" [ngIfThen]="isAuthTemplate" [ngIfElse]="notAuthTemplate"></ng-template>
+
+<ng-template #notAuthTemplate>
+
+  <button
+    class="app-button-primary-sm"
+    (click)="login.emit()"
+  >
+    <span class="px-md py-xs">{{ 'auth.enter' | translate }}</span>
+  </button>
+
+</ng-template>
+
+<ng-template #isAuthTemplate>
+  <p-menu #userTemplate [model]="items" [popup]="true"></p-menu>
+  <button
+    class="app-button"
+    (click)="userTemplate.toggle($event)"
+  >
+    <span class="pi pi-user"></span>
+  </button>
+
+</ng-template>

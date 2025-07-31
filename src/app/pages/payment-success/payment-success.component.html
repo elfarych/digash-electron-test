@@ -1,0 +1,61 @@
+
+<div class="payment-success">
+  <div class="container">
+
+    <div class="bg-main px-lg py-xl rounded-borders-md mt-lg">
+      <div class="text-title text-center">
+        <i class="pi pi-check-circle text-positive"></i>
+      </div>
+
+      <div class="mt-md flex justify-center column gap-md text-center">
+        <h2 class="text-sub-title text-bold">{{ 'payment.successMessage' | translate }}</h2>
+        <h3 class="text-lg text-bold">{{ 'payment.enjoyUsage' | translate }}</h3>
+      </div>
+
+      <div class="actions-container">
+
+        <div class="navigation-greed mt-xl">
+          <button class="app-button" (click)="navigate('charts-screener')">
+            <span>{{ 'payment.screener' | translate }}</span>
+          </button>
+
+          <button class="app-button" (click)="navigate('coins-view')">
+            <span>{{ 'payment.coins' | translate }}</span>
+          </button>
+
+          <button class="app-button" (click)="navigate('alerts')">
+            <span>{{ 'payment.notifications' | translate }}</span>
+          </button>
+
+          <button class="app-button" (click)="navigate('psychology')">
+            <span>{{ 'payment.psychology' | translate }}</span>
+          </button>
+        </div>
+
+        <div class="divider my-lg"></div>
+
+        <div>
+          <h4 class="text-lg text-bold mb-md">{{ 'payment.contacts' | translate }}</h4>
+          <div class="navigation-greed">
+            <button class="app-button-secondary">
+              <a href="https://www.youtube.com/@Digash-Screener" target="_blank">
+                <svg-icon src="../../../../../assets/svg/youtube.svg" [svgStyle]="{ 'width.px':24, 'height.px': 24 }"></svg-icon>
+                <span>{{ 'payment.instructions' | translate }}</span>
+              </a>
+            </button>
+
+            <button class="app-button-secondary">
+              <a href="https://t.me/digashlive" target="_blank">
+                <svg-icon src="../../../../../assets/svg/telegram.svg" [svgStyle]="{ 'width.px':24, 'height.px': 24 }"></svg-icon>
+                <span>{{ 'payment.support' | translate }}</span>
+              </a>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<app-footer></app-footer>

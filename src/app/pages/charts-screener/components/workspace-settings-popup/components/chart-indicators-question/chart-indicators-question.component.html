@@ -1,0 +1,53 @@
+<div [formGroup]="form" class="digash-form-control" [class.checkbox]="question.type === 'boolean'">
+  <label *ngIf="question.type !== 'boolean'" class="block mb-sm">{{ 'technical_indicators.' + question.key + 'Label' | translate }}</label>
+
+  <ng-container [ngSwitch]="question.type">
+    <p-inputNumber
+      *ngSwitchCase="'number'"
+      [formControlName]="question.key"
+      [id]="question.key"
+      [type]="question.type"
+      mode="decimal"
+      inputId="withoutgrouping"
+      [useGrouping]="false"
+      [inputId]="question.key"
+      class="w-full">
+    </p-inputNumber>
+
+    <input
+      *ngSwitchCase="'text'"
+      pInputText
+      [formControlName]="question.key"
+      [id]="question.key"
+      [type]="question.type"
+      [inputId]="question.key"
+    />
+
+    <input
+      *ngSwitchCase="'color'"
+      [formControlName]="question.key"
+      [id]="question.key"
+      [type]="question.type"
+      type="color"
+    >
+
+    <div *ngSwitchCase="'boolean'" >
+      <input type="checkbox" [formControlName]="question.key"  [id]="question.key" >
+      <label [for]="question.key" class="checkbox-label">{{ 'technical_indicators.' + question.key + 'Label' | translate }}</label>
+    </div>
+
+    <div *ngSwitchCase="'dropdown'">
+      <p-dropdown
+        formControlName="{{question.key}}"
+        [options]="question.options"
+        optionLabel="value"
+        optionValue="key"
+        optionDisabled="isDisable"
+        appendTo="body"
+      ></p-dropdown>
+    </div>
+
+  </ng-container>
+
+  <div class="errorMessage" *ngIf="!isValid">{{ 'technical_indicators.' + question.key + 'Required' | translate }}</div>
+</div>

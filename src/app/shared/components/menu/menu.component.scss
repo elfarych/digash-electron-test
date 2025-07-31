@@ -1,0 +1,30 @@
+@import "./src/styles";
+
+:host {
+  position: absolute;
+  right: 0;
+  width: 100%;
+  background-color: var(--dark-background-second-color);
+  //border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+
+  z-index: -1;
+  pointer-events: none;
+  display: block;
+  opacity: 0;
+  transition: .5s all;
+
+  &.opened {
+    display: block;
+    z-index: 101;
+    opacity: 1;
+    pointer-events: all;
+    //top: calc($header-height - var(--md) + 2px);
+  }
+}
+
+:host-context(body.light-theme) {
+  //background-color: $light-background-second-color;
+  color: var(--dark-color);
+  border: 1px solid var(--border-color-2);
+}

@@ -1,0 +1,83 @@
+<!--<div class="tabs">-->
+<!--  <div-->
+<!--    class="tab"-->
+<!--    *ngFor="let workspace of workspaces"-->
+<!--    matRipple-->
+<!--    [class.selected]="selectedWorkspace.id === workspace.id"-->
+<!--    (click)="selectTab.emit(workspace.id)"-->
+<!--  >-->
+
+<!--    <div>-->
+<!--      <ng-container [ngSwitch]="workspace.market">-->
+<!--        <div *ngSwitchCase="'BINANCE_SPOT'" class="workspace-exchange">-->
+<!--          <svg-icon  src="../assets/svg/binance.svg" [svgStyle]="{ 'width.px': 14 }"></svg-icon>-->
+<!--          <span>СПОТ: </span>-->
+<!--        </div>-->
+<!--        <div *ngSwitchCase="'BINANCE_SPOT_WITHOUT_FUTURES'" class="workspace-exchange">-->
+<!--          <svg-icon  src="../../../../../assets/svg/binance.svg" [svgStyle]="{ 'width.px': 14 }"></svg-icon>-->
+<!--          <span>СПОТ - ФЬЮЧ: </span>-->
+<!--        </div>-->
+<!--        <div *ngSwitchCase="'BINANCE_SPOT_WITH_FUTURES'" class="workspace-exchange">-->
+<!--          <svg-icon  src="../../../../../assets/svg/binance.svg" [svgStyle]="{ 'width.px': 14 }"></svg-icon>-->
+<!--          <span>СПОТ + ФЬЮЧ: </span>-->
+<!--        </div>-->
+<!--        <div *ngSwitchCase="'BINANCE_FUTURES'" class="workspace-exchange">-->
+<!--          <svg-icon  src="../../../../../assets/svg/binance.svg" [svgStyle]="{ 'width.px': 14 }"></svg-icon>-->
+<!--          <span>ФЬЮЧ: </span>-->
+<!--        </div>-->
+
+<!--        <div *ngSwitchCase="'BYBIT_SPOT'" class="workspace-exchange">-->
+<!--          <svg-icon  src="../../../../../assets/svg/bybit.svg" [svgStyle]="{ 'width.px': 14 }"></svg-icon>-->
+<!--          <span>СПОТ: </span>-->
+<!--        </div>-->
+
+<!--        <div *ngSwitchCase="'BYBIT_FUTURES'" class="workspace-exchange">-->
+<!--          <svg-icon  src="../../../../../assets/svg/bybit.svg" [svgStyle]="{ 'width.px': 14 }"></svg-icon>-->
+<!--          <span>ФЬЮЧ: </span>-->
+<!--        </div>-->
+<!--      </ng-container>-->
+
+<!--      <span>{{workspace.title}}</span>-->
+<!--    </div>-->
+
+
+<!--    <div>-->
+<!--      <button matRipple (click)="handleOpenSettings($event, workspace)">-->
+<!--        <svg-icon src="../../../../../assets/svg/settings.svg"-->
+<!--                  [svgStyle]="{ 'width.px':18, 'height.px':18 }"></svg-icon>-->
+<!--      </button>-->
+
+<!--      <button matRipple (click)="handleRemove($event, workspace)">-->
+<!--        <svg-icon src="../../../../../assets/svg/remove.svg"-->
+<!--                  [svgStyle]="{ 'width.px':18, 'height.px':18 }"></svg-icon>-->
+<!--      </button>-->
+<!--    </div>-->
+
+
+<!--  </div>-->
+
+<!--  <div class="tab create-tab">-->
+<!--    <button matRipple (click)="createTab.emit()">-->
+<!--      <svg-icon src="../../../../../assets/svg/add.svg"-->
+<!--                [svgStyle]="{ 'width.px':18, 'height.px': 18 }"></svg-icon>-->
+<!--    </button>-->
+<!--  </div>-->
+<!--</div>-->
+
+<div class="settings-action">
+  <button
+    *ngIf="selectedWorkspace?.sortingTime === 'manual'"
+    matRipple
+    class="digah-button"
+    `matTooltip="{{ 'workspace.button.updateSorting.tooltip' | translate }}"`
+    (click)="updateSorting.emit(selectedWorkspace.id)"
+  >
+  {{ 'workspace.button.updateSorting.label' | translate }}
+    <mat-icon>restart_alt</mat-icon>
+  </button>
+</div>
+
+<app-menu class="notifications-menu" #notificationsMenu>
+  <app-notifications [notifications]="notifications"></app-notifications>
+</app-menu>
+

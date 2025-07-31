@@ -1,0 +1,28 @@
+{
+  "user_preferences": {
+    "layout": "3c",
+    "loaded": true,
+    "lineValue": "V24h",
+    "chartLayout": "single",
+    "askLevelColor": "#ea5d8c",
+    "bidLevelColor": "#9dff8a",
+    "dailyHighLowColor": "#4B38B3",
+    "trendLevelColorLow": "#64FF66",
+    "trendLevelColorHigh": "#FF3F3F",
+    "horizontalLevelColor": "#B6B6B6"
+  },
+  "psychology": [
+    {
+      "id": 30571,
+      "title": "Прочитай перед сделкой",
+      "content": "<p>1. Не нужно тратить свои силы на торговлю плохих формаций. Не притянута ли формация за уши? Стоит ли данная сделка твоего времени?</p><p><br></p><p>2. Перед каждой сделкой спрашивать у себя: по стратегии ли сделка? Все ли факторы соблюдены?</p><p>Вход, выход, стоп, тейк, олын формация или нет? Как будешь вести себя в сделке при возникновении разных обстоятельств?</p><p><br></p><p>3. Если выбьет по стопу, то это будет ошибка или системный стоп? Какое у тебя настроение? Нет ли эмоций? Забайтился ли ты на кого-то? Нет ли у тебя тильта? Чистая ли у тебя голова, свободно ли ты себя чувствуешь? Будешь ли ты жалеть об этой сделке? Готов ли ты принять убыток? Ты хочешь заработать или получить эмоции?</p><p><br></p><p><strong><u>Можно торговать если:</u></strong></p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Всё по стратегии</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Ты уверен в сделке</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Готов принять убыток</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Нет эмоций</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Полностью сконцентрирован на торговле</li></ol><p><br></p><p><strong><u>Нельзя торговать если:</u></strong></p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Есть эмоции</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Не уверен в сделке</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Не готов принять убыток</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Рассеян</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Плохое настроение</li></ol><p><br></p><p><strong><u>Советы:</u></strong></p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Торговать с чистой головой</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Не жадничать</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Крыть базу</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Выходить по факту</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Лучше недозаработать, чем потерять</li></ol>",
+      "occurrenceHours": 3,
+      "sound": true,
+      "telegram": false,
+      "created": "2024-09-11T11:37:34.255774Z",
+      "lastTrigger": "2024-09-11T11:37:34.255790Z",
+      "active": false,
+      "watchedLast": true
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+@import './src/styles';
+
+:host {
+  display: block;
+}
+
+.actions {
+  justify-content: center;
+}
+
+.content {
+  white-space: pre-wrap;
+  padding: var(--md);
+}

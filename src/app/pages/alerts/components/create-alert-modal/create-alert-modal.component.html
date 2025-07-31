@@ -1,0 +1,94 @@
+<p-dialog
+  [header]="getDialogHeader()"
+  [(visible)]="showDialog"
+  [style]="{ width: '990px', height: '98vh' }"
+  [draggable]="false"
+  [resizable]="false"
+  [modal]="true"
+  [dismissableMask]="true"
+>
+  <div class="divider my-md"></div>
+
+  <div class="create-alert-container">
+    <section *ngIf="selectedAlertType !== 'price' && !data.edit" class="margin-bottom-4">
+      <app-alert-type-selection
+        [selectedAlertTypes]="[selectedAlertType]"
+        (alertTypeChanged)="alertTypeChange($event)"
+      />
+    </section>
+
+    <section *ngIf="selectedAlertType === 'price'">
+      <app-alert-price-crossing-form
+        [alert]="data.alert"
+        [edit]="data.edit"
+      ></app-alert-price-crossing-form>
+    </section>
+
+    <section *ngIf="selectedAlertType === 'limitOrder'">
+      <app-alert-limit-order-form
+        [alert]="data.alert"
+        [edit]="data.edit"
+      />
+    </section>
+
+    <section *ngIf="selectedAlertType === 'priceChange'">
+      <app-alert-price-change-form
+        [alert]="data.alert"
+        [edit]="data.edit"
+      />
+    </section>
+
+    <section *ngIf="selectedAlertType === 'btcCorrelation'">
+      <app-alert-btc-correlation-form
+        [alert]="data.alert"
+        [edit]="data.edit"
+      />
+    </section>
+
+    <section *ngIf="selectedAlertType === 'volatility'">
+      <app-alert-volatility-form
+        [alert]="data.alert"
+        [edit]="data.edit"
+      />
+    </section>
+
+    <section *ngIf="selectedAlertType === 'listing'">
+      <app-alert-listing-form
+        [alert]="data.alert"
+        [edit]="data.edit"
+      />
+    </section>
+
+    <section *ngIf="selectedAlertType === 'volumeSplash'">
+      <app-alerts-volume-splash-form
+        [alert]="data.alert"
+        [edit]="data.edit"
+      />
+    </section>
+
+    <section *ngIf="selectedAlertType === 'funding'">
+      <app-alert-funding-form
+        [alert]="data.alert"
+        [edit]="data.edit"
+      ></app-alert-funding-form>
+    </section>
+
+  </div>
+
+  <div class="divider my-lg"></div>
+
+  <div *ngIf="errorMessage$ | async as errorMessage" class="mb-md">
+    <app-error-message [errorMessages]="[errorMessage]"></app-error-message>
+  </div>
+
+  <div class="flex justify-end gap-md pa-xs">
+    <button class="app-button" (click)="dialogRef.close()">
+      <span>{{'alerts.close' | translate}}</span>
+    </button>
+
+    <button class="app-button-primary" (click)="submit()">
+      <span>{{ data.edit ? ('alerts.edit' | translate) : ('alerts.save' | translate) }}</span>
+    </button>
+  </div>
+
+</p-dialog>

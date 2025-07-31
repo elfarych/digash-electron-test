@@ -1,0 +1,11 @@
+.timeframe-option {
+  padding: var(--sm);
+  cursor: pointer;
+  border-radius: var(--sm);
+  transition: .5s all;
+  text-align: center;
+
+  &:hover {
+    background: var(--color-main-bg-accent);
+  }
+}

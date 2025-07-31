@@ -1,0 +1,191 @@
+// Navy ~ 0.1-lite
+// ^^^ First comment should provide a NavyJS version
+
+// Meta tag
+[OVERLAY name = LimitOrdersLevels, ctx = Canvas, author = wintrading, version = 1.0.0]
+
+let drawnObjects = [];
+
+function draw(ctx) {
+  const data = $core.data;
+  const layout = $core.layout;
+  const fullChart = $props.fullChart;
+  const isMobile = window?.innerWidth < 720
+
+  const currentPrice = $core.hub.mainOv.data[$core.hub.mainOv.data.length - 1][3];
+  drawnObjects = []; // Очистка массива перед рисованием
+
+  for (let i = 0; i < data.length; i++) {
+    const [time, {asks, price, full_price, created_time, distance, corrosion_time, timestamp, quantity}] = data[i];
+
+    if (!time) {
+      continue;
+    }
+
+    //if (asks) {
+    //  if (currentPrice > price) {
+    //    continue;
+    //  }
+    //} else {
+    //  if (currentPrice < price) {
+    //    continue;
+    //  }
+    //}
+
+    const y = layout.value2y(price);
+    const x = layout.ti2x(time);
+    const arcRadius = 3;
+
+    ctx.lineWidth = isMobile ? 1 : fullChart ? 2 : 1;
+    ctx.strokeStyle = asks ? $props.askLevelColor : $props.bidLevelColor;
+    ctx.fillStyle = asks ? $props.askLevelColor : $props.bidLevelColor;
+
+    ctx.beginPath();
+    ctx.arc(x, y, arcRadius, 0, 2 * Math.PI, false);
+    ctx.moveTo(x + arcRadius, y);
+    ctx.lineTo(layout.width, y);
+    ctx.stroke();
+    ctx.fill();
+
+    const text = `${convertPrice(full_price)} - ${distance?.toFixed(1)}%`;
+    const textWidth = ctx.measureText(text).width;
+
+    // draw rect
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    const rectStartX = Math.max(layout.width - textWidth * 1.2, x);
+    const rectPosY = 21;
+    ctx.fillStyle = (asks ? $props.askLevelColor : $props.bidLevelColor) + '40';
+    if (asks) {
+      ctx.rect(rectStartX, y - rectPosY, textWidth * 1.2, 21);
+    } else {
+      ctx.rect(rectStartX, y, textWidth * 1.2, 21);
+    }
+    ctx.fill();
+    ctx.closePath();
+    ctx.beginPath();
+    if (asks) {
+      ctx.moveTo(layout.width, y - rectPosY);
+      ctx.lineTo(rectStartX, y - rectPosY);
+      ctx.moveTo(rectStartX, y - rectPosY);
+      ctx.lineTo(rectStartX, y);
+    } else {
+      ctx.moveTo(layout.width, y + rectPosY);
+      ctx.lineTo(rectStartX, y + rectPosY);
+      ctx.moveTo(rectStartX, y + rectPosY);
+      ctx.lineTo(rectStartX, y);
+    }
+
+    ctx.stroke();
+    ctx.closePath();
+
+    // Draw text
+    ctx.font = isMobile ? '8px Roboto' : '9px Roboto';
+    ctx.fillStyle = asks ? $props.askLevelColor : $props.bidLevelColor;
+    ctx.fillStyle = $props.textColor;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    const textX = Math.max(layout.width - textWidth * 0.55, x + textWidth / 1.2);
+
+    if (asks) {
+      ctx.fillText(text, textX, y - 10);
+    } else {
+      ctx.fillText(text, textX, y + 10);
+    }
+    ctx.closePath();
+
+    drawnObjects.push({
+      type: 'circle',
+      x, y, arcRadius, timestamp, asks, price, full_price, created_time, distance, corrosion_time, quantity
+    });
+
+    drawnObjects.push({
+      type: 'line',
+      x1: x + arcRadius,
+      y1: y,
+      x2: layout.width,
+      y2: y,
+      timestamp, asks, price, full_price, created_time, distance, corrosion_time, quantity
+    });
+
+    drawnObjects.push({
+      type: 'rect',
+      x: rectStartX,
+      y: asks ? y - rectPosY : y,
+      width: textWidth * 1.2,
+      height: 21,
+      timestamp, asks, price, full_price, created_time, distance, corrosion_time, quantity
+    });
+  }
+}
+
+function convertPrice(price) {
+  if (!price) {
+    return void 0;
+  }
+
+  const formatter = Intl.NumberFormat('en', {notation: 'compact'});
+  return `${formatter.format(price)}$`;
+}
+
+function legend(x) {
+  return '';
+}
+
+function mousemove(event) {
+  const canvas = event.target;
+  if (canvas) {
+    canvas.style.cursor = getCursorObject(event) ? 'help' : 'default';
+  }
+}
+
+function click(event) {
+  const activeObj = getCursorObject(event);
+  const chartInOverlay = $props.chartInOverlay;
+
+  if (activeObj) {
+    if (chartInOverlay) {
+      activeObj.x = event.offsetX + 20;
+      activeObj.y = event.offsetY;
+    } else {
+      activeObj.x = event.clientX - 20;
+      activeObj.y = event.clientY;
+    }
+
+    if (event.target) {
+      event.target.dispatchEvent(new CustomEvent("limit-order-clicked", { detail: activeObj, bubbles: true }));
+    }
+  }
+}
+
+function getCursorObject (event) {
+  const canvas = event.target;
+
+  if (!canvas) {
+    return void 0;
+  }
+
+  const rect = canvas.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+
+  for (const obj of drawnObjects) {
+      if (obj.type === 'circle') {
+        if (Math.abs(x - obj.x) <= obj.arcRadius && Math.abs(y - obj.y) <= obj.arcRadius) {
+          return obj;
+        }
+      } else if (obj.type === 'rect') {
+        if (x >= obj.x && x <= obj.x + obj.width && y >= obj.y && y <= obj.y + obj.height) {
+          return obj;
+        }
+      } else if (obj.type === 'line') {
+        const tolerance = 5; // Допустимая погрешность
+        if (Math.abs(y - obj.y1) <= tolerance && x >= obj.x1 && x <= obj.x2) {
+          return obj;
+        };
+      }
+    }
+  return null;
+}
+

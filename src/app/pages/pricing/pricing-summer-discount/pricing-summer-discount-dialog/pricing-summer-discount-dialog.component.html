@@ -1,0 +1,12 @@
+<p-dialog
+  header="{{ 'premium.summerDiscount.summerDiscount' | translate }}"
+  [(visible)]="showDialog"
+  [style]="{ width: '95%', height: '95%' }"
+  [draggable]="false"
+  [resizable]="false"
+  [modal]="true"
+  [dismissableMask]="true"
+  (onHide)="onDialogClose()"
+>
+  <app-pricing-summer-discount [dialog]="true" (closeDialog)="onDialogClose()"></app-pricing-summer-discount>
+</p-dialog>

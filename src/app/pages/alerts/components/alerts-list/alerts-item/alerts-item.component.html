@@ -1,0 +1,70 @@
+<div
+  class="app-alert-item"
+  [class.active]="alert.active"
+  [class.fake]="alert.id < 0"
+  [ngStyle]="{'--alert-color': getAlertColor(alert.type)}"
+>
+  <div class="app-alert-item-header">
+    <div class="alert-title">
+      {{ alert.type === 'listing' ? 'Листинг' : alert.title }}
+      <span [ngClass]="alert.active ? 'alert-active-indicator' : 'alert-inactive-indicator'" class="alert-indicator"></span>
+    </div>
+
+    <div class="flex gap-xs justify-end">
+      <button *ngIf="alert.notifications?.length" class="app-button-xs" (click)="notificationsTemplate.toggle($event)">
+        <span class="pi pi-bell"></span>
+
+        <div class="app-badge-sm">{{ alert.notifications?.length }}</div>
+      </button>
+
+      <button class="app-button-xs" (click)="edit($event)">
+        <span class="pi pi-pencil"></span>
+      </button>
+
+      <button *ngIf="!alert.active" class="app-button-xs" (click)="activate($event)">
+        <span class="pi pi-play"></span>
+      </button>
+
+      <button *ngIf="alert.active" class="app-button-xs" (click)="stop($event)">
+        <span class="pi pi-pause"></span>
+      </button>
+
+      <button class="app-button-xs" (click)="remove($event)">
+        <span class="pi pi-trash"></span>
+      </button>
+    </div>
+  </div>
+
+
+  <div class="mt-md">
+    <p *ngIf="alert.comment"><span class="text-grey">{{ 'alerts.comment' | translate }}:</span> {{ alert.comment }}</p>
+    <p *ngIf="alert.values_comment"><span class="text-grey">{{ 'alerts.parameters2' | translate }}:</span> {{ alert.values_comment }}</p>
+    <p *ngIf="alert.created_at"><span class="text-grey">{{ 'alerts.created' | translate }}:</span> {{ formatDate(alert.created_at, 'dd.MM.YYYY hh:mm', 'en') }}</p>
+  </div>
+
+  <div class="flex gap-sm mt-md footer">
+    <div class="alert-type-badge alert-type-badge-color">{{ getAlertTypeText() }}</div>
+    <div class="alert-type-badge-exchange">
+      <span>{{ readableExchangeName() }}</span>
+      <svg-icon
+        [src]="getExchangeIcon()"
+        [svgStyle]="{ 'width.px': 18, 'height.px': 18 }"
+      ></svg-icon>
+    </div>
+  </div>
+
+
+  <!--      <section class="chips">-->
+  <!--        <p-chip *ngIf="alert.sound_alert" label="Сигнал" [icon]="PrimeIcons.VOLUME_UP" (click)="playSound()" class="cursor-pointer"></p-chip>-->
+  <!--        <p-chip *ngIf="alert.telegram_alert" label="Telegram" [icon]="PrimeIcons.TELEGRAM"></p-chip>-->
+  <!--        <p-chip *ngIf="alert.email_alert" label="Email" [icon]="PrimeIcons.ENVELOPE"></p-chip>-->
+  <!--      </section>-->
+
+  <p-overlayPanel #notificationsTemplate>
+    <app-header-notifications-menu
+      [notifications]="alert.notifications"
+      [allNotificationsMode]="false"
+      [alertId]="alert.id"
+    ></app-header-notifications-menu>
+  </p-overlayPanel>
+</div>

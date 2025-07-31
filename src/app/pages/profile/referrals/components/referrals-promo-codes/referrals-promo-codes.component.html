@@ -1,0 +1,149 @@
+<div class="bg-main pa-lg rounded-borders-md">
+  <div class="flex justify-between items-center">
+    <div class="text-lg text-bold">{{ 'profile.myPromoCodesHeader' | translate }}</div>
+    <div>
+      <button class="app-button-primary" (click)="openCouponForm(null)">
+        <span class="pi pi-plus"></span>
+        <span>{{ 'profile.createPromoCode' | translate }}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="divider my-lg"></div>
+
+  <p-toast />
+  <p-confirmPopup />
+
+  <div class="grid-3-1 grid-gap-md">
+
+    <ng-container *ngFor="let coupon of coupons">
+      <div class="coupon-card outlined-main pa-md rounded-borders-sm">
+
+        <div class="flex justify-between items-center">
+          <div>{{ coupon.code }}</div>
+          <div class="actions flex gap-sm">
+            <button class="app-button-xs" (click)="copyRefLink(coupon.code)">
+              <span class="pi pi-link"></span>
+            </button>
+            <button class="app-button-xs" (click)="copyToClipBoard(coupon.code)">
+              <span class="pi pi-clone"></span>
+            </button>
+            <button class="app-button-xs" (click)="openCouponForm(coupon)">
+              <span class="pi pi-pencil"></span>
+            </button>
+            <button class="app-button-xs" (click)="deleteCoupon(coupon)">
+              <span class="pi pi-trash"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="divider my-md"></div>
+
+        <div class="flex justify-between">
+          <div>
+            <span>{{ 'profile.reward' | translate }}: {{ coupon.revenue }}%</span>
+          </div>
+          <div>
+            <span>{{ 'profile.discount' | translate }}: {{ coupon.discount.value }}{{ coupon.discount.is_percentage ? '%' : '$' }}</span>
+          </div>
+        </div>
+
+        <div class="mt-sm">
+          {{ 'profile.activationCount' | translate }}: {{ coupon.partner_orders?.length }}
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+</div>
+
+<p-dialog
+  [header]="!!editCouponId ? ('profile.create_promo' | translate) : ('profile.edit_promo' | translate)"
+  [modal]="true"
+  [(visible)]="dialogVisible"
+  [style]="{ width: '35rem' }"
+>
+
+  <div class="divider my-lg"></div>
+
+  <form class="app-form" [formGroup]="form" (ngSubmit)="submit()">
+
+    <div>
+      <label for="code" class="block mb-sm">{{ 'profile.code' | translate }}</label>
+      <input
+        [readOnly]="!!editCouponId"
+        [disabled]="!!editCouponId"
+        id="code"
+        formControlName="code"
+        class="mb-sm"
+      />
+      <small *ngIf="form.get('code').errors?.['required'] && formTouched" class="text-negative block">
+        {{ 'profile.requiredField' | translate }}
+      </small>
+      <small *ngIf="form.get('code').errors?.['maxLength'] && formTouched" class="text-negative block">
+        {{ 'profile.maxLength' | translate }}
+      </small>
+      <small *ngIf="form.get('code').hasError('whitespace')" class="text-negative block">
+        {{ 'profile.noWhitespace' | translate }}
+      </small>
+    </div>
+
+    <div class="grid-2-1 grid-gap-md mt-sm">
+      <div>
+        <label for="revenue" class="block mb-sm">{{ 'profile.rewardPercent' | translate }}</label>
+        <input id="revenue" formControlName="revenue" class="mb-sm" type="number"/>
+        <small *ngIf="form.get('revenue').errors?.['required'] && formTouched" class="text-negative block">
+          {{ 'profile.requiredField' | translate }}
+        </small>
+        <small *ngIf="form.get('revenue').errors?.['min'] && formTouched" class="text-negative block">
+          {{ 'profile.minValue' | translate }}
+        </small>
+        <small *ngIf="form.get('revenue').errors?.['max']" class="text-negative block">
+          {{ 'profile.maxValue' | translate }}
+        </small>
+      </div>
+
+      <div>
+        <label for="discount" class="block mb-sm">{{ 'profile.discountPercent' | translate }}</label>
+        <input id="discount" formControlName="discount" class="mb-sm" type="number"/>
+        <small *ngIf="form.get('discount').errors?.['required'] && formTouched" class="text-negative block">
+          {{ 'profile.requiredField' | translate }}
+        </small>
+        <small *ngIf="form.get('discount').errors?.['min'] && formTouched" class="text-negative block">
+          {{ 'profile.minValue' | translate }}
+        </small>
+        <small *ngIf="form.get('discount').errors?.['max']" class="text-negative block">
+          {{ 'profile.maxValue' | translate }}
+        </small>
+      </div>
+    </div>
+
+    <div *ngIf="form.get('code').value" class="mt-sm">
+      <div>{{ 'profile.referralLinkHeader' | translate }}</div>
+      <div class="flex gap-sm items-center mt-sm">
+        <div class="text-primary text-underline">{{ userRefLink }}</div>
+        <button class="app-button-primary-sm" (click)="copyRefLink()">
+          <span class="pi pi-copy"></span>
+        </button>
+      </div>
+    </div>
+
+    <div
+      class="mt-md"
+      [class]="form.errors?.['validationErrorMessage'] && formTouched ? 'text-negative' : 'text-hint'"
+    >
+    {{ 'profile.validationMessage' | translate }}
+    </div>
+
+    <div class="divider my-lg"></div>
+
+    <div class="flex justify-end">
+      <button class="app-button-primary" (click)="submit()">
+        <span>{{ editCouponId ? ( 'profile.edit' | translate ) : ( 'profile.create' | translate ) }}</span>
+      </button>
+    </div>
+
+  </form>
+
+</p-dialog>
+

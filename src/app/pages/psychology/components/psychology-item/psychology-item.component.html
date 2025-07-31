@@ -1,0 +1,43 @@
+
+<p-confirmPopup></p-confirmPopup>
+
+<div class="psyhology-item">
+  <div class="text-bold">{{psychology.title}}</div>
+
+  <div class="mt-md">
+    <span class="text-grey">{{ 'psychology.occurrence' | translate }}:</span>
+    <span class="ml-sm">{{psychology.occurrenceHours}}&nbsp;{{ 'psychology.hours' | translate }}</span>
+  </div>
+
+  <div class="mt-md">
+    <span class="text-grey">{{ 'psychology.lastTrigger' | translate }}:</span>
+    <span class="ml-sm">{{psychology.lastTrigger | date : 'medium':'':locale}}</span>
+  </div>
+
+  <div class="mt-md flex gap-sm items-end justify-between">
+    <div class="badge">
+      {{ 'psychology.cardHeader' | translate }}
+    </div>
+
+    <div class="flex gap-sm">
+      <button class="app-button-sm" (click)="edit.emit(psychology)">
+        <span class="pi pi-pencil"></span>
+      </button>
+
+      <button class="app-button-sm" (click)="handleRemove($event, psychology)">
+        <span class="pi pi-trash"></span>
+      </button>
+
+      <button *ngIf="psychology.active" class="app-button-sm" (click)="deactivate.emit(psychology)">
+        <span class="pi pi-pause"></span>
+      </button>
+
+      <button *ngIf="!psychology.active" class="app-button-sm" (click)="activate.emit(psychology)">
+        <span class="pi pi-play"></span>
+      </button>
+
+    </div>
+  </div>
+</div>
+
+

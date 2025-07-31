@@ -1,0 +1,18 @@
+.preset {
+  padding: var(--sm) var(--xs);
+  transition: .5s all;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--color-main-bg-accent-lighten);
+  }
+
+  button {
+    span {
+      font-size: 10px;
+    }
+  }
+}

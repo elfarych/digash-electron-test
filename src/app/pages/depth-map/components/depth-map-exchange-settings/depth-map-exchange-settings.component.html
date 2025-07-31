@@ -1,0 +1,286 @@
+<form [formGroup]="exchangeSettingsForm">
+
+  <!-- Active checkbox -->
+  <div class="form-control checkbox margin-bottom-2">
+    <p-checkbox formControlName="active" [binary]="true" inputId="active"></p-checkbox>
+    <label for="active">{{ 'depth_map.active_label' | translate }}</label>
+  </div>
+
+  <ng-template [ngIf]="exchangeSettingsForm.get('active').value">
+
+    <!-- Small Orders Section -->
+    <div class="orders-range-grid margin-top-8">
+      <div formGroupName="smallOrderFilterValues" class="card">
+        <div>{{ 'depth_map.small_orders' | translate }}</div>
+        <p-divider></p-divider>
+        <label class="block mb-2" for="minCorrosionTime">
+          {{ 'depth_map.corrosion_time_min' | translate }}
+        </label>
+        <p-inputNumber
+          inputId="minCorrosionTime"
+          formControlName="minCorrosionTime"
+          class="w-full"
+          [min]="0"
+          [max]="100"
+          [step]="1"
+          [showButtons]="true"
+          spinnerMode="horizontal"
+          buttonLayout="horizontal"
+          decrementButtonClass="p-button-danger"
+          incrementButtonClass="p-button-success"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+        />
+
+        <div class="form-control checkbox margin-top-4 margin-bottom-2">
+          <p-checkbox formControlName="filterByOrderSum" [binary]="true" inputId="filterByOrderSum"></p-checkbox>
+          <label for="filterByOrderSum">{{ 'depth_map.filter_by_order_sum' | translate }}</label>
+        </div>
+        <p-inputNumber
+          inputId="minOrderSum"
+          formControlName="minOrderSum"
+          class="w-full"
+          [min]="0"
+          [step]="10000"
+          [showButtons]="true"
+          spinnerMode="horizontal"
+          buttonLayout="horizontal"
+          decrementButtonClass="p-button-danger"
+          incrementButtonClass="p-button-success"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+        />
+      </div>
+
+      <!-- Medium Orders Section -->
+      <div formGroupName="mediumOrderFilterValues" class="card">
+        <div>{{ 'depth_map.medium_orders' | translate }}</div>
+        <p-divider></p-divider>
+        <label class="block mb-2" for="minCorrosionTime">
+          {{ 'depth_map.corrosion_time_min' | translate }}
+        </label>
+        <p-inputNumber
+          inputId="minCorrosionTime"
+          formControlName="minCorrosionTime"
+          class="w-full"
+          [min]="0"
+          [step]="1"
+          [showButtons]="true"
+          spinnerMode="horizontal"
+          buttonLayout="horizontal"
+          decrementButtonClass="p-button-danger"
+          incrementButtonClass="p-button-success"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+        />
+
+        <div class="form-control checkbox margin-top-4 margin-bottom-2">
+          <p-checkbox formControlName="filterByOrderSum" [binary]="true" inputId="filterByOrderSum"></p-checkbox>
+          <label for="filterByOrderSum">{{ 'depth_map.filter_by_order_sum' | translate }}</label>
+        </div>
+        <p-inputNumber
+          inputId="minOrderSum"
+          formControlName="minOrderSum"
+          class="w-full"
+          [min]="0"
+          [step]="10000"
+          [showButtons]="true"
+          spinnerMode="horizontal"
+          buttonLayout="horizontal"
+          decrementButtonClass="p-button-danger"
+          incrementButtonClass="p-button-success"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+        />
+      </div>
+
+      <!-- Large Orders Section -->
+      <div formGroupName="largeOrderFilterValues" class="card">
+        <div>{{ 'depth_map.large_orders' | translate }}</div>
+        <p-divider></p-divider>
+        <label class="block mb-2" for="minCorrosionTime">
+          {{ 'depth_map.corrosion_time_min' | translate }}
+        </label>
+        <p-inputNumber
+          inputId="minCorrosionTime"
+          formControlName="minCorrosionTime"
+          class="w-full"
+          [min]="0"
+          [step]="1"
+          [showButtons]="true"
+          spinnerMode="horizontal"
+          buttonLayout="horizontal"
+          decrementButtonClass="p-button-danger"
+          incrementButtonClass="p-button-success"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+        />
+
+        <div class="form-control checkbox margin-top-4 margin-bottom-2">
+          <p-checkbox formControlName="filterByOrderSum" [binary]="true" inputId="filterByOrderSum"></p-checkbox>
+          <label for="filterByOrderSum">{{ 'depth_map.filter_by_order_sum' | translate }}</label>
+        </div>
+        <p-inputNumber
+          inputId="minOrderSum"
+          formControlName="minOrderSum"
+          class="w-full"
+          [min]="0"
+          [step]="10000"
+          [showButtons]="true"
+          spinnerMode="horizontal"
+          buttonLayout="horizontal"
+          decrementButtonClass="p-button-danger"
+          incrementButtonClass="p-button-success"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+        />
+      </div>
+    </div>
+
+    <!-- Volume Filter Section -->
+    <div class="margin-top-8">
+      <p-fieldset [collapsed]="!exchangeSettingsForm.get('volumeFilterIsActive').value">
+        <ng-template pTemplate="header">
+          <div class="form-control checkbox">
+            <p-checkbox formControlName="volumeFilterIsActive" [binary]="true" inputId="volumeFilterIsActive"></p-checkbox>
+            <label for="volumeFilterIsActive">{{ 'depth_map.volume_filter' | translate }}</label>
+          </div>
+        </ng-template>
+
+        <ng-template [ngIf]="exchangeSettingsForm.get('volumeFilterIsActive').value">
+          <div>
+            <label class="block mb-2">{{ 'depth_map.period' | translate }}</label>
+            <p-dropdown
+              formControlName="volumeFilterPeriod"
+              [options]="filterRangeOptions"
+              optionLabel="label"
+              optionValue="name"
+              appendTo="body"
+            ></p-dropdown>
+          </div>
+
+          <div class="form-control-grid margin-top-6 items-center">
+            <div>
+              <label class="block mb-2" for="volumeFromFilter">
+                {{ 'depth_map.volume_from' | translate }} {{ convertPrice(exchangeSettingsForm.get('volumeFromFilter').value) }}
+              </label>
+              <p-inputNumber
+                inputId="volumeFromFilter"
+                formControlName="volumeFromFilter"
+                class="w-full"
+                [min]="0"
+                [max]="10000000000"
+                [step]="5000000"
+                [showButtons]="true"
+                spinnerMode="horizontal"
+                buttonLayout="horizontal"
+                decrementButtonClass="p-button-danger"
+                incrementButtonClass="p-button-success"
+                incrementButtonIcon="pi pi-plus"
+                decrementButtonIcon="pi pi-minus"
+              />
+              <small class="block margin-top-1">{{ 'depth_map.max_volume' | translate }}</small>
+            </div>
+
+            <div>
+              <label class="block mb-2" for="volumeToFilter">
+                {{ 'depth_map.volume_to' | translate }} {{ convertPrice(exchangeSettingsForm.get('volumeToFilter').value) }}
+              </label>
+              <p-inputNumber
+                inputId="volumeToFilter"
+                formControlName="volumeToFilter"
+                class="w-full"
+                [min]="0"
+                [max]="100000000000"
+                [step]="5000000"
+                [showButtons]="true"
+                spinnerMode="horizontal"
+                buttonLayout="horizontal"
+                decrementButtonClass="p-button-danger"
+                incrementButtonClass="p-button-success"
+                incrementButtonIcon="pi pi-plus"
+                decrementButtonIcon="pi pi-minus"
+              />
+              <small class="block margin-top-1">{{ 'depth_map.max_volume' | translate }}</small>
+            </div>
+          </div>
+        </ng-template>
+
+      </p-fieldset>
+    </div>
+
+    <!-- Price Change Filter Section -->
+    <div class="margin-top-8">
+      <p-fieldset [collapsed]="!exchangeSettingsForm.get('priceChangeFilterIsActive').value">
+        <ng-template pTemplate="header">
+          <div class="form-control checkbox">
+            <p-checkbox formControlName="priceChangeFilterIsActive" [binary]="true" inputId="priceChangeFilterIsActive"></p-checkbox>
+            <label for="priceChangeFilterIsActive">{{ 'depth_map.price_change_filter' | translate }}</label>
+          </div>
+        </ng-template>
+
+        <ng-template [ngIf]="exchangeSettingsForm.get('priceChangeFilterIsActive').value">
+          <div>
+            <label class="block mb-2">{{ 'depth_map.period' | translate }}</label>
+            <p-dropdown
+              formControlName="priceChangeFilterPeriod"
+              [options]="filterRangeOptions"
+              optionLabel="label"
+              optionValue="name"
+              appendTo="body"
+            ></p-dropdown>
+          </div>
+
+          <div class="form-control-grid margin-top-6 items-center">
+            <div>
+              <label class="block mb-2" for="priceChangeFromFilter">
+                {{ 'depth_map.price_change_from' | translate }}
+              </label>
+              <p-inputNumber
+                inputId="priceChangeFromFilter"
+                formControlName="priceChangeFromFilter"
+                class="w-full"
+                [min]="0"
+                [max]="10000"
+                [step]="10"
+                [showButtons]="true"
+                spinnerMode="horizontal"
+                buttonLayout="horizontal"
+                decrementButtonClass="p-button-danger"
+                incrementButtonClass="p-button-success"
+                incrementButtonIcon="pi pi-plus"
+                decrementButtonIcon="pi pi-minus"
+              />
+              <small class="block margin-top-1">{{ 'depth_map.max_price_change' | translate }}</small>
+            </div>
+
+            <div>
+              <label class="block mb-2" for="priceChangeToFilter">
+                {{ 'depth_map.price_change_to' | translate }}
+              </label>
+              <p-inputNumber
+                inputId="priceChangeToFilter"
+                formControlName="priceChangeToFilter"
+                class="w-full"
+                [min]="0"
+                [max]="10000"
+                [step]="10"
+                [showButtons]="true"
+                spinnerMode="horizontal"
+                buttonLayout="horizontal"
+                decrementButtonClass="p-button-danger"
+                incrementButtonClass="p-button-success"
+                incrementButtonIcon="pi pi-plus"
+                decrementButtonIcon="pi pi-minus"
+              />
+              <small class="block margin-top-1">{{ 'depth_map.max_price_change' | translate }}</small>
+            </div>
+          </div>
+        </ng-template>
+
+      </p-fieldset>
+    </div>
+
+  </ng-template>
+  
+</form>

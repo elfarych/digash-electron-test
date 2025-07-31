@@ -1,0 +1,35 @@
+<div class="chart-indicators-selection-button" (click)="openDialog()">
+  <i class="pi pi-chart-line"></i>
+  <span class="button-label">{{ 'chart_indicator.label' | translate }}</span>
+</div>
+
+<p-dialog
+  header="{{ 'chart_indicator.label' | translate }}"
+  [(visible)]="dialogVisible"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  appendTo="body"
+  (onHide)="onDialogClose()"
+  [style]="{ width: '700px', maxWidth: '100%', height: '520px', maxHeight: '100%' }"
+>
+  <div class="divider my-lg"></div>
+
+  <ng-container *ngFor="let item of chartIndicatorsOptions">
+    <div
+      class="indicator-item"
+      [class.active]="checkIsIndicatorSelected(item)"
+      (click)="selectIndicator(item)"
+    >
+      <div class="flex justify-between">
+        <div class="indicator-name">
+          <div>{{'technical_indicators.' + item.name + 'Label' | translate}}</div>
+        </div>
+      </div>
+
+      <div class="indicator-description">{{'technical_indicators.' + item.name + 'Description' | translate}}</div>
+
+    </div>
+  </ng-container>
+
+</p-dialog>

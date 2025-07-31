@@ -1,0 +1,71 @@
+@import 'src/mixins';
+
+.chart-indicators-selection-button {
+  cursor: pointer;
+  @include outlined-main(1px);
+  padding: var(--sm);
+  border-radius: var(--sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--xs);
+
+  @media (max-width: 992px) {
+    font-size: 14px;
+    padding: 6px;
+    @include outlined(
+        var(--color-main-bg-accent),
+        var(--color-main-bg-accent-lighten),
+        var(--color-main-outline-shadow),
+        1px, 1px
+    );
+    border-radius: 6px;
+    .pi {
+      font-size: 16px;
+    }
+  }
+}
+
+.indicator-item {
+  @include outlined(
+      var(--color-main-bg-accent),
+      var(--color-main-bg-accent-lighten),
+      var(--color-main-outline-shadow),
+      2px,
+      2px
+  );
+  border-radius: var(--sm);
+  padding: var(--md);
+  margin: var(--sm) var(--xs);
+  transition: .5s all;
+  cursor: pointer;
+
+  &:hover {
+    opacity: .7;
+  }
+}
+
+.active {
+  border: 2px solid transparent;
+  background: linear-gradient(var(--color-main-bg-accent), var(--color-main-bg-accent)) padding-box,
+  linear-gradient(to bottom, var(--color-primary-ligthen), var(--color-primary)) border-box,
+  var(--color-main-bg-accent) padding-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 0 0 2px var(--color-main-outline-shadow);
+}
+
+.indicator-name {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.indicator-description {
+  font-size: 12px;
+  font-style: italic;
+}
+
+.button-label {
+  @media (max-width: 992px) {
+    display: none;
+  }
+}

@@ -1,0 +1,16 @@
+<div class="chart-layout" *ngIf="chartLayoutOptions[layout]" (click)="layoutsTemplate.toggle($event)">
+  <div class="svg-icon">
+    <svg-icon [src]="chartLayoutOptions[layout].icon"></svg-icon>
+  </div>
+  <p-overlayPanel #layoutsTemplate>
+    <div class="chart-layout-options-grid">
+      <div
+        *ngFor="let option of layoutOptions"
+        class="chart-layout-options-grid-item"
+        (click)="changeChartLayout(option.layout, layoutsTemplate)"
+      >
+        <svg-icon [src]="option.icon"></svg-icon>
+      </div>
+    </div>
+  </p-overlayPanel>
+</div>

@@ -1,0 +1,24 @@
+<div
+  class="depth-map-order"
+  [ngStyle]="orderStyle"
+  (click)="onOrderClick()"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
+>
+  <div>
+    <span *ngIf="settings.showExchange" class="margin-right-1">{{ orderExchange }}</span>
+    <span>{{ order.symbol }}</span>
+  </div>
+
+  <div *ngIf="settings.showDistance">
+    {{ order.distance?.toFixed(2) }}%
+  </div>
+
+  <div *ngIf="settings.showCorrosionTime">
+    {{ order.corrosion_time?.toFixed(2) }} m
+  </div>
+
+  <div *ngIf="settings.showOrderSum">
+    {{ convertPrice(order.full_price) }}
+  </div>
+</div>

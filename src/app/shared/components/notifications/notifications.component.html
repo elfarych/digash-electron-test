@@ -1,0 +1,31 @@
+<header>
+  <div class="title">
+    {{ 'notifications.title' | translate }}
+  </div>
+  <div class="action">
+    <button class="link-button" (click)="viewAll()">{{ 'notifications.viewAll' | translate }}</button>
+  </div>
+</header>
+<div class="menu">
+  <ul>
+    <ng-template [ngIf]="notifications.length" [ngIfThen]="notificationsTmpl"
+                 [ngIfElse]="notificationsEmptyTmpl"></ng-template>
+    <ng-template #notificationsTmpl>
+      <ng-container *ngFor="let notification of notifications">
+<!--        <hive-notification-item-->
+<!--          [notification]="notification"-->
+<!--          (select)="clickNotification($event)"-->
+<!--        ></hive-notification-item>-->
+        <app-notifications-item
+          [notification]="notification"
+          (select)="clickNotification($event)"
+        ></app-notifications-item>
+      </ng-container>
+    </ng-template>
+    <ng-template #notificationsEmptyTmpl>
+      <div class="empty">
+        <h4>{{ 'notifications.empty' | translate }}</h4>
+      </div>
+    </ng-template>
+  </ul>
+</div>

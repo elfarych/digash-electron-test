@@ -1,0 +1,39 @@
+<div>
+  <form class="app-form flex column gap-md" [formGroup]="form" (ngSubmit)="submit()">
+
+    <input formControlName="username" pInputText placeholder="{{ 'auth.username_placeholder' | translate }}"/>
+    <input formControlName="password" type="password" pInputText placeholder="{{ 'auth.password_placeholder' | translate }}"/>
+
+    <div>
+      <button
+        [disabled]="!form.valid"
+        class="app-button-primary w-full"
+        type="submit"
+      >
+        <span class="text-lg">{{ 'auth.login' | translate }}</span>
+      </button>
+    </div>
+  </form>
+
+  <div class="mt-md flex justify-end">
+    <button (click)="redirectToRestore.emit()" class="app-button-sm">{{ 'auth.forgot_password' | translate }}</button>
+  </div>
+
+  <div class="mt-md text-center">
+    {{ 'auth.no_account' | translate }} <a (click)="redirectToSignup.emit()" class="text-underline">{{ 'auth.register' | translate }}</a>
+  </div>
+
+  <div class="mt-lg">
+    <div class="flex justify-between items-center gap-md">
+      <span class="divider grow-1"></span>
+      <span>{{ 'auth.or' | translate }}</span>
+      <span class="divider grow-1"></span>
+    </div>
+
+    <div class="mt-lg">
+      <asl-google-signin-button size="large" text="{{ 'auth.signin_with' | translate }}" type="standard" shape="pill"></asl-google-signin-button>
+    </div>
+  </div>
+
+  <app-progress-spinner *ngIf="loading$ | async"></app-progress-spinner>
+</div>

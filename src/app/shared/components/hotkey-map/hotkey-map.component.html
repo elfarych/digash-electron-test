@@ -1,0 +1,33 @@
+<button class="app-button" (click)="showDialog()">
+  <span class="pi pi-th-large"></span>
+</button>
+
+<p-dialog
+  [header]="'hotkeyMap.header' | translate"
+  [(visible)]="visible"
+  [modal]="true"
+  [showHeader]="true"
+  [dismissableMask]="true"
+  [closable]="true"
+  [style]="{ width: '80%', height: '95%' }"
+>
+  <div class="divider mt-sm"></div>
+
+  <div class="sections">
+    <div *ngFor="let section of keymapSections" class="section">
+
+      <div class="name">{{ 'hotkeyMap.' + section.name | translate }}:</div>
+
+      <div *ngFor="let item of section.items" class="item">
+
+        <div class="buttons">
+          <div *ngFor="let button of item.buttons; let index = index" class="flex items-center">
+            <span class="button">{{ button }}</span>
+            <span *ngIf="item.buttons.length > 1 && index === 0" class="ml-sm">+</span>
+          </div>
+        </div>
+        <div class="label">{{ 'hotkeyMap.' + item.name | translate }}</div>
+      </div>
+    </div>
+  </div>
+</p-dialog>

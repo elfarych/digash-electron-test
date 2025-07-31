@@ -1,0 +1,12 @@
+.spread-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  border-top: 1px dashed var(--border-color);
+
+  @media (max-width: 992px) {
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,99 @@
+<div
+  class="summer-discount-container"
+  [class.dialog]="dialog"
+  id="discount-container"
+>
+  <div class="content mb-xl">
+    <div class="title">
+      <img *ngIf="translateService.currentLang === 'ru'" src="../../../../assets/img/summer-discount/summer-title-ru.svg" alt="Летние скидки">
+      <img *ngIf="translateService.currentLang !== 'ru'" src="../../../../assets/img/summer-discount/summer-title-en.svg" alt="Летние скидки">
+    </div>
+
+    <div class="position-relative flex flex-center column">
+
+      <div class="discount-main-card-wrapper">
+        <div class="discount-main-card fit outlined-promo">
+            <div class="discount-cards-grid">
+
+              <div class="discount-card">
+                <div class="price">
+                  $8 <span>/ {{ 'premium.summerDiscount.shortMonth' | translate }}</span>
+                </div>
+                <div class="old-price">
+                  $18 / {{ 'premium.summerDiscount.shortMonth' | translate }}
+                </div>
+              </div>
+
+              <div class="discount-card">
+                <div class="price">
+                  $97 <span>/ {{ 'premium.summerDiscount.shortYear' | translate }}</span>
+                </div>
+                <div class="old-price">
+                  $216 / {{ 'premium.summerDiscount.shortYear' | translate }}
+                </div>
+              </div>
+            </div>
+
+            <div class="summer-discount-value">
+              <img src="../../../../assets/img/summer-discount/summer-discount-shadow.png" alt="55%" class="summer-discount-shadow">
+              <img src="../../../../assets/img/summer-discount/summner-discount-value.svg" alt="55%" class="summer-discount-value-img">
+            </div>
+        </div>
+      </div>
+
+      <button class="action-button" (click)="payment()">
+        <span>{{ 'premium.summerDiscount.checkout' | translate }}</span>
+      </button>
+
+
+      <div class="timer-container flex flex-center column">
+        <div class="timer-title">
+          {{ 'premium.summerDiscount.untilTheEndOfThePromotion' | translate }}:
+        </div>
+
+        <div class="timer">
+          <div class="timer-value">{{ remainingTime.days }}</div>
+          <div>:</div>
+          <div class="timer-value">{{ remainingTime.hours }}</div>
+          <div>:</div>
+          <div class="timer-value">{{ remainingTime.minutes }}</div>
+          <div>:</div>
+          <div class="timer-value">{{ remainingTime.seconds }}</div>
+        </div>
+
+        <div class="timer-meta">
+          <div class="timer-meta-value">{{ 'premium.summerDiscount.days' | translate }}</div>
+          <div class="timer-meta-value">{{ 'premium.summerDiscount.hours' | translate }}</div>
+          <div class="timer-meta-value">{{ 'premium.summerDiscount.minutes' | translate }}</div>
+          <div class="timer-meta-value">{{ 'premium.summerDiscount.seconds' | translate }}</div>
+        </div>
+      </div>
+
+
+      <div class="summer-phone-charts summer-phone">
+        <img src="../../../../assets/img/summer-discount/summer-phone-charts-2.png" alt="charts">
+      </div>
+
+      <div class="summer-phone-densities summer-phone">
+        <img src="../../../../assets/img/summer-discount/summer-phone-densities.png" alt="densities" class="summer-phone-densities-image">
+        <img src="../../../../assets/img/summer-discount/summer-density-coin-trump.png" alt="densities" class="summer-density-coin-trump">
+        <img src="../../../../assets/img/summer-discount/summer-density-coin-avax.png" alt="densities" class="summer-density-coin-avax">
+      </div>
+    </div>
+
+  </div>
+
+
+  <img src="../../../../assets/img/summer-discount/summer-gull-2.svg" alt="Gull" class="summer-gull-2">
+  <img src="../../../../assets/img/summer-discount/summer-gull-1.svg" alt="Gull" class="summer-gull-1">
+
+
+  <img src="../../../../assets/img/summer-discount/summer-coin-sol.png" alt="Solana" class="summer-coin-sol coin">
+  <img src="../../../../assets/img/summer-discount/summer-coin-btc.png" alt="Solana" class="summer-coin-btc coin">
+  <img src="../../../../assets/img/summer-discount/summer-coin-ton.png" alt="Solana" class="summer-coin-ton coin">
+
+  <img src="../../../../assets/img/summer-discount/screener1.png" alt="Screener" class="mobile-screener-image">
+
+</div>
+
+

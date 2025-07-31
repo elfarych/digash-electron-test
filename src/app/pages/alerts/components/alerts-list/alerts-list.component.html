@@ -1,0 +1,34 @@
+<section>
+  <ng-template
+    [ngIf]="alerts.length"
+    [ngIfThen]="alertsTmpl"
+    [ngIfElse]="alertsEmptyTmpl"
+  ></ng-template>
+  <ng-template #alertsTmpl>
+    <div class="active-alerts-grid">
+      <app-alerts-item
+        *ngFor="let alert of alerts.slice(paginatorSlice[0], paginatorSlice[1])"
+        [alert]="alert"
+        (removeAlert)="removeAlert.emit($event)"
+        (activateAlert)="activateAlert.emit($event)"
+        (stopAlert)="stopAlert.emit($event)"
+        (editAlert)="editAlert.emit($event)"
+        (openNotifications)="openNotifications.emit($event)"
+      ></app-alerts-item>
+    </div>
+
+    <div class="mt-md">
+      <p-paginator
+        (onPageChange)="onPageChange($event)"
+        [first]="0"
+        [rows]="paginatorPerPageItemsCount"
+        [totalRecords]="alerts.length"
+      ></p-paginator>
+    </div>
+  </ng-template>
+  <ng-template #alertsEmptyTmpl>
+    <div class="empty">
+      <h4>{{ 'alerts.noActiveAlerts' | translate }}</h4>
+    </div>
+  </ng-template>
+</section>

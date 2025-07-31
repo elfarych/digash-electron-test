@@ -1,0 +1,17 @@
+<p-messages [enableService]="false">
+  <ng-template pTemplate>
+    <div class="info-content">
+      <div class="text-content">
+        {{message}}
+      </div>
+      <div class="action">
+        <button class="app-button-success action-button" 
+                  (click)="redirectToPremium()">{{'workspace.premium_block_button' | translate}}</button>
+      </div>
+
+      <div class="primary-ellipse">
+        <img src="assets/img/ellipse-primary.png">
+      </div>
+    </div>
+  </ng-template>
+</p-messages>

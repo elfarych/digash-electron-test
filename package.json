@@ -1,0 +1,133 @@
+{
+  "name": "digash",
+  "version": "0.0.2",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "lint": "ng lint",
+    "build-base": "ng build --base-href ./ --output-path=dist/angular",
+    "electron": "electron ./src-electron/main.js",
+    "build:electron": "npm run build-base && electron-builder"
+  },
+  "main": "src-electron/main.js",
+  "build": {
+    "appId": "live.digash.app",
+    "icon": "src/icon",
+    "productName": "Digash",
+    "files": [
+      "dist/angular/**",
+      "src-electron/main.js",
+      "src-electron/preload.js"
+    ],
+    "directories": {
+      "output": "dist/electron"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "src/icon.ico"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "src/icon.icns"
+    },
+    "protocols": [
+      {
+        "name": "Digash Protocol",
+        "schemes": [
+          "digash"
+        ]
+      }
+    ],
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://127.0.0.1:8000/desktop/update/windows/"
+      }
+    ]
+  },
+  "private": true,
+  "dependencies": {
+    "@abacritt/angularx-social-login": "2.1.0",
+    "@angular/animations": "^16.2.11",
+    "@angular/cdk": "^16.2.10",
+    "@angular/common": "^16.2.11",
+    "@angular/compiler": "^16.2.11",
+    "@angular/core": "^16.2.11",
+    "@angular/forms": "^16.2.11",
+    "@angular/material": "^16.2.10",
+    "@angular/platform-browser": "^16.2.11",
+    "@angular/platform-browser-dynamic": "^16.2.11",
+    "@angular/router": "^16.2.11",
+    "@ngrx/effects": "^16.3.0",
+    "@ngrx/store": "^16.3.0",
+    "@ngx-translate/core": "^15.0.0",
+    "@ngx-translate/http-loader": "^8.0.0",
+    "@popperjs/core": "^2.11.6",
+    "@splidejs/splide": "^4.1.4",
+    "@splidejs/splide-extension-auto-scroll": "^0.5.3",
+    "angular-split": "^17.1.1",
+    "angular-svg-icon": "^16.1.0",
+    "autoprefixer": "^10.4.19",
+    "d3": "^7.8.2",
+    "electron-store": "^10.1.0",
+    "electron-updater": "^6.6.2",
+    "fancy-canvas": "^2.1.0",
+    "html2canvas": "^1.4.1",
+    "lightweight-charts": "^4.1.0",
+    "luxon": "^3.4.4",
+    "moment-timezone": "^0.5.46",
+    "ngx-color-picker": "^16.0.0",
+    "ngx-cookie-service": "^16.0.1",
+    "ngx-electron": "^2.2.0",
+    "night-vision": "file:./local_modules/night-vision-0.4.0.tgz",
+    "primeicons": "^7.0.0",
+    "primeng": "^16.9.1",
+    "quill": "^2.0.0",
+    "rxjs": "~7.8.0",
+    "technicalindicators": "^3.1.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.13.3"
+  },
+  "devDependencies": {
+    "@angular-builders/custom-webpack": "^16.0.1",
+    "@angular-devkit/build-angular": "^16.2.4",
+    "@angular-eslint/builder": "16.3.1",
+    "@angular-eslint/eslint-plugin": "16.3.1",
+    "@angular-eslint/eslint-plugin-template": "16.3.1",
+    "@angular-eslint/schematics": "16.3.1",
+    "@angular-eslint/template-parser": "16.3.1",
+    "@angular/cli": "~16.2.4",
+    "@angular/compiler-cli": "^16.2.11",
+    "@angular/localize": "^16.2.11",
+    "@types/jasmine": "~4.3.0",
+    "@typescript-eslint/eslint-plugin": "7.9.0",
+    "@typescript-eslint/parser": "7.9.0",
+    "concurrently": "^9.1.2",
+    "electron": "^36.4.0",
+    "electron-builder": "^26.0.12",
+    "electron-reload": "2.0.0-alpha.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-decorator-position": "^5.0.2",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-unused-imports": "^3.2.0",
+    "jasmine-core": "~4.5.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.0.0",
+    "prettier": "^3.2.5",
+    "raw-loader": "^4.0.2",
+    "schematics-scss-migrate": "^2.3.17",
+    "typescript": "~4.9.5",
+    "wait-on": "^8.0.3"
+  }
+}

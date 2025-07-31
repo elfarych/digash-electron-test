@@ -1,0 +1,14 @@
+<div class="content">
+  <div class="text-content">
+    text
+  </div>
+  <div class="actions">
+    <p-button class="action-button payment" label="Оформить предзаказ" [rounded]="true"
+              (click)="redirectToLogin()"></p-button>
+    <!--      <p-button class="action-button cancel" label="Закрыть" [text]="true" (click)="close()"></p-button>-->
+  </div>
+</div>
+
+<div class="close">
+  <p-button icon="pi pi-times" [rounded]="true" [text]="true" severity="secondary" (click)="close()"></p-button>
+</div>

@@ -1,0 +1,193 @@
+<div *ngIf="isDesktop" class="chart-with-navigation">
+  <p-splitter
+    *ngIf="chartSettings$ | async as chartSettings"
+    styleClass="mb-5"
+    [panelSizes]="splitterPanelSizes"
+    [style]="{ height: '100%', maxWidth: '100vw', width: '100%' }"
+    [layout]="splitAreaDirection"
+    (onResizeEnd)="onSplitAreaResizeEnd($event)"
+    (onResizeStart)="onSplitAreaResizeStart()">
+
+    <ng-template pTemplate>
+      <div class="chart-container">
+        <app-mini-chart
+          [chartLayout]="isDesktop ? chartLayout : 'single'"
+          [selectedChartId]="selectedChardGridId"
+          [chartHorizontalGridData]="horizontalChartGridData"
+          [chartVerticalGridData]="verticalChartGridData"
+          [coin]="selectedCoin"
+          [coinData]="coinData"
+          [preferences]="preferences"
+          [exchange]="exchange"
+          [timeframe]="timeframe ?? chartSettings?.timeframe ?? '5m'"
+          [chartSettings]="chartSettings"
+          [fullChart]="true"
+          [alerts]="alerts$ | async"
+          [watchlistCoins]="watchlistCoins$ | async"
+          [chartIndicators]="chartIndicators"
+          [inDialog]="data?.data?.dialog"
+          [setPriceTitle]="setPriceTitle"
+          (layoutChanged)="updateChartLayout($event)"
+          (changeChartId)="selectedChartGridIdChange($event)"
+          (timeframeChanged)="changeInterval($event)"
+          (swapCoinExchange)="swapCoinExchange($event)"
+          (selectTechnicalIndicator)="selectTechnicalIndicator($event)"
+          [showWatchlist]="true"
+        ></app-mini-chart>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate>
+      <div class="navigation" id="navigation-panel">
+        <app-progress-spinner *ngIf="loading$ | async" />
+        <app-navigation-settings
+          [selectedColumns]="coinsNavigationColumns$ | async"
+          [coins]="coins$ | async"
+          [allCoins]="allCoins$ | async"
+          [activeSortingId]="activeSortingId$ | async"
+          [standaloneChart]="standaloneChart"
+          (columnSelectionChange)="columnSelectionChange($event)"
+          [chartSettings]="chartSettings"
+          [dataLoaderMode]="dataLoaderMode"
+          [isPremium]="isPremium$ | async"
+          [coinNavigationAutoSize]="coinsNavigationAutoSize$ | async"
+          [presets]="presets$ | async"
+          [selectedPreset]="selectedPreset$ | async"
+          (selectSymbol)="selectCoin($event)"
+          (chartSettingsChange)="chartSettingsChange($event)"
+          (switchDataLoaderMode)="switchDataLoaderMode($event)"
+          (dataLoadButtonClick)="dataLoadButtonClick()"
+          (resetNavigationColumns)="resetNavigationColumns()"
+          (toggleNavigationAutoSize)="toggleNavigationAutoSize()"
+          (excludeExchanges)="excludeExchanges($event)"
+          (createPreset)="createPreset($event)"
+          (editPreset)="editPreset($event)"
+          (selectPreset)="selectPreset($event)"
+          (deletePreset)="deletePreset($event)"
+        >
+        </app-navigation-settings>
+
+        <app-chart-navigation
+          [autoSize]="coinsNavigationAutoSize$ | async"
+          [columnsData]="coinsNavigationColumns$ | async"
+          [coins]="filteredCoins$ | async"
+          [activeSortingId]="activeSortingId$ | async"
+          [sortByAlerts]="sortByAlerts$ | async"
+          [sortingDirection]="sortingDirection$ | async"
+          [wathclist]="watchlistCoins$ | async"
+          [selectedCoin]="selectedCoin"
+          [showPScroller]="showPScroller"
+          [chartSettings]="chartSettings"
+          [disableSorting]="popupFromWorkspace"
+          [premium]="isPremium$ | async"
+          [popupFromWorkspace]="popupFromWorkspace"
+          (updateSorting)="updateSorting($event)"
+          (toggleSortingByAlerts)="toggleSortingByAlerts()"
+          (selectCoin)="selectCoin($event)"
+          (selectColor)="handleSelectColor($event)"
+        ></app-chart-navigation>
+      </div>
+    </ng-template>
+
+  </p-splitter>
+
+  <ng-container *ngIf="chartSettings$ | async as chartSettings">
+    <ng-container *ngIf="isPremium$ | async">
+      <app-densities-widget
+        *ngIf="chartSettings.showDensitiesWidget && chartSettings.showLimitOrders"
+        [densities]="densities$ | async"
+        [settings]="chartSettings.densitiesWidgetSettings"
+        (closeWidget)="closeDensitiesWidget()"
+        (selectDensity)="selectDensity($event)"
+        (updateWidgetSettings)="updateDensitiesWidgetSettings($event)"
+      ></app-densities-widget>
+    </ng-container>
+  </ng-container>
+
+  <div class="coins-navigation-collapse-panel">
+    <button class="app-button-primary-sm" (click)="toggleCollapseCoinsNavigation()">
+      <span class="pi" [ngClass]="coinsNavigationCollapsed ? 'pi-angle-left' : 'pi-angle-right'"></span>
+    </button>
+  </div>
+
+</div>
+
+
+<div *ngIf="!isDesktop" class="chart-with-navigation">
+  <ng-container *ngIf="chartSettings$ | async as chartSettings">
+    <div class="chart-container">
+      <app-mini-chart
+        [chartLayout]="'single'"
+        [selectedChartId]="selectedChardGridId"
+        [chartHorizontalGridData]="horizontalChartGridData"
+        [chartVerticalGridData]="verticalChartGridData"
+        [coin]="selectedCoin"
+        [coinData]="coinData"
+        [preferences]="preferences"
+        [exchange]="exchange"
+        [timeframe]="timeframe ?? chartSettings?.timeframe ?? '5m'"
+        [chartSettings]="chartSettings"
+        [fullChart]="true"
+        [alerts]="alerts$ | async"
+        [watchlistCoins]="watchlistCoins$ | async"
+        [chartIndicators]="chartIndicators"
+        [inDialog]="data?.data?.dialog"
+        [setPriceTitle]="setPriceTitle"
+        (layoutChanged)="updateChartLayout($event)"
+        (changeChartId)="selectedChartGridIdChange($event)"
+        (timeframeChanged)="changeInterval($event)"
+        (swapCoinExchange)="swapCoinExchange($event)"
+        (selectTechnicalIndicator)="selectTechnicalIndicator($event)"
+        [showWatchlist]="true"
+      ></app-mini-chart>
+    </div>
+  </ng-container>
+
+  <div *ngIf="chartSettings$ | async as chartSettings" class="mobile-navigation">
+    <app-chart-mobile-navigation
+      [selectedCoin]="selectedCoin"
+      [exchange]="exchange"
+      [selectedColumns]="coinsNavigationColumns$ | async"
+      [allCoins]="allCoins$ | async"
+      [standaloneChart]="standaloneChart"
+      [dataLoaderMode]="dataLoaderMode"
+      [isPremium]="isPremium$ | async"
+      [coinNavigationAutoSize]="coinsNavigationAutoSize$ | async"
+      [presets]="presets$ | async"
+      [selectedPreset]="selectedPreset$ | async"
+      [autoSize]="coinsNavigationAutoSize$ | async"
+      [columnsData]="coinsNavigationColumns$ | async"
+      [coins]="filteredCoins$ | async"
+      [activeSortingId]="activeSortingId$ | async"
+      [sortByAlerts]="sortByAlerts$ | async"
+      [sortingDirection]="sortingDirection$ | async"
+      [wathclist]="watchlistCoins$ | async"
+      [showPScroller]="showPScroller"
+      [chartSettings]="chartSettings"
+      [disableSorting]="popupFromWorkspace"
+      [premium]="isPremium$ | async"
+      [popupFromWorkspace]="popupFromWorkspace"
+      [chartIndicators]="chartIndicators"
+
+      (selectTechnicalIndicator)="selectTechnicalIndicator($event)"
+      (selectSymbol)="selectCoin($event)"
+      (chartSettingsChange)="chartSettingsChange($event)"
+      (switchDataLoaderMode)="switchDataLoaderMode($event)"
+      (dataLoadButtonClick)="dataLoadButtonClick()"
+      (resetNavigationColumns)="resetNavigationColumns()"
+      (toggleNavigationAutoSize)="toggleNavigationAutoSize()"
+      (excludeExchanges)="excludeExchanges($event)"
+      (createPreset)="createPreset($event)"
+      (editPreset)="editPreset($event)"
+      (selectPreset)="selectPreset($event)"
+      (deletePreset)="deletePreset($event)"
+
+      (columnSelectionChange)="columnSelectionChange($event)"
+      (updateSorting)="updateSorting($event)"
+      (toggleSortingByAlerts)="toggleSortingByAlerts()"
+      (selectCoin)="selectCoin($event)"
+      (selectColor)="handleSelectColor($event)"
+    ></app-chart-mobile-navigation>
+  </div>
+
+</div>

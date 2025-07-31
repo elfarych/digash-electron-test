@@ -1,0 +1,165 @@
+<form [formGroup]="exchangeSettingsForm" class="app-form">
+
+  <div>
+    <input type="checkbox" formControlName="active" id="active">
+    <label for="active" class="checkbox-label">{{ 'depth_map.showExchangeOrders' | translate }}</label>
+  </div>
+
+  <ng-container *ngIf="exchangeSettingsForm.get('active').value">
+
+    <div class="grid-2-1 grid-gap-md mt-md">
+      <div>
+        <div class="mb-sm">{{ 'depth_map.minCorrosionTime' | translate }}</div>
+        <p-inputNumber
+          inputId="ordersMinCorrosionTime"
+          formControlName="ordersMinCorrosionTime"
+          [min]="0"
+          [max]="20"
+          [step]="1"
+          [showButtons]="true"
+          spinnerMode="horizontal"
+          buttonLayout="horizontal"
+          decrementButtonClass="p-button-danger"
+          incrementButtonClass="p-button-success"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+        />
+        <small class="block text-hint mt-sm">{{ 'depth_map.max20Min0' | translate }}</small>
+      </div>
+
+      <div>
+        <div class="mb-sm">{{ 'depth_map.largeOrderCorrosionTime' | translate }}</div>
+        <p-inputNumber
+          inputId="ordersBigCorrosionTime"
+          formControlName="ordersBigCorrosionTime"
+          [min]="5"
+          [max]="50"
+          [step]="1"
+          [showButtons]="true"
+          spinnerMode="horizontal"
+          buttonLayout="horizontal"
+          decrementButtonClass="p-button-danger"
+          incrementButtonClass="p-button-success"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+        />
+        <small class="block text-hint mt-sm">{{ 'depth_map.max50Min5' | translate }}</small>
+      </div>
+
+      <div>
+        <div class="mb-sm">{{ 'depth_map.densityLifetime' | translate }} ({{ 'depth_map.minutes' | translate }})</div>
+        <p-inputNumber
+          inputId="limitOrderLife"
+          formControlName="limitOrderLife"
+          class="w-full"
+          [min]="0"
+          [max]="1000"
+          [step]="1"
+          [showButtons]="true"
+          spinnerMode="horizontal"
+          buttonLayout="horizontal"
+          decrementButtonClass="p-button-danger"
+          incrementButtonClass="p-button-success"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus" />
+      </div>
+
+      <div>
+        <div class="mb-sm">{{ 'depth_map.minOrderSum' | translate }}</div>
+        <div class="input-with-hint">
+          <p-inputNumber
+            inputId="ordersMinSum"
+            formControlName="ordersMinSum"
+            [min]="30000"
+            [max]="1000000"
+            [step]="10000"
+            spinnerMode="horizontal"
+          />
+          <div class="input-hint">{{ convertPrice(exchangeSettingsForm.get('ordersMinSum').value) }}</div>
+        </div>
+        <small class="block text-hint mt-sm">{{ 'depth_map.max1MMin30K' | translate }}</small>
+      </div>
+
+      <div>
+        <input type="checkbox" [formControlName]="'round_density'"
+          id="round_density">
+        <label for="round_density" class="checkbox-label">{{ 'round_density' | translate }}</label>
+      </div>
+
+      <div>
+        <input type="checkbox" [formControlName]="'singleDensityPerCoin'"
+               id="singleDensityPerCoin">
+        <label for="singleDensityPerCoin" class="checkbox-label">{{ 'depth_map.single_density_per_coin' | translate }}</label>
+
+        <div *ngIf="exchangeSettingsForm.controls['singleDensityPerCoin'].value" class="mt-sm">
+          <label for="direction" class="block mb-sm">{{ 'depth_map.single_density_per_coin_type' | translate }}</label>
+          <p-dropdown
+            id="direction"
+            [options]="singleDensityPerCoinTypeOptions"
+            optionLabel="label"
+            optionValue="name"
+            appendTo="body"
+            formControlName="singleDensityPerCoinType"
+          >
+          </p-dropdown>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider my-lg"></div>
+
+    <div>
+      <div>
+        <input type="checkbox" formControlName="volumeFilterIsActive" id="volumeFilterIsActive">
+        <label for="volumeFilterIsActive" class="checkbox-label">{{ 'depth_map.volumeFilter' | translate }}</label>
+      </div>
+      <ng-template [ngIf]="exchangeSettingsForm.get('volumeFilterIsActive').value">
+        <div class="mt-md">
+          <div>
+            <label class="block mb-sm">{{ 'depth_map.period' | translate }}</label>
+            <p-dropdown
+              formControlName="volumeFilterPeriod"
+              [options]="filterRangeOptions"
+              optionLabel="label"
+              optionValue="name"
+              appendTo="body"
+            ></p-dropdown>
+          </div>
+
+          <div class="grid-2-1 grid-gap-md mt-md">
+            <div>
+              <div class="input-with-hint">
+                <p-inputNumber
+                  inputId="ordersBigSum"
+                  formControlName="volumeFromFilter"
+                  [min]="30000"
+                  [max]="10000000000"
+                  [step]="10000"
+                  spinnerMode="horizontal"
+                />
+                <div class="input-hint">{{ 'depth_map.from' | translate }} {{ convertPrice(exchangeSettingsForm.get('volumeFromFilter').value) }}</div>
+              </div>
+              <small class="block text-hint mt-xs">{{ 'depth_map.max10B' | translate }}</small>
+            </div>
+
+            <div>
+              <div class="input-with-hint">
+                <p-inputNumber
+                  inputId="volumeToFilter"
+                  formControlName="volumeToFilter"
+                  [min]="0"
+                  [max]="100000000000"
+                  [step]="5000000"
+                  spinnerMode="horizontal"
+                />
+                <div class="input-hint">{{ 'depth_map.to' | translate }} {{ convertPrice(exchangeSettingsForm.get('volumeToFilter').value) }}</div>
+              </div>
+              <small class="block text-hint mt-xs">{{ 'depth_map.max100B' | translate }}</small>
+            </div>
+          </div>
+
+        </div>
+      </ng-template>
+    </div>
+  </ng-container>
+</form>

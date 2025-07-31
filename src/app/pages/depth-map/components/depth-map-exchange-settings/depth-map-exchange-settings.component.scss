@@ -1,0 +1,17 @@
+@import "src/variables";
+
+.orders-range-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: var(--md);
+
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--md);
+  }
+}

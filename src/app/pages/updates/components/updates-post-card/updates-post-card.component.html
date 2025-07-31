@@ -1,0 +1,31 @@
+<ng-container *ngIf="post">
+  <div class="post-card" (click)="navigateToPostDetail()">
+    <div *ngIf="newPost" class="badge">{{"updates.new" | translate}}</div>
+    <div class="image-wrapper">
+      <img [src]="post.image" [alt]="title" class="image">
+      <div class="image-overlay"></div>
+
+      <div class="title text-sub-title">
+        {{ title }}
+      </div>
+    </div>
+
+    <div class="description mt-md">
+      <div class="description-img">
+        <img src="assets/img/candles_g.png" alt="candles">
+      </div>
+      <div class="description-text">
+        {{ description }}
+      </div>
+    </div>
+
+    <div class="footer mt-md">
+        <button class="app-button-primary">{{ 'updates.detail' | translate }}</button>
+      <small class="text-italic">{{ post.created_at | date:'short' }}</small>
+    </div>
+
+    <div class="bg-effect">
+      <img src="assets/img/bg_effect.png" alt="bg">
+    </div>
+  </div>
+</ng-container>

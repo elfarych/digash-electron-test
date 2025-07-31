@@ -1,0 +1,70 @@
+<form [formGroup]="form" class="app-form">
+
+  <section class="mt-lg">
+    <div class="text-lg text-bold">{{ 'alerts.funding_parameters.title' | translate }}</div>
+
+    <div class="grid-2-1 grid-gap-lg mt-md">
+
+      <div>
+        <label for="direction" class="block mb-sm">{{ 'alerts.funding_parameters.direction' | translate }}</label>
+        <p-dropdown
+          id="direction"
+          [options]="alertFundingTypeOptions"
+          optionLabel="label"
+          optionValue="value"
+          appendTo="body"
+          placeholder="{{ 'alerts.funding_parameters.direction' | translate }}"
+          formControlName="direction"
+        >
+        </p-dropdown>
+      </div>
+
+      <div>
+        <label for="until_next_funding_minutes" class="block mb-sm">{{ 'alerts.funding_parameters.nextFundingTime' | translate }}</label>
+        <p-dropdown
+          id="until_next_funding_minutes"
+          [options]="untilNextFundingTimeMinutesOptions"
+          optionLabel="label"
+          optionValue="value"
+          appendTo="body"
+          placeholder="{{ 'alerts.funding_parameters.nextFundingTime' | translate }}"
+          formControlName="until_next_funding_minutes"
+        >
+        </p-dropdown>
+      </div>
+
+      <div>
+        <label for="value" class="block mb-sm">{{ 'alerts.funding_parameters.change_percentage' | translate }}</label>
+        <p-inputNumber
+          id="value"
+          inputId="value"
+          formControlName="value"
+          disabled="true"
+          class="w-full"
+          [min]="0.5"
+          [max]="100"
+          [step]="0.1"
+          [showButtons]="true"
+          spinnerMode="horizontal"
+          buttonLayout="horizontal"
+          decrementButtonClass="p-button-danger"
+          incrementButtonClass="p-button-success"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+          tooltipPosition="top"
+        />
+        <small *ngIf="form.get('value').errors?.['required'] && formTouched" class="error-message block">{{ 'alerts.funding_parameters.required_field' | translate }}</small>
+        <small *ngIf="form.get('value').errors?.['min'] && formTouched" class="error-message block">{{ 'alerts.funding_parameters.min_value' | translate }} 1%</small>
+        <small *ngIf="form.get('value').errors?.['max'] && formTouched" class="error-message block">{{ 'alerts.funding_parameters.max_value' | translate }} 100%</small>
+      </div>
+    </div>
+  </section>
+
+  <app-alert-base-form
+    [form]="form"
+    [edit]="edit"
+    [formTouched]="formTouched"
+    [includedExchanges]="includedExchanges"
+  ></app-alert-base-form>
+
+</form>

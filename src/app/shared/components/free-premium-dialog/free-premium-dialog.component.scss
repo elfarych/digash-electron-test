@@ -1,0 +1,57 @@
+@import './src/styles';
+
+.content {
+  padding: 40px;
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  text-align: center;
+  flex-wrap: wrap;
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--md);
+    width: 100%;
+  }
+
+  .text-content {
+    width: 100%;
+
+    h2 {
+      margin: 0;
+      font-weight: bold;
+      line-height: 32px;
+    }
+
+    h4 {
+      line-height: 24px;
+    }
+
+    h3 {
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 14px;
+      line-height: 22px;
+      color: #f5d7ff;
+      margin-bottom: 0;
+
+      &:last-child {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+
+  & ::ng-deep {
+    .p-button.p-button-icon-only.p-button-rounded {
+      color: #fff;
+    }
+  }
+}

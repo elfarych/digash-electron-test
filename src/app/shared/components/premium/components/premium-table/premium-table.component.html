@@ -1,0 +1,36 @@
+<div class="premium-table">
+
+    <div class="table-header table-row rounded-borders-md">
+      <div>{{title}}</div>
+      <div class="text-center">{{ 'premium.starter' | translate }}</div>
+      <div class="text-center">{{ 'premium.premium' | translate }}</div>
+    </div>
+
+    <div class="table-content">
+      <ng-container *ngFor="let item of comparisonTableData">
+        <div class="table-row">
+
+          <div>{{ item.name }}</div>
+
+          <div class="text-center flex flex-center">
+            <ng-template [ngIf]="item.withRegTooltip">
+              <div class="table-data-tooltip text-grey">{{ item.withRegTooltip }}</div>
+            </ng-template>
+
+            <ng-template [ngIf]="!item.withRegTooltip && item.withReg">
+              <span class="success-icon pi pi-check"></span>
+            </ng-template>
+
+            <ng-template [ngIf]="!item.withRegTooltip && !item.withReg">
+              <span class="no-access-icon pi pi-times"></span>
+            </ng-template>
+          </div>
+
+          <div class="text-center flex flex-center">
+            <span class="success-icon pi pi-check"></span>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+</div>

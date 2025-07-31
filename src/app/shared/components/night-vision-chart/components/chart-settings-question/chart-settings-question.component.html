@@ -1,0 +1,40 @@
+<div [formGroup]="form" class="app-form">
+
+  <div [class.checkbox]="question.type === 'boolean'">
+    <label *ngIf="question.type !== 'boolean'" class="block mb-sm"
+           [attr.for]="question.key">{{ 'technical_indicators.' + question.key + 'Label' | translate }}</label>
+
+    <ng-container [ngSwitch]="question.type">
+
+      <p-inputNumber *ngSwitchCase="'number'" [formControlName]="question.key" class="w-full " styleClass="w-full"/>
+
+      <input *ngSwitchCase="'text'" [formControlName]="question.key"
+             [id]="question.key" [type]="question.type">
+
+      <!-- <input *ngSwitchCase="'color'" [formControlName]="question.key"
+             [id]="question.key" [type]="question.type"> -->
+
+      <input type="color" *ngSwitchCase="'color'" [formControlName]="question.key"
+             [id]="question.key" [type]="question.type">
+
+      <ng-container *ngSwitchCase="'boolean'">
+        <input type="checkbox" [formControlName]="question.key" [id]="question.key">
+        <label [for]="question.key"
+               class="checkbox-label">{{ 'technical_indicators.' + question.key + 'Label' | translate }}</label>
+      </ng-container>
+
+      <!--      <select [id]="question.key" *ngSwitchCase="'dropdown'" [formControlName]="question.key">-->
+      <!--        <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>-->
+      <!--      </select>-->
+
+      <p-dropdown appendTo="body" *ngSwitchCase="'dropdown'" [formControlName]="question.key" [id]="question.key"
+                  [options]="question.options" optionDisabled="isDisable" optionLabel="value" optionValue="key">
+
+      </p-dropdown>
+    </ng-container>
+  </div>
+
+  <div class="errorMessage"
+       *ngIf="!isValid">{{ 'technical_indicators.' + question.key + 'Label' | translate }} {{ 'app.required' | translate }}
+  </div>
+</div>

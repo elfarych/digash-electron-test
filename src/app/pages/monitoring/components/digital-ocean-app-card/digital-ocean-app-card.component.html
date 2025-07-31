@@ -1,0 +1,36 @@
+<div [class.admin]="permissions.is_admin">
+  <div class="app-card" [ngClass]="appCardClass" >
+    <a *ngIf="permissions.is_admin" [href]="app.url" target="_blank" class="name text-bold">{{ appName }}</a>
+    <div *ngIf="!permissions.is_admin">{{ appName }}</div>
+
+    <div class="text-sm mt-xs">{{ app.region }}</div>
+
+    <div *ngIf="permissions.is_admin" class="load-scale">
+      <div
+        class="load-scale-value"
+        [ngClass]="appCardClass"
+        [ngStyle]="{ width: app.current_load.toFixed(2) + '%' }"
+      ></div>
+
+      <div class="load-scale-value-text text-bold">
+        {{ app.current_load.toFixed(2) }}%
+      </div>
+    </div>
+
+    <div *ngIf="permissions.is_admin" class="footer flex gap-sm items-center justify-between">
+
+      <div >
+        <div class="text-bold" [ngClass]="appCardHighLoadClass">
+          High 24h: {{ app.high_load?.toFixed(2) }}%
+        </div>
+        <div class="mt-xs text-grey text-sm">{{ app.updated_at | date:'medium' }}</div>
+      </div>
+
+      <button *ngIf="app.type === 'app'" class="app-button" (click)="restartApp.emit(app.app_id)">
+        <span class="pi pi-refresh"></span>
+        <span>Reload</span>
+      </button>
+    </div>
+  </div>
+
+</div>

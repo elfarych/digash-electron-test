@@ -1,0 +1,95 @@
+
+@import "./src/styles";
+
+.config-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background-color: var(--color-main-bg);
+  border-radius: var(--border-radius);
+  box-shadow: 0 0 5px 2px var(--color-page-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+
+  &__tool {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2px 0;
+    transition: var(--transition);
+
+    &:hover {
+      background-color: var(--color-main-bg);
+    }
+
+    &:last-child {
+      border-right: none;
+    }
+
+    .control {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &.action-control {
+        width: 32px;
+        height: 36px;
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        cursor: pointer;
+        transition: var(--transition);
+        padding: 4px;
+        border-radius: 5px;
+
+        &:hover {
+          background-color: var(--color-main-bg-accent-lighten);
+        }
+
+        &::ng-deep {
+          .p-colorpicker {
+            margin-top: 4px;
+            display: block;
+            height: 4px;
+          }
+
+          input {
+            padding: 0;
+            height: 4px;
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  svg-icon {
+    display: flex;
+  }
+
+  &.with-label {
+    svg-icon {
+      margin-right: 4px;
+    }
+  }
+}
+
+.drag-handle {
+  cursor: grab;
+  margin-right: 6px;
+  span {
+    width: 6px;
+  }
+}

@@ -1,0 +1,28 @@
+<div class="w-full">
+  <p-autoComplete
+    #autoComplete
+    [(ngModel)]="selectedSymbol"
+    [suggestions]="filteredSymbols"
+    (completeMethod)="filterSymbols($event)"
+    (onSelect)="handleSelectSymbol($event)"
+    field="symbol"
+    [dropdown]="true"
+    [appendTo]="'body'"
+    placeholder="{{ 'blacklist.placeholder' | translate }}"
+    [emptyMessage]="'blacklist.emptyMessage' | translate"
+    [disabled]="disabled"
+  ></p-autoComplete>
+
+  <ng-template [ngIf]="blacklist?.length">
+    <div class="blacklist-grid">
+      <button
+        *ngFor="let coin of blacklist"
+        class="app-button app-button-flat flex items-center"
+        (click)="onCoinClick(coin)"
+      >
+        <span>{{ coin }}</span>
+        <span class="pi pi-times ml-xs"></span>
+      </button>
+    </div>
+  </ng-template>
+</div>

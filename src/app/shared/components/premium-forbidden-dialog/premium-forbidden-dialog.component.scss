@@ -1,0 +1,91 @@
+@import './src/styles';
+
+:host {
+  display: block;
+  position: relative;
+}
+
+.content {
+  padding: 40px;
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+
+  padding: var(--md);
+
+  border-radius: 10px !important;
+
+  .text-content {
+    width: 60%;
+
+    h2 {
+      margin: 0;
+      font-weight: bold;
+      line-height: 32px;
+    }
+
+    h4 {
+      line-height: 24px;
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 30%;
+
+    .action-button {
+      width: 100%;
+      text-align: center;
+
+      &::ng-deep .p-button {
+        border: none;
+      }
+
+      &.cancel::ng-deep .p-button {
+        color: #212529;
+      }
+
+      &.payment::ng-deep .p-button {
+        background-color: #f5d7ff;
+        padding: 15px 20px;
+
+        &:hover {
+          background-color: #edc9ff;
+        }
+      }
+    }
+  }
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+
+  & ::ng-deep {
+    .p-button.p-button-icon-only.p-button-rounded {
+      color: #fff;
+    }
+  }
+}
+
+@media (max-width: 620px) {
+  p-dialog {
+    .content {
+      width: 100%;
+      flex-wrap: wrap;
+
+      .text-content {
+        width: 100%;
+      }
+
+      .actions {
+        width: 100%;
+      }
+    }
+  }
+}

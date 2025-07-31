@@ -1,0 +1,69 @@
+
+<div class="flex justify-between items-center">
+  <div class="flex gap-sm items-center">
+    <div class="text-lg text-bold">{{ 'listing.newListings' | translate }}</div>
+    <app-tooltips identifier="LISTINGS" [size]="14"></app-tooltips>
+  </div>
+
+  <div class="app-form">
+    <div class="input-with-hint">
+      <input placeholder="{{'search.coinSearch' | translate}}" [formControl]="searchControl">
+      <div class="input-hint">
+        <span class="pi pi-search"></span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="divider my-lg"></div>
+
+
+
+<div class="listing-table">
+  <p-table
+    [value]="listingsData"
+    [responsive]="true"
+    [globalFilterFields]="['market']"
+  >
+    <ng-template pTemplate="header">
+      <tr class="header-tr">
+
+        <th pSortableColumn="symbol" class="text-lg">
+          {{ 'listing.coinContract' | translate }}
+          <p-sortIcon field="symbol" />
+        </th>
+
+        <th pSortableColumn="market" class="text-lg">
+          {{ 'listing.exchange' | translate }}
+          <p-sortIcon field="market" />
+        </th>
+        <th pSortableColumn="created_at">
+          <div class="text-right text-lg">
+            {{ 'listing.date' | translate }}
+            <p-sortIcon field="created_at" />
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-listing>
+      <tr *ngIf="getExchangeData(listing.market) as exchangeData" class="body-tr">
+        <td>
+          <div class="cursor-pointer" (click)="openChartDialog({ symbol: listing.symbol, exchange: exchangeData.exchange })">
+            {{ listing.symbol | symbolNormalize }}
+          </div>
+        </td>
+        <td>
+          <div class="text-primary">
+              {{ exchangeData.name }}
+          </div>
+        </td>
+        <td>
+          <div class="text-right">{{ listing.created_at | date:'short':'' }}</div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+</div>

@@ -1,0 +1,47 @@
+<form [formGroup]="form" class="app-form">
+
+  <section class="mt-lg">
+    <div class="text-lg text-bold">{{ 'alerts.price_change_parameters.title' | translate }}</div>
+
+    <div class="mt-md">
+      <div class="block mb-sm">{{ 'alerts.price_change_parameters.interval' | translate }}</div>
+      <app-interval-selector
+        [selectedInterval]="form.get('interval').value"
+        (intervalChange)="intervalChange($event)"
+      ></app-interval-selector>
+    </div>
+
+    <div class="grid-2-1 grid-gap-lg mt-md">
+      <div>
+        <label for="value" class="block mb-sm">{{ 'alerts.price_change_parameters.change_percentage' | translate }}</label>
+        <input pInputText id="value" aria-describedby="value-help" formControlName="value" type="number"/>
+        <small *ngIf="form.get('value').errors?.['required'] && formTouched" class="error-message block">{{ 'alerts.price_change_parameters.required_field' | translate }}</small>
+        <small *ngIf="form.get('value').errors?.['min'] && formTouched" class="error-message block">{{ 'alerts.price_change_parameters.min_value' | translate }}</small>
+        <small *ngIf="form.get('value').errors?.['max'] && formTouched" class="error-message block">{{ 'alerts.price_change_parameters.max_value' | translate }}</small>
+        <small *ngIf="formTouched" class="error-message block">{{ form.errors?.['validationErrorMessage'] }}</small>
+        <small id="value-help" class="mt-sm block text-grey"></small>
+      </div>
+
+      <div>
+        <label for="direction" class="block mb-sm">{{ 'alerts.price_change_parameters.direction' | translate }}</label>
+        <p-dropdown
+          id="direction"
+          [options]="alertPriceChangeTypeOptions"
+          optionLabel="label"
+          optionValue="value"
+          appendTo="body"
+          placeholder="{{ 'alerts.price_change_parameters.direction' | translate }}"
+          formControlName="direction"
+        >
+        </p-dropdown>
+      </div>
+    </div>
+  </section>
+
+  <app-alert-base-form
+    [form]="form"
+    [edit]="edit"
+    [formTouched]="formTouched"
+  ></app-alert-base-form>
+
+</form>

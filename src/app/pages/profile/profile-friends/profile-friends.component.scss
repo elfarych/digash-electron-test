@@ -1,0 +1,255 @@
+@import "src/mixins";
+
+:host {
+  --section-padding: 50px;
+  color: #F3F3F3
+}
+
+.section-title {
+  position: relative;
+  overflow: visible;
+  padding-top: var(--section-padding);
+
+  img {
+    position: absolute;
+    top: 0px;
+    width: 1000px;
+    left: calc(50% - 500px);
+    transform: rotateY(180deg);
+
+    @media (max-width: 992px) {
+      width: 600px;
+      left: calc(50% - 300px);
+    }
+
+    @media (max-width: 720px) {
+      width: 300px;
+      left: calc(50% - 150px);
+      opacity: .5;
+    }
+  }
+}
+
+.invite-friends-block {
+  padding: var(--lg);
+
+  position: relative;
+  border-radius: var(--md);
+  border: 1px solid transparent;
+  background: linear-gradient(hsl(240, 18%, 10%), #14141D) padding-box,
+  linear-gradient(to bottom, rgb(146, 36, 255), #292a32) border-box,
+  var(--color-primary-ligthen) padding-box;
+  background-clip: padding-box, border-box;
+}
+
+.link-text {
+  font-size: 16px;
+}
+
+.referral-link {
+  color: var(--color-primary);
+  font-style: italic;
+  cursor: pointer;
+  text-transform: lowercase;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+
+.main-info {
+  //margin-top: var(--section-padding);
+}
+
+.progress {
+  margin-top: var(--section-padding);
+}
+
+.referrals {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: var(--xl);
+
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.referral {
+  position: relative;
+  border-radius: 12px;
+  font-size: 16px;
+  color: #F3F3F3;
+  padding: 22px 30px;
+  display: flex;
+  justify-content: center;
+  gap: var(--sm);
+  align-items: center;
+  height: 64px;
+  @media (max-width: 992px) {
+    overflow: hidden;
+  }
+}
+
+button {
+  position: relative;
+  border-radius: 12px;
+  font-size: 16px;
+  color: #F3F3F3;
+  padding: 22px 30px;
+  display: flex;
+  justify-content: center;
+  gap: var(--sm);
+  align-items: center;
+  height: 64px;
+  @media (max-width: 992px) {
+    overflow: hidden;
+  }
+
+  .text {
+    position: relative;
+    z-index: 1;
+    text-wrap: nowrap;
+  }
+}
+
+.premium-button-active {
+  background: transparent;
+  border: 1px solid var(--color-primary-ligthen);
+  box-shadow: inset 0 0 20px 0 var(--color-primary-ligthen);
+  overflow: visible;
+  cursor: pointer;
+
+  .ellipse {
+    position: absolute;
+    bottom: -64px;
+    left: 0;
+    width: 100%;
+    height: 168px;
+  }
+
+  .ellipse-inset {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80%;
+  }
+}
+
+.premium-button-inactive {
+  background: transparent;
+  border: 1px solid #F3F3F3;
+  box-shadow: inset 0 0 20px 0 #F3F3F3;
+  overflow: visible;
+  opacity: .1;
+  pointer-events: none;
+
+  .ellipse {
+    display: none;
+  }
+
+  .ellipse-inset {
+    display: none;
+  }
+}
+
+.referral-active {
+  background: #24735e;
+  border: 1px solid #b1eedd;
+  font-weight: bold;
+  box-shadow: inset 0 0 30px 0 #68d6b2;
+
+  .friends-ellipsis {
+    position: absolute;
+    top: 0;
+  }
+
+  .friends-ellipsis-1 {
+    left: 0;
+    width: 70%;
+  }
+
+  .friends-ellipsis-2 {
+    left: 0;
+    width: 100%;
+  }
+
+  .friends-ellipsis-3 {
+    right: 0;
+    width: 70%;
+    transform: rotateY(180deg);
+  }
+}
+
+.referral-inactive {
+  background: transparent;
+  border: 1px solid var(--color-page-bg);
+  box-shadow: inset 0 0 30px 0 var(--color-page-bg);
+  opacity: .5;
+
+  .friends-ellipsis {
+    display: none !important;
+  }
+
+  img {
+    opacity: .5;
+  }
+
+  .friend-connector {
+    opacity: .3;
+  }
+}
+
+.friend-connector {
+  position: absolute;
+  width: 40px;
+  top: calc(50% - 10px);
+  left: -37px;
+  z-index: 2;
+
+  img {
+    width: 100%;
+  }
+
+  @media (max-width: 992px) {
+    display: none;
+  }
+}
+
+
+.rewards {
+  margin-top: var(--section-padding);
+  .reward {
+    position: relative;
+
+    span {
+      position: relative;
+      z-index: 2;
+    }
+
+    img {
+      position: absolute;
+      left: -20px;
+      top: -40px;
+      width: 100px;
+      height: 100px;
+      z-index: 0;
+    }
+  }
+}
+
+
+.claimed-rewards {
+  margin-top: 50px;
+
+  li {
+    margin-left: var(--md);
+    margin-top: var(--sm)
+  }
+}
+
+.title {
+  font-size: 16px;
+  font-weight: bold;
+}
+

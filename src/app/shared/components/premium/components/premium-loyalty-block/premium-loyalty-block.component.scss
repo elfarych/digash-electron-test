@@ -1,0 +1,201 @@
+@import 'src/mixins';
+
+.premium-loyalty-block {
+  border-radius: var(--sm);
+  padding: var(--md);
+  position: relative;
+
+  &.popup {
+    border-radius: 18px !important;
+    .countdown-timer {
+      bottom: 5px;
+      top: auto;
+    }
+  }
+
+  header {
+    margin-bottom: var(--lg);
+
+    .title {
+      font-size: 24px;
+      color: var(--color-main-bg);
+      text-align: center;
+      font-weight: var(--font-medium);
+    }
+  }
+
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+    z-index: 100;
+
+    & ::ng-deep {
+      .p-button.p-button-icon-only.p-button-rounded {
+        cursor: pointer;
+        position: relative;
+        color: #fff;
+        background: transparent;
+        box-shadow: none;
+        outline: none;
+        border: none;
+      }
+    }
+  }
+
+  .discount-prices {
+    display: flex;
+    align-items: center;
+    gap: var(--md);
+  }
+
+  .discount-prices-value {
+    opacity: .7;
+    color: var(--color-main-bg);
+    font-size: 48px;
+    line-height: 48px;
+    font-weight: bold;
+  }
+
+  .price-now {
+    opacity: .9;
+    color: var(--color-main-bg);
+    margin-right: var(--sm);
+    font-weight:bold;
+  }
+
+  .price-before {
+    opacity: .4;
+    color: #fff;
+    text-decoration: line-through;
+  }
+
+  .discount-description {
+    margin-top: var(--md);
+
+    span {
+      opacity: .7;
+      color: #fff;
+      text-shadow: 1px 1px black;
+    }
+  }
+
+  &.repeat {
+    background: url("/../assets/img/repeat_premium_discount.png");
+    background-size: 100% 100%;
+    border-radius: 10px;
+  }
+
+  &.less2weeks {
+    background: url("/../assets/img/repeat_premium_discount.png");
+    background-size: 100% 100%;
+    border-radius: 10px;
+  }
+
+  &.more2weeks {
+    background: url("/../assets/img/loyalty_premium_discount.png");
+    background-size: 100% 100%;
+    border-radius: 10px;
+
+    .price-before {
+      opacity: .4;
+      color: var(--color-main-bg);
+      text-decoration: line-through;
+    }
+
+    .action .action-button {
+      background: linear-gradient(180deg, #EACB6530 0%, #EACB65 50%, #EACB6566 100%);
+      border: 1px solid #EACB65;
+      color: #252533;
+    }
+  }
+
+  &.loyalty {
+    background: url("/../assets/img/loyalty_premium_discount.png");
+    background-size: 100% 100%;
+    border-radius: 10px;
+
+    .price-before {
+      opacity: .4;
+      color: var(--color-main-bg);
+      text-decoration: line-through;
+    }
+
+    .action .action-button {
+      background: linear-gradient(180deg, #EACB6530 0%, #EACB65 50%, #EACB6566 100%);
+      border: 1px solid #EACB65;
+      color: #252533;
+    }
+  }
+
+  .action {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    margin-top: var(--md);
+
+    .action-button {
+      font-weight: 600;
+      background: linear-gradient(180deg, #f3f3f3 0%, #18E99266 50%, #B5F7DC66 100%);
+      border: 1px solid #18E99266;
+      border-radius: 10px;
+      padding: 12px 24px;
+      width: 200px;
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  .countdown-timer {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+
+    .countdown-left-label {
+      color: var(--color-main-bg);
+      margin-bottom: 2px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .time-blocks-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .time-block {
+      .time-block-divider {
+        color: var(--color-main-bg);
+      }
+
+      .time-block-value-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2px;
+      }
+
+      .clock-label {
+        opacity: 0.9;
+        margin-top: 1px;
+        font-size: 10px;
+        color: var(--color-main-bg);
+        text-align: center;
+        text-transform: lowercase;
+      }
+
+      .time-block-value {
+        color: var(--color-main-bg);
+        padding: 2px 5px;
+        border-radius: 4px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 100%);
+        border-image-source: linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0) 100%);
+      }
+    }
+  }
+}

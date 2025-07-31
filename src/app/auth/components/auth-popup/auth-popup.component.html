@@ -1,0 +1,51 @@
+<p-toast></p-toast>
+
+<div class="title">
+  <div class="logo">
+<!--    <img src="assets/svg/logo.svg" alt="logo">-->
+  </div>
+
+  <ng-template [ngIf]="authStatus === 'login'" [ngIfThen]="loginTmpl"></ng-template>
+  <ng-template [ngIf]="authStatus === 'register'" [ngIfThen]="registerTmpl"></ng-template>
+  <ng-template [ngIf]="authStatus === 'restore'" [ngIfThen]="restoreTmpl"></ng-template>
+
+  <ng-template #loginTmpl>
+    <h1 class="text-sub-title mt-lg text-center">{{ 'auth.login_title' | translate }}</h1>
+    <h4 class="text-center mt-sm">{{ 'auth.register_subtitle' | translate }}</h4>
+  </ng-template>
+
+  <ng-template #registerTmpl>
+    <h1 class="text-sub-title mt-lg text-center">{{ 'auth.register_title' | translate }}</h1>
+    <h4 class="text-center mt-sm">{{ 'auth.register_subtitle' | translate }}</h4>
+  </ng-template>
+
+  <ng-template #restoreTmpl>
+    <h1 class="text-sub-title mt-lg text-center">{{ 'auth.restore_title' | translate }}</h1>
+    <h4 class="text-center mt-sm">{{ 'auth.restore_subtitle' | translate }}</h4>
+  </ng-template>
+</div>
+<ng-container [ngSwitch]="authStatus">
+  <div *ngIf="errorMessage$ | async as message" class="mt-md">
+    <app-error-message [errorMessages]="[message]"></app-error-message>
+  </div>
+
+  <div class="mt-lg">
+
+    <hive-login
+      *ngSwitchCase="'login'"
+      (redirectToSignup)="redirectToSignup()"
+      (redirectToRestore)="redirectToRestore()"
+    ></hive-login>
+
+    <hive-register
+      *ngSwitchCase="'register'"
+      (redirectToSignIn)="redirectToSignIn()"
+    ></hive-register>
+
+    <hive-restore
+      *ngSwitchCase="'restore'"
+      (redirectToSignIn)="redirectToSignIn()"
+    ></hive-restore>
+
+  </div>
+</ng-container>
