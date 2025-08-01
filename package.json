@@ -1,6 +1,6 @@
 {
   "name": "digash",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -41,7 +41,8 @@
     },
     "mac": {
       "target": [
-        "dmg"
+        "dmg",
+        "zip"
       ],
       "icon": "src/icon.icns"
     },
