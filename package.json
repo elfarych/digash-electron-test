@@ -1,6 +1,6 @@
 {
   "name": "digash",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -10,9 +10,17 @@
     "lint": "ng lint",
     "build-base": "ng build --base-href ./ --output-path=dist/angular",
     "electron": "electron ./src-electron/main.js",
-    "build:electron": "npm run build-base && electron-builder"
+    "build:electron": "npm run build-base && electron-builder",
+    "build:electron:release": "dotenv -e .env electron-builder --publish always"
   },
   "main": "src-electron/main.js",
+  "repository": "https://github.com/elfarych/digash-electron-test",
+
+  "publish": {
+    "provider": "github",
+    "releaseType": "release"
+  },
+
   "build": {
     "appId": "live.digash.app",
     "icon": "src/icon",
@@ -47,8 +55,9 @@
     ],
     "publish": [
       {
-        "provider": "generic",
-        "url": "http://127.0.0.1:8000/desktop/update/windows/"
+        "provider": "github",
+        "owner": "elfarych",
+        "repo": "digash-electron-test"
       }
     ]
   },
@@ -110,6 +119,7 @@
     "@typescript-eslint/eslint-plugin": "7.9.0",
     "@typescript-eslint/parser": "7.9.0",
     "concurrently": "^9.1.2",
+    "dotenv-cli": "^10.0.0",
     "electron": "^36.4.0",
     "electron-builder": "^26.0.12",
     "electron-reload": "2.0.0-alpha.1",

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, session, ipcMain, dialog, Notification } from 'electron';
+import {app, BrowserWindow, session, ipcMain, dialog, Notification} from 'electron';
 import pkg from 'electron-updater';
 const { autoUpdater } = pkg;
 import path from 'path';
@@ -10,7 +10,11 @@ const __dirname = path.dirname(__filename);
 let mainWindow;
 let deeplinkUrl = null;
 
+autoUpdater.autoDownload = true;
+autoUpdater.autoInstallOnAppQuit = true
+
 app.setAsDefaultProtocolClient('digash');
+
 
 const gotTheLock = app.requestSingleInstanceLock();
 
@@ -101,33 +105,35 @@ ipcMain.on('notification', (event, { title, body, deepLink  }) => {
 });
 
 
-const server = 'http://127.0.0.1:8000';
-const feed = `${server}/desktop/update/windows/`;
 
 
 export function checkUpdates () {
-  autoUpdater.setFeedURL({
-    provider: 'generic',
-    url: feed
+  autoUpdater.checkForUpdates()
+  autoUpdater.checkForUpdatesAndNotify()
+
+  autoUpdater.on('update-available', (info) => {
+    console.log('Update available:', info);
+    const notification = new Notification({ title: 'Update available', body: info })
+    notification.show();
   });
 
-
-  autoUpdater.checkForUpdates();
-
-  autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-    const dialogOpts = {
+  autoUpdater.on('update-downloaded', (info) => {
+    console.log('Update downloaded:', info);
+    const notification = new Notification({ title: 'Update downloaded', body: info })
+    notification.show();
+    dialog.showMessageBox({
       type: 'info',
-      buttons: ['Перезапустить', 'Позже'],
       title: 'Обновление',
-      message: process.platform === 'win32' ? releaseNotes : releaseName,
-      detail: 'Доступна новая версия приложения. Перезапустить сейчас?'
-    };
-    dialog.showMessageBox(dialogOpts).then((returnValue) => {
-      if (returnValue.response === 0) autoUpdater.quitAndInstall();
+      message: 'Доступно новое обновление. Перезапустить приложение?',
+      buttons: ['Да', 'Позже']
+    }).then(result => {
+      if (result.response === 0) autoUpdater.quitAndInstall();
     });
-  })
+  });
 
   autoUpdater.on('error', (err) => {
-    console.error('Ошибка обновления:', err);
+    const notification = new Notification({ title: 'Update error', body: JSON.stringify(err) })
+    notification.show();
+    console.error('Auto updater error:', err);
   });
 }
